@@ -40,6 +40,7 @@
       height: 48px;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       padding: 0 32px;
     }
     .top-nav .logo {
@@ -50,6 +51,13 @@
       text-decoration: none;
     }
     .top-nav .logo span { color: #0f62fe; }
+    .top-nav .github-link {
+      font-size: 14px;
+      color: #0f62fe;
+      text-decoration: none;
+      letter-spacing: 0.16px;
+    }
+    .top-nav .github-link:hover { text-decoration: underline; }
 
     /* Main content */
     .page-content {
@@ -176,6 +184,7 @@
 
   <nav class="top-nav">
     <a class="logo" href="index.html">IBM <span>Bob</span></a>
+    <a class="github-link" href="https://github.com/howard-haowen/ibm-bobathon" target="_blank" rel="noopener noreferrer">GitHub</a>
   </nav>
 
   <main class="page-content">
