@@ -12,6 +12,8 @@
 │   ├── index.html
 │   ├── agentic-ai-key-concepts.html
 │   └── hackathon-team-plan.html
+├── .github/workflows/
+│   └── deploy-gh-pages.yml # 自動部署 artifacts/ 到 GitHub Pages
 ├── youtube-k5jYwyhDMxA.md # YouTube 影片逐字稿與摘要
 └── book-深入理解AIAgent.md # Apple Books 書籍摘要
 ```
@@ -35,6 +37,40 @@
 |------|------|------|
 | YouTube 影片 | 5 Terms You Need to Know About Agentic AI | [`youtube-k5jYwyhDMxA.md`](youtube-k5jYwyhDMxA.md) |
 | 書籍 | 深入理解 AI Agent：設計原理與工程實踐 | [`book-深入理解AIAgent.md`](book-深入理解AIAgent.md) |
+
+## GitHub Pages 部署
+
+`artifacts/` 下的 HTML 簡報透過 GitHub Actions 自動發布至 GitHub Pages。
+
+**網址**：`https://howard-haowen.github.io/ibm-bobathon/`
+
+### 部署流程
+
+```
+修改 artifacts/ → git push origin main → GitHub Actions 自動觸發 → gh-pages 更新 → 網站發布
+```
+
+### Workflow 說明（[`.github/workflows/deploy-gh-pages.yml`](.github/workflows/deploy-gh-pages.yml)）
+
+| 設定 | 說明 |
+|------|------|
+| 觸發條件 | push 到 `main` 且 `artifacts/**` 有變動 |
+| 部署工具 | `peaceiris/actions-gh-pages@v4` |
+| 來源目錄 | `./artifacts`（內容放至 `gh-pages` 根目錄） |
+| 認證方式 | `GITHUB_TOKEN`（自動提供，無需手動設定） |
+| commit 歷史 | 保留（`force_orphan: false`） |
+
+> **首次使用注意**：需至 GitHub repo → **Settings → Actions → General → Workflow permissions** 設為 **Read and write permissions**。
+
+### 手動同步（不使用 Actions 時）
+
+```bash
+git checkout gh-pages
+git show main:artifacts/index.html > index.html
+# 依此類推同步其他檔案
+git add . && git commit -m "deploy: manual sync" && git push origin gh-pages
+git checkout main
+```
 
 ## 相關文件
 
