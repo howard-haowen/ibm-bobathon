@@ -58,6 +58,17 @@ function heroDesc(html) {
   return '';
 }
 
+/** Decode common HTML entities to avoid double-escaping. */
+function decodeEntities(str) {
+  return str
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, '\u00a0');
+}
+
 function escapeHtml(str) {
   return str
     .replace(/&/g, '&amp;')
@@ -83,10 +94,12 @@ if (htmlFiles.length === 0) {
 const cards = await Promise.all(
   htmlFiles.map(async file => {
     const raw = await readFile(resolve(ARTIFACTS_DIR, file), 'utf8');
-    const eyebrow = firstClassText(raw, 'card-eyebrow') ||
-                    firstClassText(raw, 'hero-eyebrow') || '';
-    const title   = firstTagText(raw, 'h1') || firstTagText(raw, 'title') || file;
-    const desc    = heroDesc(raw);
+    const eyebrow = decodeEntities(
+                      firstClassText(raw, 'card-eyebrow') ||
+                      firstClassText(raw, 'hero-eyebrow') || '');
+    const title   = decodeEntities(
+                      firstTagText(raw, 'h1') || firstTagText(raw, 'title') || file);
+    const desc    = decodeEntities(heroDesc(raw));
     return { file, eyebrow, title, desc };
   })
 );
