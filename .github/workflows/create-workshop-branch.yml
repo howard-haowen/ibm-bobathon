@@ -36,14 +36,21 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Create branch from main
-          git checkout -b "$BRANCH"
+          # Create an orphan branch (no shared history with main)
+          git checkout --orphan "$BRANCH"
 
-          # artifacts/, .bob/, AGENTS.md are already present (checked out from main).
-          # Commit them as the workshop's initial snapshot.
-          git add artifacts/ .bob/ AGENTS.md
-          git commit -m "chore($SLUG): seed workshop branch from main" \
-            --allow-empty
+          # Remove everything from the index
+          git rm -rf .
+
+          # Restore only the specific files needed for the workshop
+          git checkout main -- \
+            .bob/mcp.json \
+            .bob/skills/find-skills \
+            DESIGN.md \
+            skills-lock.json
+
+          git add .bob/mcp.json .bob/skills/find-skills DESIGN.md skills-lock.json
+          git commit -m "chore($SLUG): seed workshop branch with base files from main"
 
           git push origin "$BRANCH"
           echo "Branch '$BRANCH' created and pushed successfully."
