@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'artifacts/**'
+      - 'workshops/**/artifacts/**'
 
 jobs:
   deploy:
@@ -19,11 +19,60 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Deploy artifacts/ to gh-pages
+      - name: Assemble _site/
+        run: |
+          mkdir -p _site
+
+          # Copy each workshop's artifacts into _site/workshops/<slug>/
+          for dir in workshops/*/artifacts; do
+            [ -d "$dir" ] || continue
+            slug=$(echo "$dir" | cut -d/ -f2)
+            mkdir -p "_site/workshops/$slug"
+            cp -r "$dir/." "_site/workshops/$slug/"
+          done
+
+          # Generate Hub index.html listing all workshops
+          cat > _site/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="zh-Hant">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>IBM Bob 工作坊 Hub</title>
+            <style>
+              body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; max-width: 760px; margin: 40px auto; padding: 0 24px; color: #1f2328; }
+              h1 { font-size: 1.6rem; border-bottom: 1px solid #e5e7eb; padding-bottom: 12px; }
+              ul { list-style: none; padding: 0; }
+              li { margin: 12px 0; }
+              a { color: #3b82d4; text-decoration: none; font-size: 1rem; }
+              a:hover { text-decoration: underline; }
+              footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid #e5e7eb; text-align: center; font-size: 12px; color: #57606a; }
+            </style>
+          </head>
+          <body>
+            <h1>IBM Bob 工作坊 Hub</h1>
+            <ul>
+          EOF
+
+          for dir in workshops/*/artifacts; do
+            [ -d "$dir" ] || continue
+            slug=$(echo "$dir" | cut -d/ -f2)
+            echo "      <li><a href=\"workshops/$slug/\">$slug</a></li>" >> _site/index.html
+          done
+
+          cat >> _site/index.html << 'EOF'
+            </ul>
+            <footer>Made with IBM Bob</footer>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy _site/ to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./artifacts
+          publish_dir: ./_site
           publish_branch: gh-pages
           force_orphan: false
-          commit_message: 'deploy: sync artifacts from main (${{ github.sha }})'
+          keep_files: false
+          commit_message: 'deploy: sync all workshops from main (${{ github.sha }})'
