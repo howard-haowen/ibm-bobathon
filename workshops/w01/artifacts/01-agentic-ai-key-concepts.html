@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Agent 設計原理與工程實踐</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0.16px;
+    color: #161616;
+    background: #ffffff;
+  }
+
+  /* ── Utility bar ── */
+  .utility-bar {
+    background: #f4f4f4;
+    border-bottom: 1px solid #e0e0e0;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+  }
+  .utility-bar span {
+    font-size: 12px;
+    color: #525252;
+    letter-spacing: 0.32px;
+  }
+
+  /* ── Top nav ── */
+  .top-nav {
+    background: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+  }
+  .top-nav .brand { font-size: 14px; font-weight: 600; color: #161616; letter-spacing: 0.16px; }
+  .top-nav .brand .ibm-blue { color: #0f62fe; }
+
+  /* ── Layout ── */
+  .page-container { max-width: 760px; margin: 0 auto; padding: 48px 32px 64px; }
+
+  /* ── Hero ── */
+  .hero { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid #e0e0e0; }
+  .hero-eyebrow { font-size: 14px; color: #525252; letter-spacing: 0.16px; margin-bottom: 12px; }
+  .hero h1 { font-size: 42px; font-weight: 300; line-height: 1.20; color: #161616; margin-bottom: 16px; }
+  .hero p { font-size: 16px; color: #525252; max-width: 600px; letter-spacing: 0.16px; }
+  .formula {
+    display: inline-block;
+    background: #f4f4f4;
+    border: 1px solid #e0e0e0;
+    padding: 12px 28px;
+    font-size: 18px;
+    font-weight: 300;
+    color: #0f62fe;
+    letter-spacing: 0.02em;
+    margin-top: 20px;
+  }
+  .formula span { color: #525252; font-weight: 400; margin: 0 6px; }
+
+  /* ── Source cards ── */
+  .sources { display: flex; gap: 1px; background: #e0e0e0; border: 1px solid #e0e0e0; margin-bottom: 40px; }
+  .source-card { flex: 1; background: #ffffff; padding: 20px 24px; }
+  .source-card:nth-child(odd) { background: #f4f4f4; }
+  .source-type {
+    font-size: 12px;
+    letter-spacing: 0.32px;
+    color: #525252;
+    margin-bottom: 6px;
+  }
+  .source-title { font-size: 14px; font-weight: 600; color: #161616; margin-bottom: 4px; letter-spacing: 0.16px; }
+  .source-meta { font-size: 12px; color: #525252; letter-spacing: 0.32px; }
+
+  /* ── Section ── */
+  .section { margin-bottom: 40px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 20px;
+  }
+  .section-num {
+    width: 24px;
+    height: 24px;
+    background: #0f62fe;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    letter-spacing: 0;
+  }
+  .section-num.dark  { background: #161616; }
+  .section-num.gray  { background: #525252; }
+  .section-title-text { font-size: 20px; font-weight: 400; color: #161616; }
+  .section-sub {
+    font-size: 12px;
+    color: #525252;
+    letter-spacing: 0.32px;
+    margin-left: auto;
+  }
+
+  /* ── Term grid (YouTube) ── */
+  .term-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #e0e0e0; border: 1px solid #e0e0e0; }
+  .term-card { background: #ffffff; padding: 20px; }
+  .term-card:nth-child(odd) { background: #f4f4f4; }
+  .term-card.full { grid-column: 1 / -1; background: #ffffff; }
+  .term-tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.32px;
+    color: #0f62fe;
+    margin-bottom: 8px;
+  }
+  .term-name { font-size: 14px; font-weight: 600; color: #161616; margin-bottom: 6px; letter-spacing: 0.16px; }
+  .term-desc { font-size: 14px; color: #525252; line-height: 1.5; letter-spacing: 0.16px; }
+
+  /* ── Chapter list (Book) ── */
+  .chapter-list { display: flex; flex-direction: column; }
+  .chapter-item { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid #e0e0e0; }
+  .chapter-item:last-child { border-bottom: none; }
+  .ch-num { font-size: 12px; font-weight: 600; color: #0f62fe; min-width: 56px; padding-top: 2px; letter-spacing: 0.32px; }
+  .ch-body { flex: 1; }
+  .ch-title { font-size: 14px; font-weight: 600; color: #161616; margin-bottom: 4px; letter-spacing: 0.16px; }
+  .ch-points { font-size: 14px; color: #525252; line-height: 1.5; letter-spacing: 0.16px; }
+  .ch-points strong { color: #161616; }
+
+  /* ── Data table ── */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 4px; }
+  th { background: #161616; color: #ffffff; border: none; padding: 12px 16px; text-align: left; font-weight: 600; letter-spacing: 0.16px; }
+  td { border-bottom: 1px solid #e0e0e0; padding: 12px 16px; vertical-align: top; color: #161616; line-height: 1.5; letter-spacing: 0.16px; }
+  tr:nth-child(odd) td { background: #f4f4f4; }
+  tr:nth-child(even) td { background: #ffffff; }
+
+  /* ── Conclusion ── */
+  .conclusion { background: #f4f4f4; border: 1px solid #e0e0e0; padding: 24px; }
+  .conclusion h3 { font-size: 16px; font-weight: 600; color: #161616; margin-bottom: 14px; letter-spacing: 0.16px; }
+  .conc-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
+  .conc-bar { width: 4px; background: #0f62fe; flex-shrink: 0; margin-top: 3px; align-self: stretch; min-height: 16px; }
+  .conc-text { font-size: 14px; color: #161616; line-height: 1.5; letter-spacing: 0.16px; }
+  .conc-text strong { color: #0f62fe; }
+
+  .cloud-box { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #e0e0e0; border: 1px solid #e0e0e0; margin-top: 16px; }
+  .cloud-item { background: #ffffff; padding: 16px 20px; font-size: 14px; color: #525252; line-height: 1.5; letter-spacing: 0.16px; }
+  .cloud-item strong { display: block; color: #161616; margin-bottom: 4px; font-size: 14px; font-weight: 600; }
+
+  /* ── Section separator ── */
+  .section-sep { border: none; border-top: 1px solid #e0e0e0; margin: 8px 0 32px; }
+
+  /* ── Footer ── */
+  .page-footer {
+    background: #161616;
+    color: #8c8c8c;
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 0.32px;
+    padding: 20px 32px;
+    border-top: 1px solid #393939;
+  }
+</style>
+</head>
+<body>
+
+<div class="utility-bar">
+  <span>IBM Skills Build &nbsp;·&nbsp; 期末報告研究簡報</span>
+</div>
+
+<div class="top-nav">
+  <span class="brand"><span class="ibm-blue">IBM</span> Bob AI</span>
+</div>
+
+<div class="page-container">
+
+  <!-- Hero / Cover -->
+  <div class="hero">
+    <div class="hero-eyebrow">期末報告研究簡報 &nbsp;·&nbsp; 2 個資料來源</div>
+    <h1>AI Agent 設計原理與工程實踐</h1>
+    <p>整合 YouTube 影片與書籍摘要，系統性梳理 Agentic AI 的核心概念與工程落地方法。</p>
+    <div class="formula">
+      Agent <span>=</span> LLM <span>+</span> 上下文 <span>+</span> 工具
+    </div>
+  </div>
+
+  <!-- Section 1: Sources -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title-text">資料來源概覽</div>
+    </div>
+    <div class="sources">
+      <div class="source-card">
+        <div class="source-type">YouTube 影片</div>
+        <div class="source-title">5 Terms You Need to Know About Agentic AI</div>
+        <div class="source-meta">概念入門 · 5 個核心術語 · 英文</div>
+      </div>
+      <div class="source-card">
+        <div class="source-type">Apple Books 書籍</div>
+        <div class="source-title">深入理解 AI Agent：設計原理與工程實踐</div>
+        <div class="source-meta">作者：李博杰 · 正體中文 · 10 章</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: YouTube -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title-text">YouTube 影片重點：5 個必知術語</div>
+      <div class="section-sub">來源一</div>
+    </div>
+    <div class="term-grid">
+      <div class="term-card">
+        <div class="term-tag">術語 01</div>
+        <div class="term-name">AGENTS.md</div>
+        <div class="term-desc">放在專案根目錄、專為 Agent 設計的 README。告知 Agent 測試指令、程式碼規範等，可多層嵌套，越近越優先。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-tag">術語 02</div>
+        <div class="term-name">Agent Skill（代理技能）</div>
+        <div class="term-desc">含 SKILL.md 的資料夾，描述「何時應載入此技能」。按需載入，不相關時完全不佔用 context window。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-tag">術語 03</div>
+        <div class="term-name">MCP — Model Context Protocol</div>
+        <div class="term-desc">開放協定，讓 Agent 透過標準化 MCP Server 連接任意外部工具或資料源。由 Anthropic 提出，現由 Linux 基金會治理。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-tag">術語 04</div>
+        <div class="term-name">A2A — Agent-to-Agent</div>
+        <div class="term-desc">由 Google 提出的開放協定。每個 Agent 發布 Agent Card，其他 Agent 讀取後進行任務委派（如採購 → 財務審批）。</div>
+      </div>
+      <div class="term-card full">
+        <div class="term-tag">術語 05</div>
+        <div class="term-name">Subagents（子代理）</div>
+        <div class="term-desc">主 Agent 生成子 Agent 來處理特定子任務，各自擁有獨立的 context window，完成後回傳結果。適用於任務過大（超出單一 context）或可並行處理的情境（如同時執行 20 項獨立檢查，速度提升 20 倍）。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: Book -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num dark">3</div>
+      <div class="section-title-text">書籍重點：各章設計原理</div>
+      <div class="section-sub">來源二</div>
+    </div>
+    <div class="chapter-list">
+      <div class="chapter-item">
+        <div class="ch-num">第 1 章</div>
+        <div class="ch-body">
+          <div class="ch-title">AI Agent 入門</div>
+          <div class="ch-points">核心公式 Agent = LLM + 上下文 + 工具；運作機制為 <strong>ReAct 迴圈</strong>（思考 → 行動 → 觀察）；編排模式從固定工作流到自主 Agent 是一個設計光譜。</div>
+        </div>
+      </div>
+      <div class="chapter-item">
+        <div class="ch-num">第 2 章</div>
+        <div class="ch-body">
+          <div class="ch-title">上下文工程（全書最關鍵）</div>
+          <div class="ch-points"><strong>上下文決定能力上限</strong>；KV Cache 快取友好設計；Agent Skills 按需動態載入；Agent 狀態列；分層上下文壓縮策略。</div>
+        </div>
+      </div>
+      <div class="chapter-item">
+        <div class="ch-num">第 3 章</div>
+        <div class="ch-body">
+          <div class="ch-title">使用者記憶與知識庫</div>
+          <div class="ch-points">個人化記憶（懂你的助手）vs 共享知識庫（領域專家）；RAG 完整技術棧；<strong>Agentic RAG</strong>：讓 Agent 自主決定何時檢索。</div>
+        </div>
+      </div>
+      <div class="chapter-item">
+        <div class="ch-num">第 4 章</div>
+        <div class="ch-body">
+          <div class="ch-title">工具</div>
+          <div class="ch-points">五類工具：感知、執行、協作、事件觸發、使用者溝通；<strong>MCP</strong> 互操作標準；執行安全機制；事件驅動非同步 Agent 架構。</div>
+        </div>
+      </div>
+      <div class="chapter-item">
+        <div class="ch-num">第 5 章</div>
+        <div class="ch-body">
+          <div class="ch-title">Coding Agent 與程式碼生成</div>
+          <div class="ch-points">通用 Agent 核心架構：<strong>Coding Agent + 檔案系統</strong>（Manus、OpenClaw 均遵循）；程式碼是元能力；Agent 自舉（程式碼創造程式碼）。</div>
+        </div>
+      </div>
+      <div class="chapter-item">
+        <div class="ch-num">第 6–8 章</div>
+        <div class="ch-body">
+          <div class="ch-title">評估、後訓練與持續進化</div>
+          <div class="ch-points"><strong>沒有評估就沒有進步</strong>；LLM-as-a-Judge；SFT 記憶、RL 泛化；資料比演算法重要；四種更新載體（知識 / Prompt / 程式碼 / 模型參數）。</div>
+        </div>
+      </div>
+      <div class="chapter-item">
+        <div class="ch-num">第 9–10 章</div>
+        <div class="ch-body">
+          <div class="ch-title">多模態互動與多 Agent 協作</div>
+          <div class="ch-points">語音三種正規化（級聯 → Omni → Full-Duplex）；Computer Use；<strong>A2A 協定</strong>與 Agent Card；多 Agent 群體智慧可能超越個體。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4: Cross-reference table -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num gray">4</div>
+      <div class="section-title-text">影片術語 × 書籍章節對照</div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>影片術語</th>
+          <th>對應書籍章節</th>
+          <th>延伸深度</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>AGENTS.md</strong></td>
+          <td>引言 + 第 2 章（系統提示詞設計）</td>
+          <td>流程驅動 vs 規則堆砌、提示注入防禦</td>
+        </tr>
+        <tr>
+          <td><strong>Agent Skill</strong></td>
+          <td>第 2 章（Agent Skills 按需載入）</td>
+          <td>KV Cache 代價、Skills 與工具的關係</td>
+        </tr>
+        <tr>
+          <td><strong>MCP</strong></td>
+          <td>第 4 章（工具生態與 MCP 標準）</td>
+          <td>五類工具設計、執行安全機制</td>
+        </tr>
+        <tr>
+          <td><strong>A2A</strong></td>
+          <td>第 10 章（多 Agent 協作）</td>
+          <td>Agent Card、對等 / 管理者 / 去中心化拓撲</td>
+        </tr>
+        <tr>
+          <td><strong>Subagents</strong></td>
+          <td>第 2 章（上下文隔離）+ 第 10 章</td>
+          <td>隔離優於壓縮、並行任務設計</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Section 5: Conclusion -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num gray">5</div>
+      <div class="section-title-text">綜合結論與建議</div>
+    </div>
+    <div class="conclusion">
+      <h3>核心共識：兩個資料來源的交叉驗證</h3>
+      <div class="conc-row">
+        <div class="conc-bar"></div>
+        <div class="conc-text"><strong>統一框架：</strong>影片與書籍均以 Agent = LLM + 上下文 + 工具 為核心公式，概念高度吻合。</div>
+      </div>
+      <div class="conc-row">
+        <div class="conc-bar"></div>
+        <div class="conc-text"><strong>實踐先於命名：</strong>書籍作者親身驗證——harness、Skills、loop engineering 等術語，均是業界早已實踐後才被命名的。</div>
+      </div>
+      <div class="conc-row">
+        <div class="conc-bar"></div>
+        <div class="conc-text"><strong>開放標準是趨勢：</strong>AGENTS.md、Agent Skills、MCP、A2A 均已成為 Linux 基金會下的開放標準，跨平台互操作是方向。</div>
+      </div>
+      <div class="conc-row">
+        <div class="conc-bar"></div>
+        <div class="conc-text"><strong>評估是核心競爭力：</strong>沒有評估機制，Agent 改進只能依賴直覺；科學評估是工程落地的地基。</div>
+      </div>
+      <h3 style="margin-top:20px">尚待解決的兩朵烏雲</h3>
+      <div class="cloud-box">
+        <div class="cloud-item">
+          <strong>即時互動</strong>
+          Agent 如何流式、即時地與環境互動，徹底擺脫「按輪次請求—應答」模式。
+        </div>
+        <div class="cloud-item">
+          <strong>持續學習</strong>
+          Agent 如何像人一樣從成功與失敗中積累經驗，而非每次任務結束後歸零。
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-container -->
+
+<div class="page-footer">Made with IBM Bob</div>
+
+</body>
+</html>
