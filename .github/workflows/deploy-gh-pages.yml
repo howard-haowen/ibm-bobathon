@@ -41,7 +41,7 @@ jobs:
           <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>IBM Bob — 工作坊 Hub</title>
+            <title>IBM Bob — Workshop Hub</title>
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&display=swap">
             <style>
@@ -76,7 +76,7 @@ jobs:
               }
               .card-grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
                 gap: 1px; background: #e0e0e0; border: 1px solid #e0e0e0;
               }
               .card {
@@ -104,16 +104,16 @@ jobs:
             </style>
           </head>
           <body>
-            <div class="utility-bar">IBM Bob · 工作坊 Hub</div>
+            <div class="utility-bar">IBM Bob · Workshop Hub</div>
             <nav class="top-nav">
               <a class="logo" href="#">IBM <span>Bob</span></a>
               <a class="github-link" href="https://github.com/howard-haowen/ibm-bobathon" target="_blank" rel="noopener noreferrer">GitHub</a>
             </nav>
             <main class="page-content">
               <div class="hero">
-                <p class="hero-eyebrow">工作坊 Hub</p>
-                <h1>IBM Bob 工作坊</h1>
-                <p>所有工作坊的成果報告，透過 IBM Bob AI Agent 研究、整理並產出。</p>
+                <p class="hero-eyebrow">Workshop Hub</p>
+                <h1>IBM Bob Workshop Hub</h1>
+                <p>所有工作坊的教學材料，透過 IBM Bob AI Agent 研究、整理並產出。</p>
               </div>
           EOF
 
@@ -127,7 +127,7 @@ jobs:
             cards_html="${cards_html}      <a class=\"card\" href=\"workshops/${slug}/\">\n"
             cards_html="${cards_html}        <p class=\"card-eyebrow\">${slug}</p>\n"
             cards_html="${cards_html}        <h2>工作坊 ${slug}</h2>\n"
-            cards_html="${cards_html}        <p>瀏覽 ${slug} 工作坊所有報告。</p>\n"
+            cards_html="${cards_html}        <p>瀏覽 ${slug} 工作坊成果內容。</p>\n"
             cards_html="${cards_html}        <span class=\"card-cta\">進入工作坊</span>\n"
             cards_html="${cards_html}      </a>\n"
           done
