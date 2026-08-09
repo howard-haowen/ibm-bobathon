@@ -8,12 +8,16 @@
 ├── AGENTS.md              # Bob AI agent 指令設定（角色、工作流程、限制）
 ├── DESIGN.md              # HTML 輸出的視覺設計規範（色彩、字型、元件）
 ├── hackathon-team-plan.md # 黑客松團隊分工計劃與 Git 操作指南
-├── artifacts/             # 產出的 HTML 簡報檔案
-│   ├── index.html
-│   ├── agentic-ai-key-concepts.html
-│   └── hackathon-team-plan.html
+├── workshops/
+│   └── w01/
+│       └── artifacts/     # w01 工作坊產出的 HTML 簡報
+│           ├── index.html
+│           ├── 01-agentic-ai-key-concepts.html
+│           ├── 02-hackathon-team-plan.html
+│           └── 03-datasets.html
 ├── .github/workflows/
-│   └── deploy-gh-pages.yml # 自動部署 artifacts/ 到 GitHub Pages
+│   └── deploy-gh-pages.yml      # 自動部署各工作坊 artifacts 到 GitHub Pages
+├── skills-lock.json       # Bob skills 版本鎖定檔
 ├── youtube-k5jYwyhDMxA.md # YouTube 影片逐字稿與摘要
 └── book-深入理解AIAgent.md # Apple Books 書籍摘要
 ```
@@ -27,7 +31,7 @@
 提供書名關鍵字 → Bob 搜尋本機 Apple Books → 讀取內容 → 產出核心論點與章節重點摘要
 
 ### 3. HTML 簡報產生
-整合上述摘要資料 → Bob 依 `DESIGN.md` 規範產出單頁 HTML 簡報 → 儲存至 `artifacts/`
+整合上述摘要資料 → Bob 依 `DESIGN.md` 規範產出單頁 HTML 簡報 → 儲存至 `workshops/w01/artifacts/`
 
 簡報結構：封面 → 資料來源概覽 → 各來源重點摘要 → 綜合結論與建議
 
@@ -40,23 +44,24 @@
 
 ## GitHub Pages 部署
 
-`artifacts/` 下的 HTML 簡報透過 GitHub Actions 自動發布至 GitHub Pages。
+各工作坊的 HTML 簡報透過 GitHub Actions 自動發布至 GitHub Pages。
 
-**網址**：`https://howard-haowen.github.io/ibm-bobathon/`
+**Hub 首頁**：`https://howard-haowen.github.io/ibm-bobathon/`
+**w01 工作坊**：`https://howard-haowen.github.io/ibm-bobathon/workshops/w01/`
 
 ### 部署流程
 
 ```
-修改 artifacts/ → git push origin main → GitHub Actions 自動觸發 → gh-pages 更新 → 網站發布
+修改 workshops/w01/artifacts/ → git push origin main → GitHub Actions 自動觸發 → gh-pages 更新 → 網站發布
 ```
 
 ### Workflow 說明（[`.github/workflows/deploy-gh-pages.yml`](.github/workflows/deploy-gh-pages.yml)）
 
 | 設定 | 說明 |
 |------|------|
-| 觸發條件 | push 到 `main` 且 `artifacts/**` 有變動 |
+| 觸發條件 | push 到 `main` 且 `workshops/**/artifacts/**` 有變動 |
 | 部署工具 | `peaceiris/actions-gh-pages@v4` |
-| 來源目錄 | `./artifacts`（內容放至 `gh-pages` 根目錄） |
+| 來源目錄 | `./_site`（動態彙整所有工作坊 artifacts） |
 | 認證方式 | `GITHUB_TOKEN`（自動提供，無需手動設定） |
 | commit 歷史 | 保留（`force_orphan: false`） |
 
