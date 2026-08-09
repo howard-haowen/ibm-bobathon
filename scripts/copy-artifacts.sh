@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # copy-artifacts.sh
-# Copies the artifacts/ directory from the main branch into a target branch,
-# then pushes the result to the remote.
+# Copies the local artifacts/ directory (gitignored working directory) into a
+# target workshop branch, then pushes the result to the remote.
+# Note: workshop/wNN branches are orphans — they are never merged into main.
 
 set -euo pipefail
 
