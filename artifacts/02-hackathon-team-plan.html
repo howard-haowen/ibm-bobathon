@@ -473,15 +473,18 @@
 
         <hr class="section-sep">
 
-        <div class="section-title">整合階段操作流程</div>
-        <p class="section-sub">整合時確保 main branch 是最終乾淨版本</p>
+        <div class="section-title">GitHub 協作操作流程</div>
+        <p class="section-sub">從建立 repo 到整合，完整的 GitHub 協作步驟</p>
 
         <ul class="step-list">
-          <li><div class="step-num">1</div><div>每人確認自己的 branch 已完成最後一次 <strong>commit + push</strong></div></li>
-          <li><div class="step-num">2</div><div>向技術 Lead 發出 <strong>Pull Request</strong>，附上簡短說明（我做了什麼）</div></li>
-          <li><div class="step-num">3</div><div>技術 Lead 審查並 <strong>merge</strong> 到 main，發現衝突時請 Bob 協助解決</div></li>
-          <li><div class="step-num">4</div><div>所有人從 main <strong>pull</strong> 最新版本，確認本地端與 GitHub 同步</div></li>
-          <li><div class="step-num">5</div><div>確認 GitHub repo 上每人都有 <strong>commit 紀錄</strong>，README 完整</div></li>
+          <li><div class="step-num">1</div><div>派一位代表在 GitHub 上<strong>新增團隊 repo</strong>，並在 Settings → Collaborators 將所有其他成員加入<strong>協作者</strong></div></li>
+          <li><div class="step-num">2</div><div>其他成員收到邀請並接受後，在自己的電腦執行 <strong>git clone</strong> 將 repo 複製到本地：<br><code style="display:inline-block;margin-top:6px;">git clone https://github.com/帳號/repo名稱.git</code></div></li>
+          <li><div class="step-num">3</div><div>每位成員進入 repo 目錄，依照自己的角色<strong>新增個人 branch</strong>，建議命名規則 <code>feature/名字-角色</code>：<br><code style="display:inline-block;margin-top:6px;">git checkout -b feature/名字-角色</code></div></li>
+          <li><div class="step-num">4</div><div>每人確認自己的 branch 已完成最後一次 <strong>commit + push</strong></div></li>
+          <li><div class="step-num">5</div><div>向技術 Lead 發出 <strong>Pull Request</strong>，附上簡短說明（我做了什麼）</div></li>
+          <li><div class="step-num">6</div><div>技術 Lead 審查並 <strong>merge</strong> 到 main，發現衝突時請 Bob 協助解決</div></li>
+          <li><div class="step-num">7</div><div>所有人從 main <strong>pull</strong> 最新版本，確認本地端與 GitHub 同步</div></li>
+          <li><div class="step-num">8</div><div>確認 GitHub repo 上每人都有 <strong>commit 紀錄</strong>，README 完整</div></li>
         </ul>
 
         <div class="cta-banner">
