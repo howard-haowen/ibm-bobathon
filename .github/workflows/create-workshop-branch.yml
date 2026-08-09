@@ -1,0 +1,49 @@
+name: Create Workshop Branch
+
+on:
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: 'Workshop slug (e.g. w02, w03)'
+        required: true
+        type: string
+
+jobs:
+  create-branch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Create workshop branch and seed from main
+        env:
+          SLUG: ${{ github.event.inputs.slug }}
+        run: |
+          BRANCH="workshop/$SLUG"
+
+          # Fail early if branch already exists on remote
+          if git ls-remote --exit-code --heads origin "$BRANCH" > /dev/null 2>&1; then
+            echo "::error::Branch '$BRANCH' already exists on remote. Aborting."
+            exit 1
+          fi
+
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Create branch from main
+          git checkout -b "$BRANCH"
+
+          # artifacts/, .bob/, AGENTS.md are already present (checked out from main).
+          # Commit them as the workshop's initial snapshot.
+          git add artifacts/ .bob/ AGENTS.md
+          git commit -m "chore($SLUG): seed workshop branch from main" \
+            --allow-empty
+
+          git push origin "$BRANCH"
+          echo "Branch '$BRANCH' created and pushed successfully."
