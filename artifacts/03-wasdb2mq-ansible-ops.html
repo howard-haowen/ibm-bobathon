@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用 IBM Bob 輔助 WAS、MQ、Db2 維運與 Ansible 自動化</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&display=swap">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: 0.16px;
+      color: #161616;
+      background: #ffffff;
+    }
+
+    /* Utility bar */
+    .utility-bar {
+      background: #f4f4f4;
+      color: #525252;
+      font-size: 12px;
+      letter-spacing: 0.32px;
+      line-height: 1.33;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    /* Top nav */
+    .top-nav {
+      background: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+    }
+    .top-nav .logo {
+      font-size: 18px;
+      font-weight: 600;
+      color: #161616;
+      text-decoration: none;
+    }
+    .top-nav .logo span { color: #0f62fe; }
+
+    /* Main content */
+    .page-content {
+      max-width: 1056px;
+      margin: 0 auto;
+      padding: 64px 32px 96px;
+    }
+
+    /* Hero */
+    .hero {
+      margin-bottom: 48px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .hero-eyebrow {
+      font-size: 14px;
+      color: #525252;
+      letter-spacing: 0.16px;
+      line-height: 1.29;
+      margin-bottom: 12px;
+    }
+    .hero h1 {
+      font-size: 42px;
+      font-weight: 300;
+      line-height: 1.20;
+      color: #161616;
+      margin-bottom: 16px;
+    }
+    .hero p {
+      font-size: 18px;
+      color: #525252;
+      line-height: 1.5;
+      max-width: 760px;
+    }
+
+    /* Section title */
+    .section-title {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.33;
+      color: #161616;
+      margin-top: 48px;
+      margin-bottom: 24px;
+    }
+
+    .section-desc {
+      font-size: 16px;
+      color: #525252;
+      line-height: 1.5;
+      margin-bottom: 24px;
+      max-width: 760px;
+    }
+
+    /* Grid layout */
+    .scene-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1px;
+      background: #e0e0e0;
+      border: 1px solid #e0e0e0;
+      margin-bottom: 48px;
+    }
+    .scene-card {
+      background: #ffffff;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .scene-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #161616;
+    }
+    .scene-card p {
+      font-size: 14px;
+      color: #525252;
+      line-height: 1.4;
+    }
+
+    /* Log Box */
+    .log-box {
+      border: 1px solid #e0e0e0;
+      background: #161616;
+      padding: 16px 20px;
+      margin: 16px 0 24px;
+    }
+    .log-header {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #8c8c8c;
+      text-transform: uppercase;
+      border-bottom: 1px solid #393939;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+    .log-text {
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      font-size: 13px;
+      color: #f4f4f4;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    /* Prompt Box */
+    .prompt-showcase {
+      border: 1px solid #e0e0e0;
+      background: #f4f4f4;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+    .prompt-header {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #0f62fe;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .prompt-text {
+      font-style: italic;
+      color: #161616;
+      font-size: 15px;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    .response-header {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #198038;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .response-content {
+      font-size: 14px;
+      color: #525252;
+      line-height: 1.6;
+    }
+
+    /* Table */
+    .carbon-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 32px;
+      text-align: left;
+    }
+    .carbon-table th {
+      background: #f4f4f4;
+      color: #161616;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 12px 16px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .carbon-table td {
+      color: #525252;
+      font-size: 14px;
+      padding: 16px;
+      border-bottom: 1px solid #e0e0e0;
+      line-height: 1.5;
+    }
+
+    /* Code Highlight box */
+    pre {
+      background: #f4f4f4;
+      padding: 16px 20px;
+      border-left: 4px solid #0f62fe;
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      font-size: 13.5px;
+      color: #161616;
+      line-height: 1.6;
+      overflow-x: auto;
+      margin: 16px 0 24px;
+    }
+
+    /* Footer */
+    footer {
+      background: #161616;
+      color: #c6c6c6;
+      font-size: 14px;
+      letter-spacing: 0.16px;
+      line-height: 1.29;
+      padding: 64px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    footer span { font-size: 12px; color: #8c8c8c; }
+  </style>
+</head>
+<body>
+
+  <div class="utility-bar">IBM Bob · 工作坊教學材料</div>
+
+  <nav class="top-nav">
+    <a class="logo" href="index.html">IBM <span>Bob</span></a>
+  </nav>
+
+  <main class="page-content">
+
+    <div class="hero">
+      <p class="hero-eyebrow">工作坊教材 · IT 維運輔助</p>
+      <h1>用 IBM Bob 輔助 WAS、MQ、Db2 維運與 Ansible 自動化</h1>
+      <p>本教材展示如何利用 IBM Bob 的 Ask 與 Agent 模式，在不依賴真實伺服器的情況下，進行 WAS/MQ 錯誤日誌分析、Db2 SQL 問題排查，並自動生成 Ansible 自動化 Playbook。</p>
+    </div>
+
+    <!-- Section 1 -->
+    <h2 class="section-title">維運四大實戰情境</h2>
+    <p class="section-desc">在大型企業中，維運工程師每天面對無數的系統日誌與繁瑣的重啟任務。IBM Bob 可扮演您的維運副駕駛，在關鍵時刻提供秒級診斷建議與腳本支援：</p>
+
+    <div class="scene-grid">
+      <div class="scene-card">
+        <h3>WAS 日誌診斷</h3>
+        <p>快速解讀 SystemOut.log 的 Java OutOfMemory 堆疊，提供故障排除與參數優化方案。</p>
+      </div>
+      <div class="scene-card">
+        <h3>MQ 通道排查</h3>
+        <p>定位 AMQ 錯誤代碼，分析網路與認證失敗原因，無需翻閱厚重的系統指南。</p>
+      </div>
+      <div class="scene-card">
+        <h3>Db2 SQL 輔助</h3>
+        <p>描述系統異常需求（如死鎖、長時間等待），由 Bob 即時生成精確的診斷型 SQL 語法。</p>
+      </div>
+      <div class="scene-card">
+        <h3>Ansible 自動維護</h3>
+        <p>自動生成標準化 Playbook，快速分發配置或重啟損壞節點，降低手動操作失誤。</p>
+      </div>
+    </div>
+
+    <!-- Section 2 -->
+    <h2 class="section-title">情境一：WAS SystemOut.log 分析</h2>
+    <p class="section-desc">當 WebSphere Application Server 突然當機，而日誌中噴出以下 JVM OutOfMemory 片段時，新進維運同仁往往不知從何下手：</p>
+
+    <div class="log-box">
+      <div class="log-header">JVM SystemOut.log EXCERPT</div>
+      <div class="log-text">[10/24/23 15:42:01:294 CST] 0000004d SystemErr     R Exception in thread "WebContainer : 3" java.lang.OutOfMemoryError: Java heap space
+    at java.util.Arrays.copyOf(Arrays.java:3332)
+    at java.io.ByteArrayOutputStream.write(ByteArrayOutputStream.java:167)
+    at com.ibm.ws.webcontainer.srt.impl.HttpInputStream.read(HttpInputStream.java:214)</div>
+    </div>
+
+    <div class="prompt-showcase">
+      <div class="prompt-header">學員 Prompt (Ask 模式)</div>
+      <div class="prompt-text">「請幫我診斷這段 WAS 日誌。發生了什麼問題？我該如何排查，以及在 WAS 主控台需要調整哪些參數？」</div>
+      <div class="response-header">IBM Bob 的維運診斷回應</div>
+      <div class="response-content">
+        1. <strong>根本原因：</strong>JVM 堆疊記憶體不足（<code>java.lang.OutOfMemoryError: Java heap space</code>），這意味著應用程式耗盡了分配給 WAS JVM 的記憶體。<br>
+        2. <strong>代碼層分析：</strong>從堆疊軌跡可以看出，在處理 <code>HttpInputStream.read</code> 並往 <code>ByteArrayOutputStream</code> 寫入大檔案時發生了擴容拷貝（<code>Arrays.copyOf</code>），推測是學員/使用者上傳了超大型檔案。<br>
+        3. <strong>應急排查法：</strong>使用 IBM Memory Analyzer (MAT) 分析 <code>.phd</code> 或 <code>.hprof</code> 格式的 Heap Dump，找出記憶體洩漏（Memory Leak）的主要物件。<br>
+        4. <strong>主控台參數調整：</strong>登入 WAS 管理主控台 <code>Servers &gt; Server Infrastructure &gt; Java and Process Management &gt; Process definition &gt; Java Virtual Machine</code>，將 "Maximum heap size"（最大堆疊記憶體，例如由 1024M 擴增至 2048M）適度上調。
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <h2 class="section-title">情境二：IBM MQ AMQERR01.LOG 分析</h2>
+    <p class="section-desc">當 MQ Channel 無法正常啟動，連線發生異常時，AMQ 錯誤日誌是關鍵的線索來源：</p>
+
+    <div class="log-box">
+      <div class="log-header">MQ AMQERR01.LOG EXCERPT</div>
+      <div class="log-text">AMQ9208E: Error on receive from host '192.168.1.105 (192.168.1.105)'.
+EXPLANATION:
+An error occurred receiving data from '192.168.1.105 (192.168.1.105)' over TCP/IP.
+ACTION:
+The connection to the remote host was unexpectedly terminated. Record the TCP/IP error code 10054 (X'2746').</div>
+    </div>
+
+    <div class="prompt-showcase">
+      <div class="prompt-header">學員 Prompt (Ask 模式)</div>
+      <div class="prompt-text">「我的 MQ 通道斷開了，AMQ9208E 伴隨錯誤碼 10054 代表什麼意思？我該如何修復它？」</div>
+      <div class="response-header">IBM Bob 的維運診斷回應</div>
+      <div class="response-content">
+        1. <strong>錯誤解讀：</strong><code>AMQ9208E</code> 是典型 TCP/IP 通訊層錯誤。而 Windows TCP/IP 錯誤碼 <code>10054</code> (或 Linux 下的 <code>ECONNRESET</code>) 代表<strong>「連線被遠端主機強行關閉」</strong>。<br>
+        2. <strong>常見肇因：</strong>遠端的佇列管理器（Queue Manager）突然重啟、遠端的 MQ 監聽器（Listener）沒在運行，或者介於兩台主機之間的防火牆（Firewall）因為閒置逾時（Idle Timeout）強行切斷了 TCP 長連線。<br>
+        3. <strong>排查步驟：</strong><br>
+        &nbsp;&nbsp;&nbsp;&bull; 檢查遠端 MQ 主機，確保 <code>runmqlsr -m QM_NAME -p 1414</code> 正在正常監聽。<br>
+        &nbsp;&nbsp;&nbsp;&bull; 檢查 MQ Channel 的 KeepAlive 屬性。在佇列管理器端設置 <code>KeepAlive=YES</code>，利用 TCP 保活機制防止防火牆隨意中斷閒置連線。
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <h2 class="section-title">情境三：Db2 維運 SQL 生成</h2>
+    <p class="section-desc">當核心資料庫效能低下、疑似發生死鎖等待（Lock Wait）時，我們可以描述需求，讓 Bob 自動產生專屬的診斷 SQL 語法：</p>
+
+    <div class="prompt-showcase">
+      <div class="prompt-header">學員 Prompt (Agent 模式)</div>
+      <div class="prompt-text">「請幫我寫一條 IBM Db2 語法，用來查詢目前所有正在處於 Lock Wait 狀態的 Application Handle、鎖定的 Table 名稱以及等待的時間（秒數）。」</div>
+      <div class="response-header">IBM Bob 生成的 Db2 診斷 SQL</div>
+      <div class="response-content">
+        <pre style="margin: 0; padding: 12px; font-size:12px;">SELECT 
+    AI.AGENT_USERID AS USER_ID,
+    LW.AGENT_HOLDING_LK AS LOCK_HOLDER_HANDLE,
+    LW.REQ_AGENT_ID AS WAITING_HANDLE,
+    LW.LOCK_NAME AS LOCK_ID,
+    LW.TABNAME AS TABLE_NAME,
+    LW.LOCK_WAIT_START_TIME AS START_TIME,
+    (CURRENT TIMESTAMP - LW.LOCK_WAIT_START_TIME) AS WAIT_TIME_SECONDS
+FROM 
+    SYSIBMADM.LOCKWAITS LW
+JOIN 
+    SYSIBMADM.APPL_INFO AI ON LW.REQ_AGENT_ID = AI.AGENT_ID
+ORDER BY 
+    WAIT_TIME_SECONDS DESC;</pre>
+      </div>
+    </div>
+
+    <!-- Section 5 -->
+    <h2 class="section-title">情境四：Ansible 自動重啟 WAS Playbook 生成</h2>
+    <p class="section-desc">診斷完畢後，若需要將「重啟 WAS 伺服器」的繁瑣步驟寫入自動化運維流程中，我們可以直接讓 Bob 自動草稿一份標準的 Ansible Playbook：</p>
+
+    <pre><code># Ansible Playbook 示範 (由 Bob Agent 模式生成)
+- name: Restart WebSphere Application Server Node
+  hosts: was_servers
+  become: yes
+  vars:
+    was_profile_path: "/opt/IBM/WebSphere/AppServer/profiles/AppSrv01/bin"
+    was_server_name: "server1"
+
+  tasks:
+    - name: Stop WebSphere Application Server
+      shell: "./stopServer.sh {{ was_server_name }} -username admin -password admin_pwd"
+      args:
+        chdir: "{{ was_profile_path }}"
+      ignore_errors: yes
+
+    - name: Ensure JVM process is dead
+      wait_for:
+        port: 9080
+        state: stopped
+        timeout: 30
+
+    - name: Start WebSphere Application Server
+      shell: "./startServer.sh {{ was_server_name }}"
+      args:
+        chdir: "{{ was_profile_path }}"
+
+    - name: Verify server port is listening
+      wait_for:
+        port: 9080
+        delay: 5
+        timeout: 120</code></pre>
+
+    <!-- FAQ -->
+    <h2 class="section-title">常見問答</h2>
+    <table class="carbon-table">
+      <thead>
+        <tr>
+          <th style="width: 35%;">學員疑問</th>
+          <th style="width: 65%;">解答說明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Bob 判斷錯誤碼是否可能過時或不準？</strong></td>
+          <td>Bob 使用最先進的檢索機制。對於 IBM 這種擁有高穩定度的產品（WAS/MQ），其 SystemOut、AMQ 錯誤代碼數十年來皆保持高度向下相容，診斷準確度極高。</td>
+        </tr>
+        <tr>
+          <td><strong>我可以讓 Bob 直接幫我執行 Ansible Playbook 嗎？</strong></td>
+          <td>只要在 Agent 模式下，且您的本機具備 <code>ansible-playbook</code> 執行環境，並且 Bob 被授予了對應的 CLI 執行權限，Bob 即可直接幫您呼叫指令測試。</td>
+        </tr>
+        <tr>
+          <td><strong>為什麼在 Db2 中我的診斷 SQL 找不到對應的表？</strong></td>
+          <td>請確認您的 Db2 版本與環境配置。部分效能視圖需要開啟監控器開關（例如：<code>db2 update dbm cfg using DFT_MON_LOCK ON</code>）才能正常獲取鎖資訊。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Finish CTA Banner -->
+    <div class="cta-banner" style="background: #198038;">
+      <h3>工作坊單元已全部閱讀完畢！</h3>
+      <p>恭喜您順利學會了 IBM Bob 基礎操作、COBOL 系統傳承解讀，以及 WAS/MQ/Db2 自動化運維排查！請點擊下方返回課程主索引頁，並使用複製的指令開始克隆與實作吧！</p>
+      <p>
+        <a href="index.html" class="cta-link" style="text-decoration: underline;">返回教材主索引頁 →</a>
+      </p>
+    </div>
+
+  </main>
+
+  <footer>
+    <span>Made with IBM Bob</span>
+  </footer>
+
+</body>
+</html>

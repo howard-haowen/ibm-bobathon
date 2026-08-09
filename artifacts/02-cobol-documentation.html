@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用 IBM Bob 解讀、文件化與傳承 COBOL 程式</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&display=swap">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: 0.16px;
+      color: #161616;
+      background: #ffffff;
+    }
+
+    /* Utility bar */
+    .utility-bar {
+      background: #f4f4f4;
+      color: #525252;
+      font-size: 12px;
+      letter-spacing: 0.32px;
+      line-height: 1.33;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    /* Top nav */
+    .top-nav {
+      background: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+    }
+    .top-nav .logo {
+      font-size: 18px;
+      font-weight: 600;
+      color: #161616;
+      text-decoration: none;
+    }
+    .top-nav .logo span { color: #0f62fe; }
+
+    /* Main content */
+    .page-content {
+      max-width: 1056px;
+      margin: 0 auto;
+      padding: 64px 32px 96px;
+    }
+
+    /* Hero */
+    .hero {
+      margin-bottom: 48px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .hero-eyebrow {
+      font-size: 14px;
+      color: #525252;
+      letter-spacing: 0.16px;
+      line-height: 1.29;
+      margin-bottom: 12px;
+    }
+    .hero h1 {
+      font-size: 42px;
+      font-weight: 300;
+      line-height: 1.20;
+      color: #161616;
+      margin-bottom: 16px;
+    }
+    .hero p {
+      font-size: 18px;
+      color: #525252;
+      line-height: 1.5;
+      max-width: 760px;
+    }
+
+    /* Section title */
+    .section-title {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.33;
+      color: #161616;
+      margin-top: 48px;
+      margin-bottom: 24px;
+    }
+
+    .section-desc {
+      font-size: 16px;
+      color: #525252;
+      line-height: 1.5;
+      margin-bottom: 24px;
+      max-width: 760px;
+    }
+
+    /* Table */
+    .carbon-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 32px;
+      text-align: left;
+    }
+    .carbon-table th {
+      background: #f4f4f4;
+      color: #161616;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 12px 16px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .carbon-table td {
+      color: #525252;
+      font-size: 14px;
+      padding: 16px;
+      border-bottom: 1px solid #e0e0e0;
+      line-height: 1.5;
+    }
+    .carbon-table tr:hover td {
+      background: #f4f4f4;
+    }
+
+    /* Code Block */
+    pre {
+      background: #f4f4f4;
+      padding: 16px 20px;
+      border-left: 4px solid #0f62fe;
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      font-size: 13.5px;
+      color: #161616;
+      line-height: 1.6;
+      overflow-x: auto;
+      margin: 16px 0 24px;
+    }
+    code {
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      font-size: 13px;
+    }
+
+    /* Blockquote / Prompt Showcase */
+    .prompt-showcase {
+      border: 1px solid #e0e0e0;
+      background: #f4f4f4;
+      padding: 24px;
+      margin: 24px 0;
+    }
+    .prompt-header {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #0f62fe;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .prompt-text {
+      font-style: italic;
+      color: #161616;
+      font-size: 15px;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    .response-header {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #198038;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .response-content {
+      font-size: 14px;
+      color: #525252;
+      line-height: 1.6;
+    }
+
+    /* Grid for Task Cards */
+    .task-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+    @media (max-width: 768px) {
+      .task-grid { grid-template-columns: 1fr; }
+    }
+    .task-card {
+      border: 1px solid #e0e0e0;
+      padding: 24px;
+      background: #ffffff;
+    }
+    .task-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #161616;
+      margin-bottom: 8px;
+    }
+    .task-card p {
+      font-size: 14px;
+      color: #525252;
+      line-height: 1.5;
+    }
+
+    /* Footer */
+    footer {
+      background: #161616;
+      color: #c6c6c6;
+      font-size: 14px;
+      letter-spacing: 0.16px;
+      line-height: 1.29;
+      padding: 64px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    footer span { font-size: 12px; color: #8c8c8c; }
+
+    /* CTA Section */
+    .cta-banner {
+      background: #0f62fe;
+      color: #ffffff;
+      padding: 48px;
+      margin-top: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .cta-banner h3 {
+      font-size: 24px;
+      font-weight: 300;
+      line-height: 1.25;
+    }
+    .cta-banner p {
+      font-size: 16px;
+      line-height: 1.5;
+      max-width: 600px;
+      opacity: 0.9;
+    }
+    .cta-link {
+      color: #ffffff;
+      font-weight: 600;
+      text-decoration: underline;
+      font-size: 15px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .cta-link:hover {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="utility-bar">IBM Bob · 工作坊教學材料</div>
+
+  <nav class="top-nav">
+    <a class="logo" href="index.html">IBM <span>Bob</span></a>
+  </nav>
+
+  <main class="page-content">
+
+    <div class="hero">
+      <p class="hero-eyebrow">工作坊教材 · COBOL 傳承</p>
+      <h1>用 IBM Bob 解讀、文件化與傳承 COBOL 程式</h1>
+      <p>以開源的 cics-genapp 為範例，展示如何使用 IBM Bob 在無編譯環境下，高效進行 COBOL 程式碼解讀、生成業務規則、撰寫新功能段落與進行新進人員知識傳承。</p>
+    </div>
+
+    <!-- Section 1 -->
+    <h2 class="section-title">cics-genapp 示範專案簡介</h2>
+    <p class="section-desc">cics-genapp 是 IBM 官方開源的典型 mainframe 應用程式，模擬保險公司的核心交易系統。在真實的核心傳承工作中，我們常常需要在沒有編譯器的本機環境下，快速理清以下龐雜的原始碼結構：</p>
+
+    <table class="carbon-table">
+      <thead>
+        <tr>
+          <th style="width: 25%;">COBOL 原始檔名</th>
+          <th style="width: 45%;">核心功能描述</th>
+          <th style="width: 30%;">估算規模與特徵</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>LGACUS01.cbl</strong></td>
+          <td>新增客戶保險單（Add Customer Policy）</td>
+          <td>約 800 行，包含 CICS EXEC 呼叫與 DB2 寫入</td>
+        </tr>
+        <tr>
+          <td><strong>LGDPDB01.cbl</strong></td>
+          <td>刪除保單與相關聯客戶資料（Delete Policy）</td>
+          <td>約 600 行，涉及多表聯動外鍵與防呆校驗</td>
+        </tr>
+        <tr>
+          <td><strong>LGIPDB01.cbl</strong></td>
+          <td>查詢保單詳情（Inquire Policy DB）</td>
+          <td>約 500 行，典型 SQL 查詢與記憶體變數 mapping</td>
+        </tr>
+        <tr>
+          <td><strong>LGUPVS01.cbl</strong></td>
+          <td>更新保單狀態與理賠記錄（Update VSAM）</td>
+          <td>約 700 行，混合 VSAM 檔案與關係型 DB2 讀寫</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Section 2 -->
+    <h2 class="section-title">COBOL 四大傳承任務實踐</h2>
+    <p class="section-desc">我們將展示新進工程師如何透過 IBM Bob，將看似天書的 COBOL 程式碼快速轉化為可讀文件與新功能代碼。</p>
+
+    <!-- Task 1 -->
+    <h2 class="section-title" style="font-size: 20px; font-weight: 600;">任務一：解讀 (Deconstruct) — 看懂核心開單邏輯</h2>
+    <p class="section-desc">當我們需要讀懂 <code>LGACUS01.cbl</code> 中的 CICS & DB2 變數映射時，可以貼出該 COBOL 段落，並使用 Ask 模式請求 Bob 解讀：</p>
+
+    <pre><code>* COBOL CODE SAMPLE FROM LGACUS01.cbl
+       EXEC CICS GET CONTAINER('Customer')
+                 INTO(CUSTOMER-DATA)
+                 RESP(WS-RESP)
+       END-EXEC.
+       
+       IF WS-RESP = DFHRESP(NORMAL)
+           MOVE CUSTOMER-ID TO DB-CUST-ID
+           EXEC SQL
+               INSERT INTO CUSTOMER (CUST_ID, FIRST_NAME, LAST_NAME)
+               VALUES (:DB-CUST-ID, :DB-FIRST-NAME, :DB-LAST-NAME)
+           END-EXEC
+       ELSE
+           PERFORM ERROR-HANDLING
+       END-IF.</code></pre>
+
+    <div class="prompt-showcase">
+      <div class="prompt-header">學員 Prompt (Ask 模式)</div>
+      <div class="prompt-text">「請幫我用繁體中文解讀這段 COBOL 程式碼。這是一個 CICS 交易，請解釋它如何獲取資料，以及在什麼條件下會寫入 DB2 資料庫？」</div>
+      <div class="response-header">IBM Bob 的分析回應</div>
+      <div class="response-content">
+        1. <strong>CICS 容器獲取：</strong>此段程式碼首先透過 <code>EXEC CICS GET CONTAINER</code> 指令，自名為 'Customer' 的容器中讀取學員/客戶資料，並將其放入 <code>CUSTOMER-DATA</code> 變數中，同時將狀態存入 <code>WS-RESP</code>。<br>
+        2. <strong>條件防呆校驗：</strong>只有當 <code>WS-RESP</code> 的回應為 <code>DFHRESP(NORMAL)</code>（即讀取完全正常）時，才會執行後續的 DB2 寫入。<br>
+        3. <strong>DB2 SQL 寫入：</strong>將本地變數 <code>CUSTOMER-ID</code> 搬移（MOVE）至 <code>DB-CUST-ID</code>，並執行內嵌 SQL <code>INSERT INTO CUSTOMER</code> 寫入資料庫。<br>
+        4. <strong>異常處理：</strong>若讀取容器失敗，則進入 <code>ERROR-HANDLING</code> 錯誤處理段落。
+      </div>
+    </div>
+
+    <!-- Task 2 -->
+    <h2 class="section-title" style="font-size: 20px; font-weight: 600;">任務二：文件化 (Document) — 萃取核心業務邏輯</h2>
+    <p class="section-desc">核心系統最怕「人走茶涼、文件遺失」。我們可以使用 Bob 為 <code>LGUPVS01.cbl</code> 自動提煉出結構化的 Business Rules 文件：</p>
+
+    <div class="prompt-showcase">
+      <div class="prompt-header">學員 Prompt (Plan / Ask 模式)</div>
+      <div class="prompt-text">「這段 COBOL 代碼包含理賠比例的限制：如果保單不滿一年，理賠金額上限為 50%，如果滿一年但小於三年則為 80%。請幫我以此萃取出一份繁體中文的業務規則規格書（Business Rules Specification）。」</div>
+      <div class="response-header">IBM Bob 產生的文件草稿</div>
+      <div class="response-content" style="font-family: inherit;">
+        <h4 style="font-size: 15px; font-weight:600; color:#161616; margin-bottom:8px;">理賠核心業務規則 (Rule-ID: INS-CLM-01)</h4>
+        <p style="margin-bottom: 8px;"><strong>1. 規則意圖：</strong>防止短期惡意投保理賠，並根據保單效期進行理賠額度遞增控管。</p>
+        <table class="carbon-table" style="margin-bottom: 8px;">
+          <thead>
+            <tr>
+              <th>保單效期 (T)</th>
+              <th>理賠上限比例</th>
+              <th>對應 COBOL 控制變數</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>T &lt; 1 年</td>
+              <td>50%</td>
+              <td><code>WS-POLICY-AGE &lt; 365</code></td>
+            </tr>
+            <tr>
+              <td>1 年 &le; T &lt; 3 年</td>
+              <td>80%</td>
+              <td><code>WS-POLICY-AGE &ge; 365 AND &lt; 1095</code></td>
+            </tr>
+            <tr>
+              <td>T &ge; 3 年</td>
+              <td>100% (全額)</td>
+              <td><code>ELSE 段落</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Task 3 & 4 Grid -->
+    <h2 class="section-title">任務三與任務四：撰寫新段落與知識傳承</h2>
+    <div class="task-grid">
+      <div class="task-card">
+        <h3>任務三：新進撰寫 (Construct)</h3>
+        <p style="margin-bottom: 12px;">當業務變更，需要增加一個「核對保單是否已逾期」的判斷段落時。新進工程師只需輸入商業邏輯：</p>
+        <span style="font-size: 13px; color: #0f62fe; font-weight:600; display:block; margin-bottom:8px;">Bob 產生的符合規格 COBOL 片段：</span>
+        <pre style="margin: 0; padding: 12px; font-size:12px;">       Evaluate True
+           When Expiry-Date < Current-Date
+               Set Policy-Status-Expired To True
+               Perform Expired-Handling
+           When Other
+               Perform Normal-Processing
+       End-Evaluate.</pre>
+      </div>
+
+      <div class="task-card">
+        <h3>任務四：新進傳承 (Transfer)</h3>
+        <p style="margin-bottom: 12px;">系統交接給新進同仁時，讓 Bob 自動產生「新手工程師導覽卡」：</p>
+        <ul style="font-size: 13px; color: #525252; padding-left: 16px; line-height: 1.6;">
+          <li><strong>變數命名法：</strong><code>WS-</code> 開頭代表 Working Storage，<code>LS-</code> 代表 Linkage Section。</li>
+          <li><strong>交易調用：</strong><code>DFHRESP(NORMAL)</code> 是 CICS 中檢查 API 執行成功的最常用手段。</li>
+          <li><strong>除錯技巧：</strong>利用 Bob 提煉出段落呼叫圖 (Paragraph Call Tree) 快速定位死循環。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bob Prompt Cheat Sheet -->
+    <h2 class="section-title">Bob COBOL 傳承常用 Prompt 速查表</h2>
+    <table class="carbon-table">
+      <thead>
+        <tr>
+          <th style="width: 30%;">應用場景</th>
+          <th style="width: 70%;">推薦使用的對話範本 (Prompt)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>代碼快速導讀</strong></td>
+          <td><code>「請幫我產生這段 COBOL 程式碼的 Paragraph 呼叫順序，並指出最核心的入口 paragraph 哪裡？」</code></td>
+        </tr>
+        <tr>
+          <td><strong>資料庫字典映射</strong></td>
+          <td><code>「請列出這段 EXEC SQL 區塊中，所有的 Host Variables 及其對應的 DB2 資料庫欄位對照表。」</code></td>
+        </tr>
+        <tr>
+          <td><strong>防呆與業務規則提煉</strong></td>
+          <td><code>「這段程式碼有哪些防呆、例外處理（Exception Handling）與 Error Code？請用繁體中文條列成清單。」</code></td>
+        </tr>
+        <tr>
+          <td><strong>現代化重構 (Java/API)</strong></td>
+          <td><code>「如果我想把這段 COBOL 的開單核心邏輯用 Java Spring Boot 重寫，請幫我規劃資料結構與 RESTful API 的 JSON Payload 設計。」</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- FAQ -->
+    <h2 class="section-title">常見問答</h2>
+    <table class="carbon-table">
+      <thead>
+        <tr>
+          <th style="width: 35%;">學員疑問</th>
+          <th style="width: 65%;">解答說明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>我電腦沒有 Mainframe 模擬器也可以學這堂課嗎？</strong></td>
+          <td>完全可以。我們這堂課的重點在於「透過 IBM Bob 降低核心系統的理解門檻」，不依賴大型主機，利用 Bob 即可完成全套程式理解與重構。</td>
+        </tr>
+        <tr>
+          <td><strong>Bob 如何處理大型、數萬行的 COBOL 檔案？</strong></td>
+          <td>您可以利用 Bob 的 <code>GetSymbolsOverview</code> 與 <code>grep</code> 工具，先找出核心的 Paragraph (段落)，並採取「精確切割、逐段解讀」的策略。</td>
+        </tr>
+        <tr>
+          <td><strong>cics-genapp 的程式碼可以直接轉成 Java 嗎？</strong></td>
+          <td>可以使用 Bob 提供 Java 代碼架構的重寫指引。但通常建議先由 Bob 萃取出「純淨的業務規則」，再根據現代微服務架構重新設計。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Next CTA Banner -->
+    <div class="cta-banner">
+      <h3>核心 COBOL 搞定了，那系統運維呢？</h3>
+      <p>掌握核心代碼解讀後，下一步我們將展示如何利用 IBM Bob 來輔助日常系統維運，包括 WAS 日誌分析、MQ 通道錯誤排查以及 Ansible 自動化維運。</p>
+      <p>
+        <a href="03-wasdb2mq-ansible-ops.html" class="cta-link">進入單元三：IT 維運輔助與日誌分析 →</a>
+      </p>
+    </div>
+
+  </main>
+
+  <footer>
+    <span>Made with IBM Bob</span>
+  </footer>
+
+</body>
+</html>
