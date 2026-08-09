@@ -123,12 +123,12 @@ const cardItems = cards.map(({ file, eyebrow, title, desc }) => {
   return `
       <a class="card" href="${escapeHtml(file)}">${eyebrowHtml}
         <h2>${escapeHtml(title)}</h2>${descHtml}
-        <span class="card-cta">閱讀報告</span>
+        <span class="card-cta">開始學習</span>
       </a>`;
 }).join('\n');
 
 const newSectionLabel =
-  `<p class="section-label">全部報告（${cards.length}）</p>`;
+  `<p class="section-label">全部教材（${cards.length}）</p>`;
 
 const newCardGrid =
   `<div class="card-grid">${cardItems}\n\n    </div>`;
@@ -139,7 +139,7 @@ let index = await readFile(INDEX_FILE, 'utf8');
 
 // Replace section-label line
 index = index.replace(
-  /<p class="section-label">全部報告（\d+）<\/p>/,
+  /<p class="section-label">全部教材（\d+）<\/p>/,
   newSectionLabel,
 );
 
@@ -151,5 +151,5 @@ index = index.replace(
 
 await writeFile(INDEX_FILE, index, 'utf8');
 
-console.log(`✔  index.html updated — ${cards.length} report(s):`);
+console.log(`✔  index.html updated — ${cards.length} tutorial(s):`);
 cards.forEach(c => console.log(`   • ${c.file}  →  ${c.title}`));
