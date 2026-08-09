@@ -17,8 +17,12 @@ Live site: <https://howard-haowen.github.io/ibm-bobathon/>
 # Regenerate artifacts/index.html card grid after adding/removing HTML files
 node scripts/update-index.mjs
 
-# Copy local artifacts/ into a workshop branch (requires clean working tree)
-bash scripts/copy-artifacts.sh workshop/w03
+# Regenerate index.html for a specific workshops/ directory
+node scripts/update-index.mjs --dir workshops/w01/artifacts
+
+# Sync local artifacts/ to BOTH main (workshops/<slug>/artifacts/) AND the
+# workshop branch (artifacts/) — commits & pushes both (requires clean working tree)
+bash scripts/copy-artifacts.sh workshop/w01
 
 # Deploy is automatic — push to main with changes under workshops/**/artifacts/**
 ```
@@ -32,9 +36,11 @@ bash scripts/copy-artifacts.sh workshop/w03
    - The workflow creates an **orphan** branch `workshop/w03` (no shared history with `main`).
    - It seeds only: `.bob/mcp.json`, `.bob/skills/find-skills/`, `DESIGN.md`, `skills-lock.json`.
 3. ⚠️ **Update `docs/client-url-map.md` locally** (not tracked by git) to register the new slug → client/URL mapping.
-4. Add HTML artifacts to `artifacts/` in the new branch.
-5. Run `node scripts/update-index.mjs` after adding/removing HTML files in `artifacts/`.
-6. Run `bash scripts/copy-artifacts.sh workshop/wNN` if you need to sync `artifacts/` from `main` into the branch.
+4. Add HTML artifacts to the local (gitignored) `artifacts/` directory on `main`.
+5. Run `node scripts/update-index.mjs` to regenerate `artifacts/index.html`.
+6. Run `bash scripts/copy-artifacts.sh workshop/wNN` to sync everything in one shot:
+   - Copies `artifacts/` → `workshops/wNN/artifacts/` on `main`, regenerates its `index.html`, commits & pushes `main`.
+   - Copies `artifacts/` → `artifacts/` on the `workshop/wNN` orphan branch, commits & pushes that branch.
 
 ---
 
@@ -69,7 +75,8 @@ All artifacts follow the **Carbon Design System** spec defined in `DESIGN.md`. N
 ## Repository Structure (Non-Obvious)
 
 - `artifacts/` — local working directory for the current workshop's HTML files; **gitignored** (not committed to `main`). Used as the source for `scripts/copy-artifacts.sh`.
-- `workshops/wNN/artifacts/` — per-workshop copies committed on each `workshop/wNN` orphan branch; only these trigger `deploy-gh-pages.yml` (path filter: `workshops/**/artifacts/**`).
+- `workshops/wNN/artifacts/` — per-workshop copies committed **on `main`**; these are what trigger `deploy-gh-pages.yml` (path filter: `workshops/**/artifacts/**`).
+- `workshop/wNN` orphan branches also carry an `artifacts/` at their root — synced by `copy-artifacts.sh` Step 2.
 - `docs/`, `plans/`, and `artifacts/` are **gitignored** — local only, never committed to `main`.
 - `gh-pages` branch is **fully managed by GitHub Actions** — never edit manually.
 - Each `workshop/wNN` branch is an **orphan** (no git history shared with `main`).
