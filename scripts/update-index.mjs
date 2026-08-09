@@ -11,7 +11,9 @@
  *   title    — first <h1> text, else <title> text, else filename
  *   desc     — first <p> after <h1> (the hero description), else empty
  *
- * Usage:  node scripts/update-index.mjs
+ * Usage:
+ *   node scripts/update-index.mjs                      # default: artifacts/
+ *   node scripts/update-index.mjs --dir workshops/w01/artifacts
  */
 
 import { readdir, readFile, writeFile } from 'node:fs/promises';
@@ -19,7 +21,12 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ARTIFACTS_DIR = resolve(__dirname, '../artifacts');
+
+// Allow --dir <path> override (path relative to repo root / cwd)
+const dirFlagIdx = process.argv.indexOf('--dir');
+const ARTIFACTS_DIR = dirFlagIdx !== -1
+  ? resolve(process.cwd(), process.argv[dirFlagIdx + 1])
+  : resolve(__dirname, '../artifacts');
 const INDEX_FILE = resolve(ARTIFACTS_DIR, 'index.html');
 
 // ── helpers ────────────────────────────────────────────────────────────────
