@@ -1,24 +1,179 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IBM Bob 工作坊 Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&display=swap">
   <style>
-    body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; max-width: 760px; margin: 40px auto; padding: 0 24px; color: #1f2328; }
-    h1 { font-size: 1.6rem; border-bottom: 1px solid #e5e7eb; padding-bottom: 12px; }
-    ul { list-style: none; padding: 0; }
-    li { margin: 12px 0; }
-    a { color: #3b82d4; text-decoration: none; font-size: 1rem; }
-    a:hover { text-decoration: underline; }
-    footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid #e5e7eb; text-align: center; font-size: 12px; color: #57606a; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: 0.16px;
+      color: #161616;
+      background: #ffffff;
+    }
+    .utility-bar {
+      background: #f4f4f4;
+      color: #525252;
+      font-size: 12px;
+      letter-spacing: 0.32px;
+      line-height: 1.33;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .top-nav {
+      background: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+    }
+    .top-nav .logo {
+      font-size: 18px;
+      font-weight: 600;
+      color: #161616;
+      text-decoration: none;
+    }
+    .top-nav .logo span { color: #0f62fe; }
+    .top-nav .github-link {
+      font-size: 14px;
+      color: #0f62fe;
+      text-decoration: none;
+    }
+    .top-nav .github-link:hover { text-decoration: underline; }
+    .page-content {
+      max-width: 1056px;
+      margin: 0 auto;
+      padding: 64px 32px 96px;
+    }
+    .hero {
+      margin-bottom: 48px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .hero-eyebrow {
+      font-size: 14px;
+      color: #525252;
+      letter-spacing: 0.16px;
+      margin-bottom: 12px;
+    }
+    .hero h1 {
+      font-size: 42px;
+      font-weight: 300;
+      line-height: 1.2;
+      color: #161616;
+      margin-bottom: 16px;
+    }
+    .hero p {
+      font-size: 18px;
+      color: #525252;
+      line-height: 1.5;
+      max-width: 640px;
+    }
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #525252;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1px;
+      background: #e0e0e0;
+      border: 1px solid #e0e0e0;
+    }
+    .card {
+      background: #ffffff;
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: background 0.1s;
+    }
+    .card:hover { background: #f4f4f4; }
+    .card-eyebrow {
+      font-size: 12px;
+      letter-spacing: 0.32px;
+      color: #0f62fe;
+    }
+    .card h2 {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.4;
+      color: #161616;
+    }
+    .card p {
+      font-size: 14px;
+      color: #525252;
+      line-height: 1.29;
+      flex: 1;
+    }
+    .card-cta {
+      font-size: 14px;
+      color: #0f62fe;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .card-cta::after { content: " →"; }
+    footer {
+      background: #161616;
+      color: #c6c6c6;
+      font-size: 14px;
+      padding: 32px;
+      text-align: center;
+      border-top: 1px solid #262626;
+    }
+    footer span { font-size: 12px; color: #8c8c8c; }
+    @media (max-width: 672px) {
+      .utility-bar { display: none; }
+      .page-content { padding: 40px 16px 64px; }
+      .hero h1 { font-size: 32px; }
+    }
   </style>
 </head>
 <body>
-  <h1>IBM Bob 工作坊 Hub</h1>
-  <ul>
-      <li><a href="workshops/w01/">w01</a></li>
-  </ul>
-  <footer>Made with IBM Bob</footer>
+  <div class="utility-bar">IBM Bob · 工作坊 Hub</div>
+  <nav class="top-nav">
+    <a class="logo" href="index.html">IBM <span>Bob</span> Hub</a>
+    <a class="github-link" href="https://github.com/howard-haowen/ibm-bobathon" target="_blank" rel="noopener noreferrer">GitHub</a>
+  </nav>
+  <main class="page-content">
+    <div class="hero">
+      <p class="hero-eyebrow">工作坊總覽</p>
+      <h1>IBM Bob 工作坊 Hub</h1>
+      <p>匯集所有 IBM Bob 工作坊教學教材與產出報告。</p>
+    </div>
+    <p class="section-label">所有工作坊（1）</p>
+    <div class="card-grid">
+      
+  <a class="card" href="workshops/w01/">
+    <p class="card-eyebrow">工作坊 · W01</p>
+    <h2>IBM Bob — 報告索引</h2>
+    <p>報告索引</p>
+    <span class="card-cta">進入工作坊</span>
+  </a>
+
+    </div>
+  </main>
+  <footer>
+    <span>Made with IBM Bob</span>
+  </footer>
 </body>
 </html>
