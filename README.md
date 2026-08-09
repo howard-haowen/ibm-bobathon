@@ -8,15 +8,11 @@
 ├── AGENTS.md              # Bob AI agent 指令設定（角色、工作流程、限制）
 ├── DESIGN.md              # HTML 輸出的視覺設計規範（色彩、字型、元件）
 ├── hackathon-team-plan.md # 黑客松團隊分工計劃與 Git 操作指南
-├── workshops/
-│   └── w01/
-│       └── artifacts/     # w01 工作坊產出的 HTML 簡報
-│           ├── index.html
-│           ├── 01-agentic-ai-key-concepts.html
-│           ├── 02-hackathon-team-plan.html
-│           └── 03-datasets.html
-├── .github/workflows/
-│   └── deploy-gh-pages.yml      # 自動部署各工作坊 artifacts 到 GitHub Pages
+├── artifacts/             # 產出的 HTML 簡報檔案
+│   ├── index.html
+│   ├── 01-agentic-ai-key-concepts.html
+│   ├── 02-hackathon-team-plan.html
+│   └── 03-datasets.html
 ├── skills-lock.json       # Bob skills 版本鎖定檔
 ├── youtube-k5jYwyhDMxA.md # YouTube 影片逐字稿與摘要
 └── book-深入理解AIAgent.md # Apple Books 書籍摘要
@@ -31,7 +27,7 @@
 提供書名關鍵字 → Bob 搜尋本機 Apple Books → 讀取內容 → 產出核心論點與章節重點摘要
 
 ### 3. HTML 簡報產生
-整合上述摘要資料 → Bob 依 `DESIGN.md` 規範產出單頁 HTML 簡報 → 儲存至 `workshops/w01/artifacts/`
+整合上述摘要資料 → Bob 依 `DESIGN.md` 規範產出單頁 HTML 簡報 → 儲存至 `artifacts/`
 
 簡報結構：封面 → 資料來源概覽 → 各來源重點摘要 → 綜合結論與建議
 
@@ -41,41 +37,6 @@
 |------|------|------|
 | YouTube 影片 | 5 Terms You Need to Know About Agentic AI | [`youtube-k5jYwyhDMxA.md`](youtube-k5jYwyhDMxA.md) |
 | 書籍 | 深入理解 AI Agent：設計原理與工程實踐 | [`book-深入理解AIAgent.md`](book-深入理解AIAgent.md) |
-
-## GitHub Pages 部署
-
-各工作坊的 HTML 簡報透過 GitHub Actions 自動發布至 GitHub Pages。
-
-**Hub 首頁**：`https://howard-haowen.github.io/ibm-bobathon/`
-**w01 工作坊**：`https://howard-haowen.github.io/ibm-bobathon/workshops/w01/`
-
-### 部署流程
-
-```
-修改 workshops/w01/artifacts/ → git push origin main → GitHub Actions 自動觸發 → gh-pages 更新 → 網站發布
-```
-
-### Workflow 說明（[`.github/workflows/deploy-gh-pages.yml`](.github/workflows/deploy-gh-pages.yml)）
-
-| 設定 | 說明 |
-|------|------|
-| 觸發條件 | push 到 `main` 且 `workshops/**/artifacts/**` 有變動 |
-| 部署工具 | `peaceiris/actions-gh-pages@v4` |
-| 來源目錄 | `./_site`（動態彙整所有工作坊 artifacts） |
-| 認證方式 | `GITHUB_TOKEN`（自動提供，無需手動設定） |
-| commit 歷史 | 保留（`force_orphan: false`） |
-
-> **首次使用注意**：需至 GitHub repo → **Settings → Actions → General → Workflow permissions** 設為 **Read and write permissions**。
-
-### 手動同步（不使用 Actions 時）
-
-```bash
-git checkout gh-pages
-git show main:artifacts/index.html > index.html
-# 依此類推同步其他檔案
-git add . && git commit -m "deploy: manual sync" && git push origin gh-pages
-git checkout main
-```
 
 ## 相關文件
 
