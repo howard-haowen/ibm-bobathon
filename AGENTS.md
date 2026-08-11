@@ -20,9 +20,10 @@ node scripts/update-index.mjs
 # Regenerate index.html for a specific workshops/ directory
 node scripts/update-index.mjs --dir workshops/w01/artifacts
 
-# Sync local artifacts/ to BOTH main (workshops/<slug>/artifacts/) AND the
-# workshop branch (artifacts/) — commits & pushes both (requires clean working tree)
-bash scripts/copy-artifacts.sh workshop/w01
+# Pull artifacts/ from a workshop branch into main (workshops/<slug>/artifacts/),
+# regenerate index.html, commit & push main — requires the workshop branch to
+# exist locally and the working tree to be clean
+bash scripts/update-artifacts.sh workshop/w01
 
 # Deploy is automatic — push to main with changes under workshops/**/artifacts/**
 ```
@@ -91,16 +92,21 @@ proceeding to publish.
 
 ### Step 6 — Sync and publish
 
-Once the artifacts are approved, run the all-in-one sync script:
+Once the artifacts are approved on the workshop branch, run the sync script from `main`:
 
 ```bash
-bash scripts/copy-artifacts.sh workshop/w03
+bash scripts/update-artifacts.sh workshop/w03
 ```
 
 What this does in one shot:
-1. **`main` branch** — copies `artifacts/` → `workshops/w03/artifacts/`, regenerates that directory's `index.html`, commits and pushes `main`. This triggers `deploy-gh-pages.yml` automatically.
-2. **`workshop/w03` branch** — copies `artifacts/` → `artifacts/` on the orphan branch, commits and pushes it.
-3. **Returns** to whichever branch was checked out before the script ran (typically `main`).
+1. Checks out **`main`**.
+2. Exports `artifacts/` from the `workshop/w03` branch (via `git checkout workshop/w03 -- artifacts/`).
+3. Places the files at **`workshops/w03/artifacts/`** on `main`.
+4. Regenerates `workshops/w03/artifacts/index.html` via `update-index.mjs`.
+5. Commits and pushes `main` — this triggers `deploy-gh-pages.yml` automatically.
+6. **Returns** to whichever branch was checked out before the script ran (typically `main`).
+
+> **Note:** The script reads from the workshop branch directly — it does **not** read the local gitignored `artifacts/` directory and does **not** push to the workshop branch itself.
 
 ### Step 7 — Verify deployment
 
@@ -274,15 +280,15 @@ All artifacts follow the **Carbon Design System** spec defined in `DESIGN.md`. N
   - Footer inverts to `#161616` background with white text.
 - **Standard page chrome**: utility-bar (32px, `#f4f4f4`) → top-nav (48px, `#ffffff`) → `.page-content` (max-width: 1056px, centered).
 - **`lang="zh-TW"`** on `<html>` — content is Traditional Chinese.
-- Card CTA link text: `閱讀報告` (hardcoded in `update-index.mjs`).
+- Card CTA link text: `開始學習` (hardcoded in `update-index.mjs`).
 
 ---
 
 ## Repository Structure (Non-Obvious)
 
-- `artifacts/` — local working directory for the current workshop's HTML files; **gitignored** (not committed to `main`). Used as the source for `scripts/copy-artifacts.sh`.
+- `artifacts/` — local working directory for staging HTML files before committing them to the workshop branch; **gitignored** (not committed to `main`). **Not** read by `update-artifacts.sh`.
 - `workshops/wNN/artifacts/` — per-workshop copies committed **on `main`**; these are what trigger `deploy-gh-pages.yml` (path filter: `workshops/**/artifacts/**`).
-- `workshop/wNN` orphan branches also carry an `artifacts/` at their root — synced by `copy-artifacts.sh` Step 2.
+- `workshop/wNN` orphan branches carry an `artifacts/` at their root — this is the **source** that `update-artifacts.sh` pulls from.
 - `docs/`, `plans/`, and `artifacts/` are **gitignored** — local only, never committed to `main`.
 - `gh-pages` branch is **fully managed by GitHub Actions** — never edit manually.
 - Each `workshop/wNN` branch is an **orphan** (no git history shared with `main`).

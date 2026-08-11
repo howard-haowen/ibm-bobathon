@@ -15,8 +15,9 @@ node scripts/update-index.mjs
 # 指定特定工作坊目錄
 node scripts/update-index.mjs --dir workshops/w01/artifacts
 
-# 將本機 artifacts/ 同步至 main 與 workshop 孤立分支（需乾淨工作樹）
-bash scripts/copy-artifacts.sh workshop/w01
+# 從 workshop 孤立分支取得 artifacts/，放入 main 的 workshops/<slug>/artifacts/，
+# 重新產生 index.html 並 push main（需乾淨工作樹、工作坊分支須已存在於本機）
+bash scripts/update-artifacts.sh workshop/w01
 
 # 部署：push main 且異動路徑符合 workshops/**/artifacts/** 即自動觸發
 ```
@@ -46,10 +47,14 @@ node scripts/update-index.mjs  # 更新 artifacts/index.html，於瀏覽器確�
 **5. 等待確認**：向使用者展示 `artifacts/` 清單及預覽，取得明確同意後繼續。
 
 **6. 同步並發布**
+
+確認工作坊分支（`workshop/w03`）上的 `artifacts/` 已就緒後執行：
 ```bash
-bash scripts/copy-artifacts.sh workshop/w03
+bash scripts/update-artifacts.sh workshop/w03
 ```
-此腳本一次完成：複製 `artifacts/` → `workshops/w03/artifacts/`（main）並 push、同步至孤立分支並 push、最後回到原來的分支。
+此腳本一次完成：從 `workshop/w03` 分支 checkout `artifacts/` → 放至 `workshops/w03/artifacts/`（main）→ 重新產生 `index.html` → commit & push main → 回到原來的分支。
+
+> **注意：** 此腳本直接從 workshop 分支讀取，**不讀本機 `artifacts/`**，也**不 push 至 workshop 分支**。
 
 **7. 確認部署**：Actions 完成後造訪：
 ```
@@ -71,6 +76,7 @@ git clone --single-branch --branch workshop/w01 \
 ## 重要注意事項
 
 - `artifacts/`、`docs/`、`plans/` 均已 gitignore，不進版本庫。
+- 本機 `artifacts/` 僅作暫存用；`update-artifacts.sh` 的來源是 **workshop 孤立分支上的 `artifacts/`**，非本機目錄。
 - `workshops/wNN/artifacts/` 提交在 `main`，是部署觸發的來源。
 - `gh-pages` 分支完全由 GitHub Actions 管理，**勿手動修改**。
 - 每次部署會**整體覆蓋** `gh-pages`（`keep_files: false`）。
