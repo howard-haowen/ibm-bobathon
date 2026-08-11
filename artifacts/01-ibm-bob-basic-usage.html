@@ -50,6 +50,13 @@
       text-decoration: none;
     }
     .top-nav .logo span { color: #0f62fe; }
+    .top-nav .back-link {
+      font-size: 14px;
+      color: #0f62fe;
+      text-decoration: none;
+      letter-spacing: 0.16px;
+    }
+    .top-nav .back-link:hover { text-decoration: underline; }
 
     /* Main content */
     .page-content {
@@ -283,6 +290,7 @@
 
   <nav class="top-nav">
     <a class="logo" href="index.html">IBM <span>Bob</span></a>
+    <a class="back-link" href="index.html">← 回索引</a>
   </nav>
 
   <main class="page-content">
@@ -375,9 +383,9 @@
         <div class="step-number">03</div>
         <div class="step-content">
           <h4>轉換報告為 HTML</h4>
-          <p>利用專案中已安裝的 <code>markdown-to-html</code> 技能，讓 Bob 一次性將報告渲染成符合 Carbon 風格的 HTML。</p>
+          <p>讓 Bob 一次性將報告渲染成符合特定風格的 HTML。</p>
           <pre># 提示詞範例
-請激活 markdown-to-html 技能，將 report.md 轉換成 report.html，並使用 Carbon Design System 的極簡無陰影樣式。</pre>
+請使用 markdown-to-html 技能，將 report.md 轉換成 report.html，並使用 Carbon Design System 的極簡無陰影樣式。</pre>
         </div>
       </div>
     </div>
@@ -389,43 +397,32 @@
     <pre># 尋找可用的技能
 請幫我列出專案中所有的可載入技能。
 
-# 激活特定技能 (例如：YouTube 逐字稿工具)
-use_skill(skill_name: "youtube-transcript")</pre>
+# 使用特定技能 (例如：使用 find-skills 技能)
+# 小技巧：在對話框輸入 "/" 可快速選擇已安裝的技能
+/find-skills</pre>
+
+    <!-- Section 5 -->
+    <h2 class="section-title">如何設定 MCP</h2>
+    <p class="section-desc">MCP（Model Context Protocol）可讓 Bob 連接外部工具與服務，擴展其原生能力。您只需將設定描述給 Bob，它便能協助您完成設定：</p>
+
+    <div class="card" style="background: #f4f4f4; border: none; margin-bottom: 16px;">
+      <p class="card-eyebrow">Prompt 範例</p>
+      <p style="font-size: 14px; color: #161616; margin-bottom: 12px;">將以下設定貼給 Bob，請它協助您完成 MCP 設定流程：</p>
+      <pre style="background: #ffffff; border: 1px solid #e0e0e0; padding: 16px; font-size: 13px; line-height: 1.6; white-space: pre-wrap; word-break: break-all;">請幫我設定以下 MCP server，並說明設定完成後我可以用它做什麼：
+
+"apple-books-mcp": {
+    "command": "uvx",
+    "args": [ "apple-books-mcp@latest" ]
+}</pre>
+    </div>
+
+    <p style="font-size: 14px; color: #525252; margin-bottom: 24px;">Bob 會引導您找到正確的設定檔路徑、確認系統相依套件（如 <code>uv</code>）是否已安裝，並驗證設定是否生效。</p>
 
     <div class="card" style="border: 1px solid #0f62fe; background: #edf4ff; margin-bottom: 48px;">
       <p class="card-eyebrow" style="color: #0f62fe;">專業提示 (Pro Tip)</p>
       <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">一次只做一件事</h3>
-      <p style="font-size: 14px; color: #161616;">在使用 Agent 模式時，建議將複雜的任務拆解成多個小對話。先用 Plan 模式進行架構確認，再用 Agent 模式寫代碼，最後在 Ask 模式下進行程式碼重構與複審，這能保證最高的生成品質。</p>
+      <p style="font-size: 14px; color: #161616;">在使用 Agent 模式時，建議將複雜的任務拆解成多個小對話。先用 Plan 模式進行架構確認，再用 Agent 模式寫代碼，最後在 Ask 模式下進行程式碼複審，這能保證最高的生成品質。</p>
     </div>
-
-    <!-- Section 5 -->
-    <h2 class="section-title">常見問答</h2>
-    <table class="carbon-table">
-      <thead>
-        <tr>
-          <th style="width: 35%;">常見問題</th>
-          <th style="width: 65%;">解答說明</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>為什麼 Bob 拒絕幫我修改程式碼？</strong></td>
-          <td>請檢查您目前的模式。如果是處於 Ask 或 Plan 模式，Bob 會被安全規範限制，無法寫入檔案。請在對話中輸入「切換至 Agent 模式」或使用工具列切換。</td>
-        </tr>
-        <tr>
-          <td><strong>Bob 產生的 HTML 為什麼沒有圓角？</strong></td>
-          <td>這是 IBM Carbon Design System 的規範。Carbon 強調絕對的扁平與幾何精密，因此按鈕、輸入框、卡片皆採用 0px 圓角與無陰影（No Shadow）設計。</td>
-        </tr>
-        <tr>
-          <td><strong>需要連線上網才能使用 Bob 嗎？</strong></td>
-          <td>Bob 本身是 Agent，雖然模型推理需要連線，但在讀取本地 Excel、執行 CLI 編譯與檔案編輯時，皆是在您的本地端（Localhost）安全執行。</td>
-        </tr>
-        <tr>
-          <td><strong>如何確保 Bob 不會動到我不相干的檔案？</strong></td>
-          <td>Bob 在執行關鍵變更前會先向您確認。此外，請保持 Git 工作樹乾淨，您隨時可以使用 Git Commit 或 Git Stash 來管理與還原變更。</td>
-        </tr>
-      </tbody>
-    </table>
 
     <!-- Next CTA Banner -->
     <div class="cta-banner">
