@@ -9,6 +9,7 @@
 #   3. Exports artifacts/ from the workshop branch (git checkout <branch> -- artifacts/).
 #   4. Places the files at:
 #        • workshops/<slug>/artifacts/  (for GitHub Pages deploy)
+#        • artifacts/                   (root-level copy on main)
 #   5. Runs scripts/update-index.mjs --dir workshops/<slug>/artifacts if needed.
 #   6. Commits and pushes main.
 #   7. Returns to the original branch.
@@ -72,13 +73,14 @@ mkdir -p "$WORKSHOP_DEST"
 # Bring artifacts/ from the workshop branch into the working tree
 git checkout "$WORKSHOP_BRANCH" -- "$ARTIFACTS_DIR"
 
-# Move the exported files into workshops/<slug>/artifacts/
-# (rsync-style: copy contents, then clean up the staging dir)
+# Copy contents to workshops/<slug>/artifacts/ (GitHub Pages destination)
 rsync -a --delete "$ARTIFACTS_DIR/" "$WORKSHOP_DEST/"
 
-# Remove the top-level artifacts/ that git checkout staged above
-git checkout HEAD -- "$ARTIFACTS_DIR" 2>/dev/null || git rm -r --cached "$ARTIFACTS_DIR" 2>/dev/null || true
+# Also keep a copy at the root-level artifacts/ on main
+# (artifacts/ is gitignored, so force-add with -f)
+rsync -a --delete "$ARTIFACTS_DIR/" "$ARTIFACTS_DIR.tmp/"
 rm -rf "$ARTIFACTS_DIR"
+mv "$ARTIFACTS_DIR.tmp" "$ARTIFACTS_DIR"
 
 # ── Step 3: regenerate index.html ────────────────────────────────────────────
 info "── Step 3: regenerating index.html in $WORKSHOP_DEST ──"
@@ -87,11 +89,12 @@ node scripts/update-index.mjs --dir "$WORKSHOP_DEST"
 # ── Step 4: commit and push main ─────────────────────────────────────────────
 info "── Step 4: committing and pushing $SOURCE_BRANCH ──"
 git add "$WORKSHOP_DEST"
+git add -f "$ARTIFACTS_DIR"
 
 if git diff --cached --quiet; then
   info "nothing to commit — $WORKSHOP_DEST is already up to date"
 else
-  git commit -m "chore: update $WORKSHOP_DEST from $WORKSHOP_BRANCH"
+  git commit -m "chore: update $WORKSHOP_DEST and $ARTIFACTS_DIR from $WORKSHOP_BRANCH"
   info "committed on $SOURCE_BRANCH"
 fi
 
@@ -108,3 +111,4 @@ fi
 
 echo "✔  all done"
 echo "   • $WORKSHOP_BRANCH:$ARTIFACTS_DIR/  →  $REMOTE/$SOURCE_BRANCH:$WORKSHOP_DEST"
+echo "   • $WORKSHOP_BRANCH:$ARTIFACTS_DIR/  →  $REMOTE/$SOURCE_BRANCH:$ARTIFACTS_DIR"
