@@ -50,6 +50,13 @@
       text-decoration: none;
     }
     .top-nav .logo span { color: #0f62fe; }
+    .top-nav .back-link {
+      font-size: 14px;
+      color: #0f62fe;
+      text-decoration: none;
+      letter-spacing: 0.16px;
+    }
+    .top-nav .back-link:hover { text-decoration: underline; }
 
     /* Main content */
     .page-content {
@@ -153,14 +160,35 @@
       padding: 24px;
       margin: 24px 0;
     }
+    .prompt-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
     .prompt-header {
       font-size: 12px;
       font-weight: 600;
       letter-spacing: 0.32px;
       color: #0f62fe;
       text-transform: uppercase;
-      margin-bottom: 12px;
+      margin-bottom: 0;
     }
+    .copy-btn {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #0f62fe;
+      background: #ffffff;
+      border: 1px solid #0f62fe;
+      padding: 3px 10px;
+      cursor: pointer;
+      font-family: inherit;
+      white-space: nowrap;
+      transition: background 0.15s, color 0.15s;
+    }
+    .copy-btn:hover { background: #0f62fe; color: #ffffff; }
+    .copy-btn.copied { background: #198038; border-color: #198038; color: #ffffff; }
     .prompt-text {
       font-style: italic;
       color: #161616;
@@ -263,6 +291,7 @@
 
   <nav class="top-nav">
     <a class="logo" href="index.html">IBM <span>Bob</span></a>
+    <a class="back-link" href="index.html">← 回索引</a>
   </nav>
 
   <main class="page-content">
@@ -270,12 +299,21 @@
     <div class="hero">
       <p class="hero-eyebrow">工作坊教材 · COBOL 傳承</p>
       <h1>用 IBM Bob 解讀、文件化與傳承 COBOL 程式</h1>
-      <p>以開源的 cics-genapp 為範例，展示如何使用 IBM Bob 在無編譯環境下，高效進行 COBOL 程式碼解讀、生成業務規則、撰寫新功能段落與進行新進人員知識傳承。</p>
+      <p>本單元以開源的 cics-genapp 為練習素材，帶領學員逐步完成四個任務：讀懂程式邏輯、萃取業務規則、新增 COBOL 段落、整理新人導覽文件。全程在本機進行，不需要 Mainframe 環境。</p>
     </div>
 
     <!-- Section 1 -->
-    <h2 class="section-title">cics-genapp 示範專案簡介</h2>
-    <p class="section-desc">cics-genapp 是 IBM 官方開源的典型 mainframe 應用程式，模擬保險公司的核心交易系統。在真實的核心傳承工作中，我們常常需要在沒有編譯器的本機環境下，快速理清以下龐雜的原始碼結構：</p>
+    <h2 class="section-title">Step 1：取得練習素材 — cics-genapp</h2>
+    <p class="section-desc">
+      cics-genapp 是 IBM 官方開源的保險核心交易範例系統，原始碼托管於 GitHub：
+      <a href="https://github.com/cicsdev/cics-genapp" style="color:#0f62fe;">github.com/cicsdev/cics-genapp</a>。
+      請先在本機開一個終端機視窗，執行以下指令將專案 clone 下來：
+    </p>
+
+    <pre><code>git clone https://github.com/cicsdev/cics-genapp.git
+cd cics-genapp</code></pre>
+
+    <p class="section-desc">Clone 完成後，COBOL 原始檔位於 <code>base/src/cobol/</code> 目錄下。接著用 IBM Bob 開啟這個資料夾作為工作區，就可以讓 Bob 直接存取檔案。請大略瀏覽下表，了解我們這次會用到哪些原始檔：</p>
 
     <table class="carbon-table">
       <thead>
@@ -310,161 +348,104 @@
     </table>
 
     <!-- Section 2 -->
-    <h2 class="section-title">COBOL 四大傳承任務實踐</h2>
-    <p class="section-desc">我們將展示新進工程師如何透過 IBM Bob，將看似天書的 COBOL 程式碼快速轉化為可讀文件與新功能代碼。</p>
+    <h2 class="section-title">三個實作任務</h2>
+    <p class="section-desc">假設您是剛接手這個系統的工程師，對 cics-genapp 的程式碼完全不熟悉。以下三個任務模擬真實的接手流程，請依序操作，每個任務都附有建議的 Prompt 可以直接複製使用。</p>
 
     <!-- Task 1 -->
-    <h2 class="section-title" style="font-size: 20px; font-weight: 600;">任務一：解讀 (Deconstruct) — 看懂核心開單邏輯</h2>
-    <p class="section-desc">當我們需要讀懂 <code>LGACUS01.cbl</code> 中的 CICS & DB2 變數映射時，可以貼出該 COBOL 段落，並使用 Ask 模式請求 Bob 解讀：</p>
-
-    <pre><code>* COBOL CODE SAMPLE FROM LGACUS01.cbl
-       EXEC CICS GET CONTAINER('Customer')
-                 INTO(CUSTOMER-DATA)
-                 RESP(WS-RESP)
-       END-EXEC.
-       
-       IF WS-RESP = DFHRESP(NORMAL)
-           MOVE CUSTOMER-ID TO DB-CUST-ID
-           EXEC SQL
-               INSERT INTO CUSTOMER (CUST_ID, FIRST_NAME, LAST_NAME)
-               VALUES (:DB-CUST-ID, :DB-FIRST-NAME, :DB-LAST-NAME)
-           END-EXEC
-       ELSE
-           PERFORM ERROR-HANDLING
-       END-IF.</code></pre>
+    <h2 class="section-title" style="font-size: 20px; font-weight: 600;">任務一：Onboarding — 快速掌握程式架構</h2>
+    <p class="section-desc">切換到 <strong>Ask 模式</strong>，並確認已用 Bob 開啟 <code>cics-genapp/base/src/cobol/</code> 資料夾。目標是在不閱讀完整程式碼的情況下，先對整個系統建立基本認識。依序送出以下兩個 Prompt：</p>
 
     <div class="prompt-showcase">
-      <div class="prompt-header">學員 Prompt (Ask 模式)</div>
-      <div class="prompt-text">「請幫我用繁體中文解讀這段 COBOL 程式碼。這是一個 CICS 交易，請解釋它如何獲取資料，以及在什麼條件下會寫入 DB2 資料庫？」</div>
-      <div class="response-header">IBM Bob 的分析回應</div>
+      <div class="prompt-header-row">
+        <div class="prompt-header">Prompt 1-A：了解專案全貌</div>
+        <button class="copy-btn" data-target="p1a">複製</button>
+      </div>
+      <div class="prompt-text" id="p1a">這個資料夾裡有哪些 COBOL 程式？請列出每個檔案的名稱，並用一句話說明它負責的業務功能。</div>
+      <div class="response-header">預期 Bob 的回應方向</div>
       <div class="response-content">
-        1. <strong>CICS 容器獲取：</strong>此段程式碼首先透過 <code>EXEC CICS GET CONTAINER</code> 指令，自名為 'Customer' 的容器中讀取學員/客戶資料，並將其放入 <code>CUSTOMER-DATA</code> 變數中，同時將狀態存入 <code>WS-RESP</code>。<br>
-        2. <strong>條件防呆校驗：</strong>只有當 <code>WS-RESP</code> 的回應為 <code>DFHRESP(NORMAL)</code>（即讀取完全正常）時，才會執行後續的 DB2 寫入。<br>
-        3. <strong>DB2 SQL 寫入：</strong>將本地變數 <code>CUSTOMER-ID</code> 搬移（MOVE）至 <code>DB-CUST-ID</code>，並執行內嵌 SQL <code>INSERT INTO CUSTOMER</code> 寫入資料庫。<br>
-        4. <strong>異常處理：</strong>若讀取容器失敗，則進入 <code>ERROR-HANDLING</code> 錯誤處理段落。
+        Bob 會掃描目錄，列出各個 <code>.cbl</code> 檔案並提供每支程式的功能摘要，讓您不需要開啟任何一個檔案就能掌握整個系統的模組組成。
+      </div>
+    </div>
+
+    <div class="prompt-showcase">
+      <div class="prompt-header-row">
+        <div class="prompt-header">Prompt 1-B：深入 LGACUS01 的入口與資料流</div>
+        <button class="copy-btn" data-target="p1b">複製</button>
+      </div>
+      <div class="prompt-text" id="p1b">請針對 LGACUS01.cbl，列出它的主要 Paragraph 呼叫順序，並說明程式的主要執行流程：資料是從哪裡進來、經過哪些處理步驟、最終寫到哪裡去？</div>
+      <div class="response-header">預期 Bob 的回應方向</div>
+      <div class="response-content">
+        Bob 會解析程式的 Paragraph 結構，列出呼叫順序，並說明資料流向——從 CICS Container 取得輸入、經過驗證後寫入 DB2。這份架構摘要能讓您迅速定位後續要修改的位置。
       </div>
     </div>
 
     <!-- Task 2 -->
-    <h2 class="section-title" style="font-size: 20px; font-weight: 600;">任務二：文件化 (Document) — 萃取核心業務邏輯</h2>
-    <p class="section-desc">核心系統最怕「人走茶涼、文件遺失」。我們可以使用 Bob 為 <code>LGUPVS01.cbl</code> 自動提煉出結構化的 Business Rules 文件：</p>
+    <h2 class="section-title" style="font-size: 20px; font-weight: 600;">任務二：Extraction — 萃取核心業務邏輯</h2>
+    <p class="section-desc">切換到 <strong>Ask 模式</strong>。程式碼裡藏著大量業務規則，但通常沒有獨立的文件記錄。本任務練習如何讓 Bob 把這些邏輯從不同程式中挖掘出來。</p>
 
     <div class="prompt-showcase">
-      <div class="prompt-header">學員 Prompt (Plan / Ask 模式)</div>
-      <div class="prompt-text">「這段 COBOL 代碼包含理賠比例的限制：如果保單不滿一年，理賠金額上限為 50%，如果滿一年但小於三年則為 80%。請幫我以此萃取出一份繁體中文的業務規則規格書（Business Rules Specification）。」</div>
-      <div class="response-header">IBM Bob 產生的文件草稿</div>
-      <div class="response-content" style="font-family: inherit;">
-        <h4 style="font-size: 15px; font-weight:600; color:#161616; margin-bottom:8px;">理賠核心業務規則 (Rule-ID: INS-CLM-01)</h4>
-        <p style="margin-bottom: 8px;"><strong>1. 規則意圖：</strong>防止短期惡意投保理賠，並根據保單效期進行理賠額度遞增控管。</p>
-        <table class="carbon-table" style="margin-bottom: 8px;">
-          <thead>
-            <tr>
-              <th>保單效期 (T)</th>
-              <th>理賠上限比例</th>
-              <th>對應 COBOL 控制變數</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>T &lt; 1 年</td>
-              <td>50%</td>
-              <td><code>WS-POLICY-AGE &lt; 365</code></td>
-            </tr>
-            <tr>
-              <td>1 年 &le; T &lt; 3 年</td>
-              <td>80%</td>
-              <td><code>WS-POLICY-AGE &ge; 365 AND &lt; 1095</code></td>
-            </tr>
-            <tr>
-              <td>T &ge; 3 年</td>
-              <td>100% (全額)</td>
-              <td><code>ELSE 段落</code></td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="prompt-header-row">
+        <div class="prompt-header">Prompt 2-A：找出 LGDPDB01 的業務規則與防呆邏輯</div>
+        <button class="copy-btn" data-target="p2a">複製</button>
+      </div>
+      <div class="prompt-text" id="p2a">請閱讀 LGDPDB01.cbl，找出所有的業務規則、條件判斷與防呆校驗（例如刪除前的資格檢查、外鍵保護、錯誤回應碼等），用繁體中文條列成清單。</div>
+      <div class="response-header">預期 Bob 的回應方向</div>
+      <div class="response-content">
+        Bob 會逐段分析程式中的 IF、EVALUATE 與 WHEN 結構，將每一條隱藏在刪除保單流程裡的業務規則翻譯成可讀的條列說明，包含每個防呆條件的觸發前提與對應的處理行為。
       </div>
     </div>
 
-    <!-- Task 3 & 4 Grid -->
-    <h2 class="section-title">任務三與任務四：撰寫新段落與知識傳承</h2>
-    <div class="task-grid">
-      <div class="task-card">
-        <h3>任務三：新進撰寫 (Construct)</h3>
-        <p style="margin-bottom: 12px;">當業務變更，需要增加一個「核對保單是否已逾期」的判斷段落時。新進工程師只需輸入商業邏輯：</p>
-        <span style="font-size: 13px; color: #0f62fe; font-weight:600; display:block; margin-bottom:8px;">Bob 產生的符合規格 COBOL 片段：</span>
-        <pre style="margin: 0; padding: 12px; font-size:12px;">       Evaluate True
-           When Expiry-Date < Current-Date
-               Set Policy-Status-Expired To True
-               Perform Expired-Handling
-           When Other
-               Perform Normal-Processing
-       End-Evaluate.</pre>
+    <div class="prompt-showcase">
+      <div class="prompt-header-row">
+        <div class="prompt-header">Prompt 2-B：萃取 LGIPDB01 的 SQL 欄位對照表</div>
+        <button class="copy-btn" data-target="p2b">複製</button>
       </div>
-
-      <div class="task-card">
-        <h3>任務四：新進傳承 (Transfer)</h3>
-        <p style="margin-bottom: 12px;">系統交接給新進同仁時，讓 Bob 自動產生「新手工程師導覽卡」：</p>
-        <ul style="font-size: 13px; color: #525252; padding-left: 16px; line-height: 1.6;">
-          <li><strong>變數命名法：</strong><code>WS-</code> 開頭代表 Working Storage，<code>LS-</code> 代表 Linkage Section。</li>
-          <li><strong>交易調用：</strong><code>DFHRESP(NORMAL)</code> 是 CICS 中檢查 API 執行成功的最常用手段。</li>
-          <li><strong>除錯技巧：</strong>利用 Bob 提煉出段落呼叫圖 (Paragraph Call Tree) 快速定位死循環。</li>
-        </ul>
+      <div class="prompt-text" id="p2b">請列出 LGIPDB01.cbl 中所有 EXEC SQL 區塊使用的 Host Variables，以及它們對應的 DB2 資料表名稱與欄位名稱，整理成對照表格式。</div>
+      <div class="response-header">預期 Bob 的回應方向</div>
+      <div class="response-content">
+        Bob 會掃描查詢程式中的所有內嵌 SQL，列出 COBOL 程式變數與 DB2 實體欄位之間的對應關係，產出一份可直接貼入 Data Dictionary 的欄位對照表。
       </div>
     </div>
 
-    <!-- Bob Prompt Cheat Sheet -->
-    <h2 class="section-title">Bob COBOL 傳承常用 Prompt 速查表</h2>
-    <table class="carbon-table">
-      <thead>
-        <tr>
-          <th style="width: 30%;">應用場景</th>
-          <th style="width: 70%;">推薦使用的對話範本 (Prompt)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>代碼快速導讀</strong></td>
-          <td><code>「請幫我產生這段 COBOL 程式碼的 Paragraph 呼叫順序，並指出最核心的入口 paragraph 哪裡？」</code></td>
-        </tr>
-        <tr>
-          <td><strong>資料庫字典映射</strong></td>
-          <td><code>「請列出這段 EXEC SQL 區塊中，所有的 Host Variables 及其對應的 DB2 資料庫欄位對照表。」</code></td>
-        </tr>
-        <tr>
-          <td><strong>防呆與業務規則提煉</strong></td>
-          <td><code>「這段程式碼有哪些防呆、例外處理（Exception Handling）與 Error Code？請用繁體中文條列成清單。」</code></td>
-        </tr>
-        <tr>
-          <td><strong>現代化重構 (Java/API)</strong></td>
-          <td><code>「如果我想把這段 COBOL 的開單核心邏輯用 Java Spring Boot 重寫，請幫我規劃資料結構與 RESTful API 的 JSON Payload 設計。」</code></td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- Task 3 -->
+    <h2 class="section-title" style="font-size: 20px; font-weight: 600;">任務三：Documentation — 根據 Spec 產出程式碼文件</h2>
+    <p class="section-desc">切換到 <strong>Agent 模式</strong>。結合前兩個任務的理解，現在讓 Bob 根據您提供的規格描述，直接產出結構化的程式碼技術文件，供後續維護與交接使用。</p>
 
-    <!-- FAQ -->
-    <h2 class="section-title">常見問答</h2>
-    <table class="carbon-table">
-      <thead>
-        <tr>
-          <th style="width: 35%;">學員疑問</th>
-          <th style="width: 65%;">解答說明</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>我電腦沒有 Mainframe 模擬器也可以學這堂課嗎？</strong></td>
-          <td>完全可以。我們這堂課的重點在於「透過 IBM Bob 降低核心系統的理解門檻」，不依賴大型主機，利用 Bob 即可完成全套程式理解與重構。</td>
-        </tr>
-        <tr>
-          <td><strong>Bob 如何處理大型、數萬行的 COBOL 檔案？</strong></td>
-          <td>您可以利用 Bob 的 <code>GetSymbolsOverview</code> 與 <code>grep</code> 工具，先找出核心的 Paragraph (段落)，並採取「精確切割、逐段解讀」的策略。</td>
-        </tr>
-        <tr>
-          <td><strong>cics-genapp 的程式碼可以直接轉成 Java 嗎？</strong></td>
-          <td>可以使用 Bob 提供 Java 代碼架構的重寫指引。但通常建議先由 Bob 萃取出「純淨的業務規則」，再根據現代微服務架構重新設計。</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="prompt-showcase">
+      <div class="prompt-header-row">
+        <div class="prompt-header">Prompt 3-A：產出 LGUPVS01 模組技術規格文件</div>
+        <button class="copy-btn" data-target="p3a">複製</button>
+      </div>
+      <div class="prompt-text" id="p3a">請根據 LGUPVS01.cbl 的程式內容，產出一份繁體中文的技術規格文件，格式包含：（1）模組用途說明、（2）輸入／輸出欄位清單、（3）主要業務規則、（4）例外處理邏輯、（5）相依的 DB2 資料表與 VSAM 檔案。</div>
+      <div class="response-header">預期 Bob 的回應方向</div>
+      <div class="response-content">
+        Bob 會依照您指定的格式，針對這支混合 VSAM 與 DB2 的更新程式，產出一份完整的模組技術規格文件。每個章節都對應程式碼中的實際邏輯，可直接存為 Markdown 或貼入 Confluence。
+      </div>
+    </div>
+
+    <div class="prompt-showcase">
+      <div class="prompt-header-row">
+        <div class="prompt-header">Prompt 3-B：為 LGDPDB01 產出 Inline 程式碼註解</div>
+        <button class="copy-btn" data-target="p3b">複製</button>
+      </div>
+      <div class="prompt-text" id="p3b">請為 LGDPDB01.cbl 中目前沒有註解的關鍵段落加上繁體中文的 COBOL 行內註解（以 * 開頭），說明每個 Paragraph 的用途、重要的防呆邏輯與錯誤處理流程。</div>
+      <div class="response-header">預期 Bob 的回應方向</div>
+      <div class="response-content">
+        Bob 會在刪除保單程式的關鍵位置插入 COBOL 格式的行內註解，讓下一位接手的工程師能夠直接從程式碼本身讀懂業務邏輯與防呆設計，不再依賴口耳相傳的知識傳承。
+      </div>
+    </div>
+
+    <div class="prompt-showcase">
+      <div class="prompt-header-row">
+        <div class="prompt-header">Prompt 3-C：將 3-A 與 3-B 的成果轉為 HTML 技術文件網頁</div>
+        <button class="copy-btn" data-target="p3c">複製</button>
+      </div>
+      <div class="prompt-text" id="p3c">請把剛才 Prompt 3-A 產出的「LGUPVS01 模組技術規格文件」，以及 Prompt 3-B 產出的「LGDPDB01 含行內註解的程式碼」，整合成一份單一的自包含 HTML 網頁文件，需求如下：（1）頁面標題為「cics-genapp 技術交接文件」；（2）左側導覽列可跳至各章節；（3）技術規格文件以結構化段落呈現，並將清單、表格以 HTML 格式排版；（4）COBOL 程式碼以 &lt;pre&gt;&lt;code&gt; 區塊顯示，行內註解以不同顏色標示；（5）整份文件可直接另存為 .html 檔案供離線閱讀或上傳 Confluence。</div>
+      <div class="response-header">預期 Bob 的回應方向</div>
+      <div class="response-content">
+        Bob 會在 Agent 模式下直接產出一份完整的自包含 HTML 文件，將 3-A 的技術規格與 3-B 的帶註解程式碼合併為同一頁面，並自動加入左側導覽、章節錨點、程式碼高亮樣式。您可以點選 Bob 回應中的「Save」按鈕直接下載 <code>.html</code> 檔案，或將原始碼貼入 Confluence 的 HTML 巨集區塊即可呈現完整格式。
+      </div>
+    </div>
 
     <!-- Next CTA Banner -->
     <div class="cta-banner">
@@ -481,5 +462,21 @@
     <span>Made with IBM Bob</span>
   </footer>
 
+<script>
+  document.querySelectorAll('.copy-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var targetId = btn.getAttribute('data-target');
+      var text = document.getElementById(targetId).innerText;
+      navigator.clipboard.writeText(text).then(function() {
+        btn.textContent = '已複製 ✓';
+        btn.classList.add('copied');
+        setTimeout(function() {
+          btn.textContent = '複製';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    });
+  });
+</script>
 </body>
 </html>
