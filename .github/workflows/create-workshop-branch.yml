@@ -47,9 +47,10 @@ jobs:
             .bob/mcp.json \
             .bob/skills/find-skills \
             DESIGN.md \
-            skills-lock.json
+            skills-lock.json \
+            .gitignore
 
-          git add .bob/mcp.json .bob/skills/find-skills DESIGN.md skills-lock.json
+          git add .bob/mcp.json .bob/skills/find-skills DESIGN.md skills-lock.json .gitignore
           git commit -m "chore($SLUG): seed workshop branch with base files from main"
 
           git push origin "$BRANCH"
