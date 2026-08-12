@@ -1,21 +1,19 @@
 #!/usr/bin/env bash
 # update-artifacts.sh
-# Copies artifacts/ from a workshop branch into main so the HTML files
-# can be served on GitHub Pages via deploy-gh-pages.yml.
+# Uses artifacts/ from a workshop branch to replace TWO locations on main:
+#   1. artifacts/               (root-level, gitignored — force-added)
+#   2. workshops/<slug>/artifacts/  (GitHub Pages source — committed normally)
 #
 # What it does:
 #   1. Validates that the workshop branch exists locally.
 #   2. Checks out main (requires a clean working tree).
-#   3. Exports artifacts/ from the workshop branch (git checkout <branch> -- artifacts/).
-#   4. Places the files at:
-#        • workshops/<slug>/artifacts/  (for GitHub Pages deploy)
-#        • artifacts/                   (root-level copy on main)
-#   5. Runs scripts/update-index.mjs --dir workshops/<slug>/artifacts if needed.
-#   6. Commits and pushes main.
-#   7. Returns to the original branch.
+#   3. Exports artifacts/ from the workshop branch into both destinations.
+#   4. Runs scripts/update-index.mjs for each destination.
+#   5. Commits and pushes main.
+#   6. Returns to the original branch.
 #
 # Usage:
-#   bash scripts/update-artifacts.sh workshop/w02
+#   bash scripts/update-artifacts.sh workshop/w01
 
 set -euo pipefail
 
@@ -24,14 +22,14 @@ die()  { echo "error: $*" >&2; exit 1; }
 info() { echo "  $*"; }
 
 # ── argument validation ───────────────────────────────────────────────────────
-[[ $# -eq 1 ]] || die "usage: $0 <workshop-branch>  (e.g. workshop/w02)"
+[[ $# -eq 1 ]] || die "usage: $0 <workshop-branch>  (e.g. workshop/w01)"
 
 WORKSHOP_BRANCH="$1"
 REMOTE="${REMOTE:-origin}"
 SOURCE_BRANCH="main"
 ARTIFACTS_DIR="artifacts"
 
-# Derive slug from branch name (e.g. workshop/w02 → w02)
+# Derive slug from branch name (e.g. workshop/w01 → w01)
 SLUG="${WORKSHOP_BRANCH##*/}"
 
 # Validate branch name format
@@ -53,44 +51,52 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
 fi
 
 CURRENT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+ROOT_DEST="$ARTIFACTS_DIR"
 WORKSHOP_DEST="workshops/$SLUG/$ARTIFACTS_DIR"
 
-info "workshop branch : $WORKSHOP_BRANCH"
-info "slug            : $SLUG"
-info "destination     : $WORKSHOP_DEST  (on $SOURCE_BRANCH)"
-info "remote          : $REMOTE"
+info "workshop branch  : $WORKSHOP_BRANCH"
+info "slug             : $SLUG"
+info "destination 1    : $ROOT_DEST/  (root-level on $SOURCE_BRANCH, gitignored)"
+info "destination 2    : $WORKSHOP_DEST/  (GitHub Pages source on $SOURCE_BRANCH)"
+info "remote           : $REMOTE"
 echo ""
 
 # ── Step 1: switch to main ────────────────────────────────────────────────────
 info "── Step 1: checking out $SOURCE_BRANCH ──"
 git checkout "$SOURCE_BRANCH"
 
-# ── Step 2: export artifacts/ from the workshop branch ───────────────────────
-info "── Step 2: exporting $ARTIFACTS_DIR/ from $WORKSHOP_BRANCH ──"
+# ── Step 2a: replace root-level artifacts/ ───────────────────────────────────
+info "── Step 2a: replacing $ROOT_DEST/ from $WORKSHOP_BRANCH ──"
 
-mkdir -p "$WORKSHOP_DEST"
-
-# Remove root-level artifacts/ entirely so stale files don't linger,
-# then restore exactly what the workshop branch contains.
-rm -rf "$ARTIFACTS_DIR"
+# Remove stale files then restore exactly what the workshop branch contains.
+rm -rf "$ROOT_DEST"
 git checkout "$WORKSHOP_BRANCH" -- "$ARTIFACTS_DIR"
 
-# Copy contents to workshops/<slug>/artifacts/ (GitHub Pages destination)
-rsync -a --delete "$ARTIFACTS_DIR/" "$WORKSHOP_DEST/"
+# ── Step 2b: replace workshops/<slug>/artifacts/ ─────────────────────────────
+info "── Step 2b: replacing $WORKSHOP_DEST/ from $WORKSHOP_BRANCH ──"
 
-# ── Step 3: regenerate index.html ────────────────────────────────────────────
-info "── Step 3: regenerating index.html in $WORKSHOP_DEST ──"
+mkdir -p "$WORKSHOP_DEST"
+rsync -a --delete "$ROOT_DEST/" "$WORKSHOP_DEST/"
+
+# ── Step 3: regenerate index.html in both destinations ───────────────────────
+info "── Step 3a: regenerating index.html in $ROOT_DEST/ ──"
+node scripts/update-index.mjs --dir "$ROOT_DEST"
+
+info "── Step 3b: regenerating index.html in $WORKSHOP_DEST/ ──"
 node scripts/update-index.mjs --dir "$WORKSHOP_DEST"
 
 # ── Step 4: commit and push main ─────────────────────────────────────────────
 info "── Step 4: committing and pushing $SOURCE_BRANCH ──"
 git add "$WORKSHOP_DEST"
-git add -f "$ARTIFACTS_DIR"
+git add -f "$ROOT_DEST"
 
 if git diff --cached --quiet; then
-  info "nothing to commit — $WORKSHOP_DEST is already up to date"
+  info "nothing to commit — both destinations are already up to date"
 else
-  git commit -m "chore: update $WORKSHOP_DEST and $ARTIFACTS_DIR from $WORKSHOP_BRANCH"
+  git commit -m "chore: sync $SLUG artifacts from $WORKSHOP_BRANCH
+
+  • $ROOT_DEST/ ← $WORKSHOP_BRANCH:artifacts/
+  • $WORKSHOP_DEST/ ← $WORKSHOP_BRANCH:artifacts/"
   info "committed on $SOURCE_BRANCH"
 fi
 
@@ -106,5 +112,5 @@ if [[ "$CURRENT_BRANCH" != "$SOURCE_BRANCH" && "$CURRENT_BRANCH" != "HEAD" ]]; t
 fi
 
 echo "✔  all done"
-echo "   • $WORKSHOP_BRANCH:$ARTIFACTS_DIR/  →  $REMOTE/$SOURCE_BRANCH:$WORKSHOP_DEST"
-echo "   • $WORKSHOP_BRANCH:$ARTIFACTS_DIR/  →  $REMOTE/$SOURCE_BRANCH:$ARTIFACTS_DIR"
+echo "   • $WORKSHOP_BRANCH:artifacts/  →  $REMOTE/$SOURCE_BRANCH:$ROOT_DEST/"
+echo "   • $WORKSHOP_BRANCH:artifacts/  →  $REMOTE/$SOURCE_BRANCH:$WORKSHOP_DEST/"
