@@ -163,6 +163,18 @@
 
   /* ── Footer ── */
   .page-footer { background: #161616; color: #8c8c8c; text-align: center; font-size: 12px; letter-spacing: 0.32px; padding: 20px 32px; border-top: 1px solid #393939; }
+
+  /* ── Prompt copy card ── */
+  .prompt-card { border: 1px solid #e0e0e0; margin-bottom: 16px; }
+  .prompt-card-header { display: flex; align-items: center; justify-content: space-between; background: #f4f4f4; padding: 12px 16px; border-bottom: 1px solid #e0e0e0; }
+  .prompt-card-header h4 { font-size: 14px; font-weight: 600; color: #161616; letter-spacing: 0.16px; margin: 0; }
+  .prompt-card-header .step-tag { font-size: 11px; font-weight: 600; letter-spacing: 0.32px; color: #ffffff; background: #0f62fe; padding: 2px 8px; }
+  .prompt-card-header .step-tag.gray { background: #525252; }
+  .prompt-copy-btn { font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.32px; color: #0f62fe; background: #ffffff; border: 1px solid #0f62fe; padding: 4px 12px; cursor: pointer; white-space: nowrap; }
+  .prompt-copy-btn:hover { background: #edf4ff; }
+  .prompt-copy-btn.copied { color: #198038; border-color: #198038; background: #defbe6; }
+  .prompt-card pre { font-family: 'IBM Plex Mono', 'Courier New', monospace; font-size: 13px; color: #161616; background: #ffffff; padding: 16px; margin: 0; line-height: 1.7; white-space: pre-wrap; word-break: break-word; }
+  .prompt-card .prompt-note { font-size: 12px; color: #525252; letter-spacing: 0.16px; padding: 8px 16px 12px; border-top: 1px solid #e0e0e0; background: #f4f4f4; }
 </style>
 </head>
 <body>
@@ -476,6 +488,111 @@
 
         <hr class="section-sep">
 
+        <div class="section-title">Bob Prompt 快速卡片</div>
+        <p class="section-sub">直接複製以下 prompt，貼到 IBM Bob 對話框，Bob 會逐步引導你完成每項操作</p>
+
+        <!-- 組長任務 -->
+        <div class="highlight" style="margin-bottom:16px;">
+          <strong>組長任務：</strong>創建團隊 GitHub Repo 並邀請所有組員為協作者
+        </div>
+
+        <div class="prompt-card">
+          <div class="prompt-card-header">
+            <span><span class="step-tag">組長 Step 1</span> &nbsp;安裝 git 與 gh CLI</span>
+            <button class="prompt-copy-btn" data-target="pc1">複製 Prompt</button>
+          </div>
+          <pre id="pc1">請幫我確認系統是否已安裝 git 和 gh CLI。如果尚未安裝，請依照我的作業系統（macOS / Windows / Linux）給我安裝指令，並在安裝完成後執行以下指令確認版本：
+git --version
+gh --version</pre>
+        </div>
+
+        <div class="prompt-card">
+          <div class="prompt-card-header">
+            <span><span class="step-tag">組長 Step 2</span> &nbsp;透過瀏覽器完成 GitHub 認證</span>
+            <button class="prompt-copy-btn" data-target="pc2">複製 Prompt</button>
+          </div>
+          <pre id="pc2">請幫我執行 gh auth login，並引導我完成以下選項：
+- GitHub.com
+- HTTPS
+- Authenticate Git with your GitHub credentials → Yes
+- Login with a web browser
+
+瀏覽器開啟後，我會登入 GitHub 並授權。完成後請確認認證狀態：gh auth status</pre>
+        </div>
+
+        <div class="prompt-card">
+          <div class="prompt-card-header">
+            <span><span class="step-tag">組長 Step 3</span> &nbsp;創建團隊 Repo 並邀請組員</span>
+            <button class="prompt-copy-btn" data-target="pc3">複製 Prompt</button>
+          </div>
+          <pre id="pc3">請幫我用 gh CLI 創建一個新的 GitHub repo，名稱是「hackathon-team」，設定為 public，並加入簡短描述「黑客松團隊專案」。創建完成後，請告訴我如何在 GitHub 網頁上進入 Settings → Collaborators，把其他組員的 GitHub 帳號加入為協作者。</pre>
+        </div>
+
+        <!-- 組員任務 -->
+        <div class="highlight" style="margin-top:8px;margin-bottom:16px;">
+          <strong>所有組員任務（a → b → c）：</strong>認證 → Clone → 建立 Branch → Commit → Push
+        </div>
+
+        <div class="prompt-card">
+          <div class="prompt-card-header">
+            <span><span class="step-tag gray">組員 Step a</span> &nbsp;安裝 git 與 gh CLI，並透過瀏覽器完成 GitHub 認證</span>
+            <button class="prompt-copy-btn" data-target="pc4">複製 Prompt</button>
+          </div>
+          <pre id="pc4">請幫我依序完成以下兩件事：
+
+1. 確認系統是否已安裝 git 和 gh CLI。如果尚未安裝，請依照我的作業系統給我安裝指令。
+
+2. 安裝完成後，執行 gh auth login 並引導我完成 GitHub 認證，選項依序為：
+   - GitHub.com
+   - HTTPS
+   - Authenticate Git with your GitHub credentials → Yes
+   - Login with a web browser
+   
+瀏覽器開啟後我會登入並授權。完成後請執行 gh auth status 確認認證成功。</pre>
+          <div class="prompt-note">💡 每位組員在自己的電腦上各執行一次，設定完成後才能 clone 和 push。</div>
+        </div>
+
+        <div class="prompt-card">
+          <div class="prompt-card-header">
+            <span><span class="step-tag gray">組員 Step b</span> &nbsp;Clone 組長建立的 Repo</span>
+            <button class="prompt-copy-btn" data-target="pc5">複製 Prompt</button>
+          </div>
+          <pre id="pc5">請幫我 clone 以下 GitHub repo 到本地端，並進入該目錄：
+git clone https://github.com/【組長帳號】/hackathon-team.git
+cd hackathon-team
+
+clone 完成後，請顯示目前目錄內容（ls 或 dir）以及目前所在的 branch（git branch）。</pre>
+          <div class="prompt-note">💡 將 【組長帳號】 替換為實際的 GitHub 帳號名稱，例如：<code>git clone https://github.com/john123/hackathon-team.git</code></div>
+        </div>
+
+        <div class="prompt-card">
+          <div class="prompt-card-header">
+            <span><span class="step-tag gray">組員 Step c</span> &nbsp;建立 Branch、新增檔案、Commit 並 Push</span>
+            <button class="prompt-copy-btn" data-target="pc6">複製 Prompt</button>
+          </div>
+          <pre id="pc6">請幫我依序完成以下步驟：
+
+1. 建立並切換到新 branch，命名規則為 feature/名字-角色：
+   git checkout -b feature/【你的名字】-【你的角色】
+
+2. 在這個 branch 新增一個自我介紹檔案，檔名為 intro-【你的名字】.md，內容包含：
+   - 姓名
+   - 負責角色
+   - 今天想完成的一件事
+
+3. 將新檔案加入追蹤並 commit：
+   git add .
+   git commit -m "新增：【你的名字】自我介紹"
+
+4. 將 branch push 到 GitHub：
+   git push origin feature/【你的名字】-【你的角色】
+
+完成後請顯示 git log --oneline -3 確認 commit 已記錄。</pre>
+          <div class="prompt-note">💡 將 【你的名字】 和 【你的角色】 替換為實際內容，例如：<code>feature/小明-視覺設計</code></div>
+        </div>
+
+        <hr class="section-sep">
+
         <div class="section-title">GitHub 協作操作流程</div>
         <p class="section-sub">從建立 repo 到整合，完整的 GitHub 協作步驟</p>
 
@@ -503,6 +620,26 @@
 </div><!-- /page-container -->
 
 <div class="page-footer">Made with IBM Bob</div>
+
+<script>
+  (function () {
+    document.querySelectorAll('.prompt-copy-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var targetId = btn.getAttribute('data-target');
+        var pre = document.getElementById(targetId);
+        if (!pre) return;
+        navigator.clipboard.writeText(pre.innerText).then(function () {
+          btn.textContent = '已複製 ✓';
+          btn.classList.add('copied');
+          setTimeout(function () {
+            btn.textContent = '複製 Prompt';
+            btn.classList.remove('copied');
+          }, 2000);
+        });
+      });
+    });
+  })();
+</script>
 
 </body>
 </html>
