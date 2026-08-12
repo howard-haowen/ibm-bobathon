@@ -70,17 +70,13 @@ info "── Step 2: exporting $ARTIFACTS_DIR/ from $WORKSHOP_BRANCH ──"
 
 mkdir -p "$WORKSHOP_DEST"
 
-# Bring artifacts/ from the workshop branch into the working tree
+# Remove root-level artifacts/ entirely so stale files don't linger,
+# then restore exactly what the workshop branch contains.
+rm -rf "$ARTIFACTS_DIR"
 git checkout "$WORKSHOP_BRANCH" -- "$ARTIFACTS_DIR"
 
 # Copy contents to workshops/<slug>/artifacts/ (GitHub Pages destination)
 rsync -a --delete "$ARTIFACTS_DIR/" "$WORKSHOP_DEST/"
-
-# Also keep a copy at the root-level artifacts/ on main
-# (artifacts/ is gitignored, so force-add with -f)
-rsync -a --delete "$ARTIFACTS_DIR/" "$ARTIFACTS_DIR.tmp/"
-rm -rf "$ARTIFACTS_DIR"
-mv "$ARTIFACTS_DIR.tmp" "$ARTIFACTS_DIR"
 
 # ── Step 3: regenerate index.html ────────────────────────────────────────────
 info "── Step 3: regenerating index.html in $WORKSHOP_DEST ──"
