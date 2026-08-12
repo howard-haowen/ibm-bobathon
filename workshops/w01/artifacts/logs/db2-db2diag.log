@@ -1,0 +1,122 @@
+2023-11-30-08.00.01.112345+480 I1234A456        LEVEL: Info
+PID : 98765     TID : 140232145678512  PROC : db2sysc
+INSTANCE: db2inst1  DB  : BANKDB        APPHDL: 0-1234
+EDUID   : 456       EDUNAME: db2agent (BANKDB)
+FUNCTION: DB2 UDB, configuration manager, sqleinit, probe:1
+MESSAGE : ADM0506I  資料庫 BANKDB 已啟動, 月底對帳批次待執行 (幣別: TWD)
+
+2023-11-30-08.01.15.334567+480 I2345A789        LEVEL: Info
+PID : 98765     TID : 140232145678513  PROC : db2sysc
+INSTANCE: db2inst1  DB  : BANKDB
+MESSAGE : 對帳批次作業 RECONCILE-20231130 已啟動, 預計對帳帳戶數: 1,250,000 戶, 幣別: TWD
+
+2023-11-30-08.15.22.001234+480 I3456A123        LEVEL: Warning
+PID : 98770     TID : 140232145678520  PROC : db2agent
+INSTANCE: db2inst1  DB  : BANKDB        APPHDL: 0-2001
+EDUID   : 460       EDUNAME: db2agent (BANKDB)
+FUNCTION: DB2 UDB, lock manager, sqlplFlushLockTable, probe:10
+MESSAGE : ZRC=0x80100003=-2146435069=SQLT_LKTOUT
+          Lock wait timeout, APPL_ID: 0-2001, waiting on lock: TABLE BANK.ACCOUNT_MASTER
+
+2023-11-30-08.15.45.223456+480 I3567A234        LEVEL: Error
+PID : 98771     TID : 140232145678521  PROC : db2agent
+INSTANCE: db2inst1  DB  : BANKDB        APPHDL: 0-2002
+EDUID   : 461       EDUNAME: db2agent (BANKDB)
+FUNCTION: DB2 UDB, lock manager, sqlplResolveDeadlock, probe:20
+MESSAGE : SQLCODE=-911, ZRC=0x80100002
+          Deadlock detected: APPL_ID 0-2002 selected as victim, transaction rolled back
+          Holding lock: TABLE BANK.TRANSACTION_LOG ROW 00001A
+          Waiting on lock: TABLE BANK.ACCOUNT_MASTER ROW 00000F
+
+2023-11-30-08.15.46.334567+480 I3678A345        LEVEL: Error
+PID : 98772     TID : 140232145678522  PROC : db2agent
+INSTANCE: db2inst1  DB  : BANKDB        APPHDL: 0-2003
+EDUID   : 462       EDUNAME: db2agent (BANKDB)
+FUNCTION: DB2 UDB, lock manager, sqlplResolveDeadlock, probe:20
+MESSAGE : SQLCODE=-911, second deadlock victim
+          Holding lock: TABLE BANK.ACCOUNT_MASTER ROW 00000F
+          Waiting on lock: TABLE BANK.BALANCE_HISTORY ROW 0000AA
+
+2023-11-30-08.16.01.001234+480 I3789A456        LEVEL: Error
+PID : 98773     TID : 140232145678523  PROC : db2agent
+INSTANCE: db2inst1  DB  : BANKDB        APPHDL: 0-2004
+EDUID   : 463
+MESSAGE : SQLCODE=-911, deadlock chain expanding: 5 application handles now involved
+
+2023-11-30-08.16.15.112345+480 I3890A567        LEVEL: Warning
+PID : 98774     TID : 140232145678524  PROC : db2agent
+INSTANCE: db2inst1  DB  : BANKDB        APPHDL: 0-2010
+MESSAGE : Lock wait queue length: 48, exceeds recommended limit of 20
+
+2023-11-30-08.16.30.223456+480 I3901A678        LEVEL: Warning
+PID : 98775     TID : 140232145678525  PROC : db2agent
+INSTANCE: db2inst1  DB  : BANKDB        APPHDL: 0-2015
+MESSAGE : LOCKLIST utilization: 78%, MAXLOCKS threshold approaching (configured: 1024 pages)
+
+2023-11-30-08.17.00.334567+480 I4012A789        LEVEL: Error
+PID : 98780     TID : 140232145678530  PROC : db2agent
+INSTANCE: db2inst1  DB  : BANKDB
+MESSAGE : Lock escalation triggered on BANK.ACCOUNT_MASTER, converted to table-level lock
+          Reason: MAXLOCKS threshold reached, row-level locks promoted to table-level lock
+          Affected concurrent applications: 23
+
+2023-11-30-08.17.05.001234+480 I4123A890        LEVEL: Error
+PID : 98781     TID : 140232145678531  PROC : db2agent
+INSTANCE: db2inst1  DB  : BANKDB        APPHDL: 0-2050
+MESSAGE : SQLCODE=-912, application 0-2050 waiting on TABLE BANK.ACCOUNT_MASTER due to lock escalation
+
+2023-11-30-08.17.30.112345+480 I4234A901        LEVEL: Warning
+PID : 98782     TID : 140232145678532  PROC : db2agent
+INSTANCE: db2inst1  DB  : BANKDB
+MESSAGE : Current lock wait applications: 23, longest wait time: 245 seconds
+
+2023-11-30-08.18.00.223456+480 I4345A012        LEVEL: Info
+PID : 98783     TID : 140232145678533  PROC : db2agent
+INSTANCE: db2inst1  DB  : BANKDB
+MESSAGE : DBA 介入處理: 執行 db2 "force application (0-2002)" 以釋放鎖定
+
+2023-11-30-08.18.15.334567+480 I4456A123        LEVEL: Info
+PID : 98784     TID : 140232145678534  PROC : db2agent
+INSTANCE: db2inst1  DB  : BANKDB
+MESSAGE : Lock escalation resolved, BANK.ACCOUNT_MASTER reverted to row-level locking
+          Lock wait applications reduced to: 3
+
+2023-11-30-08.20.00.001234+480 I4567A234        LEVEL: Info
+PID : 98790     TID : 140232145678540  PROC : db2agent
+INSTANCE: db2inst1  DB  : BANKDB
+MESSAGE : Lock state normalized, lock wait queue cleared
+
+2023-11-30-08.25.00.112345+480 I4678A345        LEVEL: Info
+PID : 98791     TID : 140232145678541  PROC : db2agent
+INSTANCE: db2inst1  DB  : BANKDB
+MESSAGE : DBA 調整參數完成: LOCKLIST 從 1024 提升至 4096 pages, MAXLOCKS 從 10% 提升至 25%
+
+2023-11-30-08.30.00.223456+480 I4789A456        LEVEL: Info
+PID : 98792     TID : 140232145678542  PROC : db2agent
+INSTANCE: db2inst1  DB  : BANKDB
+MESSAGE : 對帳批次進度: 125,000 / 1,250,000 戶 (TWD), 累計對帳金額: NT$12,450,000,000
+
+2023-11-30-09.00.00.334567+480 I4890A567        LEVEL: Info
+PID : 98800     TID : 140232145678550  PROC : db2agent
+INSTANCE: db2inst1  DB  : BANKDB
+MESSAGE : 對帳批次進度: 375,000 / 1,250,000 戶 (TWD), 平均鎖定等待: 0.8 秒, 累計對帳金額: NT$37,500,000,000
+
+2023-11-30-10.00.00.001234+480 I4901A678        LEVEL: Info
+PID : 98810     TID : 140232145678560  PROC : db2agent
+INSTANCE: db2inst1  DB  : BANKDB
+MESSAGE : 對帳批次進度: 750,000 / 1,250,000 戶 (TWD), 累計對帳金額: NT$75,200,000,000
+
+2023-11-30-11.00.00.112345+480 I5012A789        LEVEL: Info
+PID : 98820     TID : 140232145678570  PROC : db2agent
+INSTANCE: db2inst1  DB  : BANKDB
+MESSAGE : 對帳批次進度: 1,000,000 / 1,250,000 戶 (TWD), LOCKLIST utilization: 31%, 累計對帳金額: NT$100,800,000,000
+
+2023-11-30-11.45.22.223456+480 I5123A890        LEVEL: Info
+PID : 98830     TID : 140232145678580  PROC : db2agent
+INSTANCE: db2inst1  DB  : BANKDB
+MESSAGE : 月底對帳批次完成, 對帳帳戶數: 1,250,000 戶 (TWD), 無新發生死結, 總對帳金額: NT$125,680,000,000, 耗時: 3h45m22s
+
+2023-11-30-11.45.25.334567+480 I5234A901        LEVEL: Info
+PID : 98831     TID : 140232145678581  PROC : db2agent
+INSTANCE: db2inst1  DB  : BANKDB
+MESSAGE : RECONCILE-20231130 完成, 報表已產出: /opt/db2/reports/reconcile-20231130.pdf (幣別: TWD)

@@ -82,7 +82,7 @@
       font-size: 18px;
       color: #525252;
       line-height: 1.5;
-      max-width: 760px;
+      max-width: 640px;
     }
 
     /* Section label */
@@ -133,7 +133,7 @@
     .card p {
       font-size: 14px;
       color: #525252;
-      line-height: 1.35;
+      line-height: 1.29;
       letter-spacing: 0.16px;
     }
 
@@ -163,7 +163,6 @@
       padding: 32px;
       text-align: center;
       border-top: 1px solid #262626;
-      margin-top: 64px;
     }
     footer span { font-size: 12px; color: #8c8c8c; }
 
@@ -205,11 +204,11 @@
     .copy-btn.copied { color: #198038; border-color: #198038; background: #defbe6; }
     .clone-box .prompt-text {
       font-family: 'IBM Plex Mono', 'Courier New', monospace;
-      font-size: 13px;
+      font-size: 16px;
       color: #161616;
       background: #f4f4f4;
-      padding: 16px 20px;
-      line-height: 1.7;
+      padding: 20px 24px;
+      line-height: 1.8;
       white-space: pre-wrap;
       word-break: break-word;
       margin: 0;
@@ -237,48 +236,48 @@
     <div class="hero">
       <p class="hero-eyebrow">教學材料總覽</p>
       <h1>本期課程教材</h1>
-      <p>以下為本次工作坊的學習教材，主題涵蓋 IBM Bob 核心功能、COBOL 程式解讀、以及 WAS/MQ/Db2 自動化維運，請依序瀏覽。</p>
-      
+      <p>以下為本次工作坊的學習教材，主題涵蓋 AI 概念、工程實踐、團隊協作等領域，請依序瀏覽。</p>
       <div class="clone-box">
         <div class="clone-box-header">
           <h3>取得本工作坊程式碼</h3>
           <button class="copy-btn" id="copyBtn">複製 Prompt</button>
         </div>
-        <code class="prompt-text" id="promptText">請在終端機執行以下 git 指令，單獨 clone 本工作坊的 orphan 分支（workshop/w02），不會下載 main 分支的任何歷史：
+        <code class="prompt-text" id="promptText">請在終端機執行以下 git 指令，單獨 clone 本工作坊的 orphan 分支（workshop/w01），不會下載 main 分支的任何歷史：
 
-git clone --single-branch --branch workshop/w02 \
+git clone --single-branch --branch workshop/w01 \
   https://github.com/howard-haowen/ibm-bobathon.git \
-  ibm-bobathon-w02
+  ibm-bobathon-w01
 
 執行完成後，切換至新建立的目錄：
 
-cd ibm-bobathon-w02</code>
+cd ibm-bobathon-w01</code>
       </div>
     </div>
 
     <p class="section-label">全部教材（3）</p>
 
     <div class="card-grid">
-      <a class="card" href="01-ibm-bob-basic-usage.html">
-        <p class="card-eyebrow">工作坊教材 · IBM Bob 入門</p>
-        <h2>IBM Bob 入門操作指南</h2>
-        <p>本教材帶領您快速掌握 IBM Bob 的三大核心模式、Skill 安裝與 MCP Server 觀念，並透過實際對話範例，讓您在 10 分鐘內上手 AI 輔助開發。</p>
+      <a class="card" href="01-agentic-ai-key-concepts.html">
+        <p class="card-eyebrow">期末報告研究簡報  ·  2 個資料來源</p>
+        <h2>AI Agent 設計原理與工程實踐</h2>
+        <p>整合 YouTube 影片與書籍摘要，系統性梳理 Agentic AI 的核心概念與工程落地方法。</p>
         <span class="card-cta">開始學習</span>
       </a>
 
-      <a class="card" href="02-cobol-documentation.html">
-        <p class="card-eyebrow">工作坊教材 · COBOL 傳承</p>
-        <h2>用 IBM Bob 解讀、文件化與傳承 COBOL 程式</h2>
-        <p>以開源的 cics-genapp 為範例，展示如何使用 IBM Bob 在無編譯環境下，高效進行 COBOL 程式碼解讀、生成業務規則、撰寫新功能段落與進行新進人員知識傳承。</p>
+      <a class="card" href="02-hackathon-team-plan.html">
+        <p class="card-eyebrow">黑客松 · 一日 MVP · 6 人混齡團隊</p>
+        <h2>團隊分工計劃</h2>
+        <p>讓你了解如何在一天內有效分工完成 MVP、透過 IBM Bob AI 輔助完成任務，以及如何讓 Bob 幫你操作 Git。</p>
         <span class="card-cta">開始學習</span>
       </a>
 
-      <a class="card" href="03-wasdb2mq-ansible-ops.html">
-        <p class="card-eyebrow">工作坊教材 · IT 維運輔助</p>
-        <h2>用 IBM Bob 輔助 WAS、MQ、Db2 維運與 Ansible 自動化</h2>
-        <p>本教材展示如何利用 IBM Bob 的 Ask 與 Agent 模式，在不依賴真實伺服器的情況下，進行 WAS/MQ 錯誤日誌 analysis、Db2 SQL 問題排查，並自動生成 Ansible 自動化 Playbook。</p>
+      <a class="card" href="03-datasets.html">
+        <p class="card-eyebrow">Bobathon · 黑客松 · 公開資料入門</p>
+        <h2>台灣公開資料入門指南</h2>
+        <p>AI 專案失敗往往不是模型不好，而是找不到資料。以下三個平台免費、合法，足以支撐大多數 Social Impact MVP。</p>
         <span class="card-cta">開始學習</span>
       </a>
+
     </div>
 
   </main>
