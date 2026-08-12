@@ -136,27 +136,6 @@
   .highlight strong { color: #0f62fe; }
   .warning { border-left: 4px solid #f1c21b; background: #f4f4f4; padding: 16px 20px; margin-bottom: 24px; font-size: 14px; color: #161616; letter-spacing: 0.16px; line-height: 1.6; }
 
-  /* ── Workflow banner ── */
-  .workflow-banner { background: #edf4ff; border: 2px solid #0f62fe; padding: 20px 24px; margin-bottom: 32px; }
-  .workflow-banner .workflow-title { font-size: 15px; font-weight: 600; color: #0f62fe; letter-spacing: 0.16px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-  .workflow-banner .workflow-title .workflow-icon { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: #0f62fe; color: #ffffff; font-size: 12px; font-weight: 700; flex-shrink: 0; }
-  .workflow-steps { display: flex; flex-direction: column; gap: 0; }
-  .workflow-step { display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-bottom: 1px solid #d0e2ff; }
-  .workflow-step:last-child { border-bottom: none; padding-bottom: 0; }
-  .workflow-step-badge { flex-shrink: 0; background: #0f62fe; color: #ffffff; font-size: 11px; font-weight: 600; letter-spacing: 0.32px; padding: 3px 10px; white-space: nowrap; margin-top: 1px; }
-  .workflow-step-badge.ask { background: #6929c4; }
-  .workflow-step-body { font-size: 14px; color: #161616; letter-spacing: 0.16px; line-height: 1.6; }
-  .workflow-step-body strong { color: #0f62fe; }
-  .workflow-step-body.ask strong { color: #6929c4; }
-
-  /* ── Notice banner ── */
-  .notice-banner { background: #fff8e1; border: 2px solid #f1c21b; padding: 20px 24px; margin-bottom: 32px; }
-  .notice-banner .notice-title { font-size: 15px; font-weight: 600; color: #161616; letter-spacing: 0.16px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-  .notice-banner .notice-title .notice-icon { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: #f1c21b; color: #161616; font-size: 13px; font-weight: 700; flex-shrink: 0; }
-  .notice-banner ol { padding-left: 20px; margin: 8px 0 0; }
-  .notice-banner li { font-size: 14px; color: #161616; letter-spacing: 0.16px; line-height: 1.8; }
-  .notice-banner .notice-sub { font-size: 13px; color: #525252; margin-top: 10px; letter-spacing: 0.16px; }
-
   /* ── Code block ── */
   .code-block { background: #161616; color: #f4f4f4; font-family: 'IBM Plex Mono', 'Courier New', monospace; font-size: 13px; padding: 16px 20px; margin-bottom: 16px; line-height: 1.6; letter-spacing: 0; overflow-x: auto; white-space: pre; }
   code { background: #e0e0e0; padding: 2px 6px; font-family: 'IBM Plex Mono', 'Courier New', monospace; font-size: 13px; }
@@ -184,18 +163,6 @@
 
   /* ── Footer ── */
   .page-footer { background: #161616; color: #8c8c8c; text-align: center; font-size: 12px; letter-spacing: 0.32px; padding: 20px 32px; border-top: 1px solid #393939; }
-
-  /* ── Prompt copy card ── */
-  .prompt-card { border: 1px solid #e0e0e0; margin-bottom: 16px; }
-  .prompt-card-header { display: flex; align-items: center; justify-content: space-between; background: #f4f4f4; padding: 12px 16px; border-bottom: 1px solid #e0e0e0; }
-  .prompt-card-header h4 { font-size: 14px; font-weight: 600; color: #161616; letter-spacing: 0.16px; margin: 0; }
-  .prompt-card-header .step-tag { font-size: 11px; font-weight: 600; letter-spacing: 0.32px; color: #ffffff; background: #0f62fe; padding: 2px 8px; }
-  .prompt-card-header .step-tag.gray { background: #525252; }
-  .prompt-copy-btn { font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.32px; color: #0f62fe; background: #ffffff; border: 1px solid #0f62fe; padding: 4px 12px; cursor: pointer; white-space: nowrap; }
-  .prompt-copy-btn:hover { background: #edf4ff; }
-  .prompt-copy-btn.copied { color: #198038; border-color: #198038; background: #defbe6; }
-  .prompt-card pre { font-family: 'IBM Plex Mono', 'Courier New', monospace; font-size: 13px; color: #161616; background: #ffffff; padding: 16px; margin: 0; line-height: 1.7; white-space: pre-wrap; word-break: break-word; }
-  .prompt-card .prompt-note { font-size: 12px; color: #525252; letter-spacing: 0.16px; padding: 8px 16px 12px; border-top: 1px solid #e0e0e0; background: #f4f4f4; }
 </style>
 </head>
 <body>
@@ -233,27 +200,6 @@
       <!-- ══ PANEL 1：分工原則與規劃 ══ -->
       <div class="tab-panel" id="panel-plan">
 
-        <div class="workflow-banner">
-          <div class="workflow-title">
-            <span class="workflow-icon">→</span>
-            與 IBM Bob 協作的建議流程
-          </div>
-          <div class="workflow-steps">
-            <div class="workflow-step">
-              <span class="workflow-step-badge">Plan Mode</span>
-              <div class="workflow-step-body">向 Bob 說明你的目標與背景，讓 Bob 產生一個<strong>具體的計劃方案</strong>（步驟、分工、預期產出）；針對計劃內容來回討論，<strong>修正與確認</strong>每個細節，直到你滿意為止</div>
-            </div>
-            <div class="workflow-step">
-              <span class="workflow-step-badge">Agent Mode</span>
-              <div class="workflow-step-body">計劃確定後切換到 Agent Mode，請 Bob <strong>開始執行</strong>——寫程式、建檔案、操作 Git，Bob 會逐步完成</div>
-            </div>
-            <div class="workflow-step">
-              <span class="workflow-step-badge ask">Ask Mode</span>
-              <div class="workflow-step-body ask"><strong>任何時候有疑問</strong>，切換到 Ask Mode 向 Bob 提問——了解概念、確認步驟，或請 Bob 解釋剛才做了什麼</div>
-            </div>
-          </div>
-        </div>
-
         <div class="section-title">核心前提</div>
         <p class="section-sub">整個計劃的設計基礎</p>
 
@@ -274,7 +220,7 @@
         <hr class="section-sep">
 
         <div class="section-title">社會影響力選題參考</div>
-        <p class="section-sub">重點是選出能真實解決問題的主題，而非特定技術 &nbsp;·&nbsp; <a href="03-datasets.html" style="color:#0f62fe;font-size:14px;text-decoration:none;letter-spacing:0.16px;">台灣公開資料入門指南 →</a></p>
+        <p class="section-sub">重點是選出能真實解決問題的主題，而非特定技術 &nbsp;·&nbsp; <a href="datasets.html" style="color:#0f62fe;font-size:14px;text-decoration:none;letter-spacing:0.16px;">台灣公開資料入門指南 →</a></p>
 
         <table class="data-table">
           <thead><tr><th>方向</th><th>說明</th></tr></thead>
@@ -368,7 +314,7 @@
         <div class="info-card">
           <div class="role-badge gray">內容與研究</div>
           <h3>提供數據與用戶視角</h3>
-          <p>不需要寫程式，但你的產出對評審非常關鍵。評審最在意：「這個問題真的存在嗎？規模多大？」找資料可參考 <a href="03-datasets.html" style="color:#0f62fe;text-decoration:none;">台灣公開資料入門指南 →</a></p>
+          <p>不需要寫程式，但你的產出對評審非常關鍵。評審最在意：「這個問題真的存在嗎？規模多大？」找資料可參考 <a href="datasets.html" style="color:#0f62fe;text-decoration:none;">台灣公開資料入門指南 →</a></p>
           <ul style="margin-top:12px;">
             <li>問題背景文件（數據 + 現有解法的不足）</li>
             <li>用戶故事清單（誰會用這個工具、為什麼用）</li>
@@ -418,19 +364,6 @@
 
       <!-- ══ PANEL 2：Git 與 Bob 操作指南 ══ -->
       <div class="tab-panel" id="panel-git">
-
-        <div class="notice-banner">
-          <div class="notice-title">
-            <span class="notice-icon">!</span>
-            在請 Bob 執行 git clone 之前，請先完成以下步驟
-          </div>
-          <ol>
-            <li>在 IBM Bob 左側邊欄的<strong>檔案總管</strong>中，點選你想存放專案的資料夾（例如桌面或指定的工作目錄）</li>
-            <li>確認該資料夾已被選取並顯示在檔案總管中，Bob 會將 repo clone 到這個位置</li>
-            <li>完成後再把 clone 的 prompt 貼給 Bob</li>
-          </ol>
-          <p class="notice-sub">⚠️ 若未先選擇資料夾，clone 下來的檔案可能會放在預設位置，之後難以找到。</p>
-        </div>
 
         <div class="section-title">Git 是什麼？</div>
         <p class="section-sub">你不需要記住任何指令，只需要理解「我在做什麼、為什麼這樣做」</p>
@@ -500,7 +433,7 @@
         <table class="data-table">
           <thead><tr><th>你想做的事</th><th>告訴 Bob 這句話</th></tr></thead>
           <tbody>
-            <tr><td>建立自己的分支</td><td><code>請幫我建立一個 branch，名稱是 feature/暱稱-角色</code></td></tr>
+            <tr><td>建立自己的分支</td><td><code>請幫我建立一個 branch，名稱是 feature/名字-角色</code></td></tr>
             <tr><td>存檔（Commit）</td><td><code>請幫我把目前的修改 commit，訊息是「新增：設計規格文件」</code></td></tr>
             <tr><td>上傳到 GitHub（Push）</td><td><code>請幫我把這個 branch push 到 GitHub</code></td></tr>
             <tr><td>申請合併（PR）</td><td><code>請幫我對 main branch 發一個 Pull Request</code></td></tr>
@@ -543,169 +476,19 @@
 
         <hr class="section-sep">
 
-        <div class="section-title">Bob Prompt 快速卡片</div>
-        <p class="section-sub">直接複製以下 prompt，貼到 IBM Bob 對話框，Bob 會逐步引導你完成每項操作</p>
+        <div class="section-title">GitHub 協作操作流程</div>
+        <p class="section-sub">從建立 repo 到整合，完整的 GitHub 協作步驟</p>
 
-        <!-- 組長任務 -->
-        <div class="highlight" style="margin-bottom:16px;">
-          <strong>組長任務（組長 = Repo 創建者）：創建團隊 GitHub Repo 並邀請所有組員為協作者</strong>
-          <ul style="margin-top:10px;padding-left:20px;line-height:2;">
-            <li>Step 1 &nbsp;確認並安裝 git 與 gh CLI</li>
-            <li>Step 2 &nbsp;執行 <code style="background:#e0e0e0;padding:1px 5px;">gh auth login</code>，透過瀏覽器完成 GitHub 認證</li>
-            <li>Step 3 &nbsp;用 gh CLI 創建團隊 repo，並在 GitHub 網頁邀請所有組員為協作者</li>
-          </ul>
-        </div>
-
-        <div class="prompt-card">
-          <div class="prompt-card-header">
-            <span><span class="step-tag">組長 Step 1</span> &nbsp;安裝 git 與 gh CLI</span>
-            <button class="prompt-copy-btn" data-target="pc1">複製 Prompt</button>
-          </div>
-          <pre id="pc1">請幫我確認系統是否已安裝 git 和 gh CLI。如果尚未安裝，請依照我的作業系統（macOS / Windows / Linux）給我安裝指令，並在安裝完成後執行以下指令確認版本：
-git --version
-gh --version</pre>
-        </div>
-
-        <div class="prompt-card">
-          <div class="prompt-card-header">
-            <span><span class="step-tag">組長 Step 2</span> &nbsp;透過瀏覽器完成 GitHub 認證</span>
-            <button class="prompt-copy-btn" data-target="pc2">複製 Prompt</button>
-          </div>
-          <pre id="pc2">請幫我執行 gh auth login，並引導我完成以下選項：
-- GitHub.com
-- HTTPS
-- Authenticate Git with your GitHub credentials → Yes
-- Login with a web browser
-
-瀏覽器開啟後，我會登入 GitHub 並授權。完成後請確認認證狀態：gh auth status</pre>
-        </div>
-
-        <div class="prompt-card">
-          <div class="prompt-card-header">
-            <span><span class="step-tag">組長 Step 3</span> &nbsp;創建團隊 Repo 並邀請組員</span>
-            <button class="prompt-copy-btn" data-target="pc3">複製 Prompt</button>
-          </div>
-          <pre id="pc3">請幫我用 gh CLI 創建一個新的 GitHub repo，設定為 public，並加入簡短描述「黑客松團隊專案」。創建完成後，請告訴我如何在 GitHub 網頁上進入 Settings → Collaborators，把其他組員的 GitHub 帳號加入為協作者。
-
-⚠️ 注意：請在執行前把以下指令中的 repo 名稱「hackathon-team」替換成你們團隊實際決定的名稱：
-gh repo create hackathon-team --public --description "黑客松團隊專案"</pre>
-          <div class="prompt-note">⚠️ <strong>「hackathon-team」只是範例名稱，請務必替換成你們團隊實際的 repo 名稱再執行。</strong>例如：<code>gh repo create team-alpha-2025 --public --description "黑客松團隊專案"</code></div>
-        </div>
-
-        <!-- 組員任務 -->
-        <div class="highlight" style="margin-top:8px;margin-bottom:16px;">
-          <strong>所有組員任務（a → b → c）：認證 → Clone → 建立 Branch → Commit → Push</strong><br>
-          <span style="font-size:13px;font-weight:400;color:#525252;">組員 = 除 Repo 創建者以外的所有團隊成員</span>
-          <ul style="margin-top:10px;padding-left:20px;line-height:2;">
-            <li>Step a &nbsp;確認並安裝 git 與 gh CLI，執行 <code style="background:#e0e0e0;padding:1px 5px;">gh auth login</code> 透過瀏覽器完成 GitHub 認證</li>
-            <li>Step b &nbsp;執行 <code style="background:#e0e0e0;padding:1px 5px;">git clone</code> 將組長建立的 repo 複製到本地端</li>
-            <li>Step c &nbsp;建立個人 branch，新增一個技能分享檔案後 commit，再 push 到 GitHub</li>
-          </ul>
-        </div>
-
-        <div class="prompt-card">
-          <div class="prompt-card-header">
-            <span><span class="step-tag gray">組員 Step a</span> &nbsp;安裝 git 與 gh CLI，並透過瀏覽器完成 GitHub 認證</span>
-            <button class="prompt-copy-btn" data-target="pc4">複製 Prompt</button>
-          </div>
-          <pre id="pc4">請幫我依序完成以下兩件事：
-
-1. 確認系統是否已安裝 git 和 gh CLI。如果尚未安裝，請依照我的作業系統給我安裝指令。
-
-2. 安裝完成後，執行 gh auth login 並引導我完成 GitHub 認證，選項依序為：
-   - GitHub.com
-   - HTTPS
-   - Authenticate Git with your GitHub credentials → Yes
-   - Login with a web browser
-   
-瀏覽器開啟後我會登入並授權。完成後請執行 gh auth status 確認認證成功。</pre>
-          <div class="prompt-note">💡 每位組員在自己的電腦上各執行一次，設定完成後才能 clone 和 push。</div>
-        </div>
-
-        <div class="prompt-card">
-          <div class="prompt-card-header">
-            <span><span class="step-tag gray">組員 Step b</span> &nbsp;Clone 組長建立的 Repo</span>
-            <button class="prompt-copy-btn" data-target="pc5">複製 Prompt</button>
-          </div>
-          <pre id="pc5">請幫我 clone 以下 GitHub repo 到本地端，並進入該目錄：
-git clone https://github.com/【組長帳號】/【repo名稱】.git
-cd 【repo名稱】
-
-clone 完成後，請顯示目前目錄內容（ls 或 dir）以及目前所在的 branch（git branch）。</pre>
-          <div class="prompt-note">⚠️ <strong>請替換兩處佔位符再執行：</strong>「【組長帳號】」換成組長的 GitHub 帳號，「【repo名稱】」換成組長在 Step 3 建立的實際 repo 名稱。例如：<code>git clone https://github.com/john123/team-alpha-2025.git</code></div>
-        </div>
-
-        <div class="prompt-card">
-          <div class="prompt-card-header">
-            <span><span class="step-tag gray">組員 Step c</span> &nbsp;建立 Branch、新增檔案、Commit 並 Push</span>
-            <button class="prompt-copy-btn" data-target="pc6">複製 Prompt</button>
-          </div>
-          <pre id="pc6">請幫我依序完成以下步驟：
-
-1. 建立並切換到新 branch，命名規則為 feature/暱稱-角色：
-   git checkout -b feature/【你的暱稱】-【你的角色】
-
-2. 在這個 branch 新增一個技能分享檔案，檔名為 skill-【你的暱稱】.md，內容包含：
-   - 你擅長的一項技能（例如：資料分析、簡報設計、文案撰寫、UI設計…）
-   - 這個技能在黑客松中可以如何幫助團隊
-   - 你願意在哪個環節貢獻這個技能
-
-3. 將新檔案加入追蹤並 commit：
-   git add .
-   git commit -m "新增：【你的暱稱】技能分享"
-
-4. 將 branch push 到 GitHub：
-   git push origin feature/【你的暱稱】-【你的角色】
-
-完成後請顯示 git log --oneline -3 確認 commit 已記錄。</pre>
-          <div class="prompt-note">💡 將 【你的暱稱】 和 【你的角色】 替換為實際內容，例如：<code>feature/小明-視覺設計</code>。請使用暱稱，無需填寫真實姓名。</div>
-        </div>
-
-        <hr class="section-sep">
-
-        <div class="section-title">整合組員成果流程</div>
-        <p class="section-sub">由 Repo 創建者（組長）負責，將所有組員的 branch 整合進 main</p>
-
-        <div class="highlight" style="margin-bottom:16px;">
-          <strong>整合流程共三步：</strong>
-          <ul style="margin-top:10px;padding-left:20px;line-height:2;">
-            <li>Step 1 &nbsp;確認所有組員已完成 push，列出 remote 的所有 branch</li>
-            <li>Step 2 &nbsp;逐一將每個 feature branch merge 進 main，遇到衝突請 Bob 協助解決</li>
-            <li>Step 3 &nbsp;確認 main 已包含所有人的成果，通知全隊從 main pull 最新版本</li>
-          </ul>
-        </div>
-
-        <div class="prompt-card">
-          <div class="prompt-card-header">
-            <span><span class="step-tag">整合負責人</span> &nbsp;一鍵整合所有 feature branch 進 main</span>
-            <button class="prompt-copy-btn" data-target="pc7">複製 Prompt</button>
-          </div>
-          <pre id="pc7">請幫我把所有組員 push 到 GitHub 的 feature branch 整合進 main，步驟如下：
-
-1. 先從 remote 抓取最新狀態，確認有哪些 branch 尚未合併：
-   git fetch --all
-   git branch -r
-
-2. 切換到 main 並更新到最新版本：
-   git checkout main
-   git pull origin main
-
-3. 逐一將每個 feature branch merge 進 main（請列出所有 feature/ 開頭的 branch 並依序執行）：
-   git merge origin/feature/【暱稱-角色】 --no-ff -m "merge: 整合 feature/【暱稱-角色】"
-
-4. 如果 merge 過程出現衝突，請告訴我衝突的檔案，並引導我逐一解決後執行：
-   git add .
-   git commit -m "fix: 解決 merge 衝突"
-
-5. 所有 branch 整合完成後，push main 到 GitHub：
-   git push origin main
-
-6. 最後確認 main 上的 commit 歷史，確認每位組員都有出現：
-   git log --oneline --graph --all
-
-請在開始前先執行 git branch -r，列出所有 remote branch 讓我確認。</pre>
-          <div class="prompt-note">💡 整合前請先在群組確認所有組員都已完成最後一次 push，避免遺漏任何人的成果。</div>
-        </div>
+        <ul class="step-list">
+          <li><div class="step-num">1</div><div>派一位代表在 GitHub 上<strong>新增團隊 repo</strong>，並在 Settings → Collaborators 將所有其他成員加入<strong>協作者</strong></div></li>
+          <li><div class="step-num">2</div><div>其他成員收到邀請並接受後，在自己的電腦執行 <strong>git clone</strong> 將 repo 複製到本地：<br><code style="display:inline-block;margin-top:6px;">git clone https://github.com/帳號/repo名稱.git</code></div></li>
+          <li><div class="step-num">3</div><div>每位成員進入 repo 目錄，依照自己的角色<strong>新增個人 branch</strong>，建議命名規則 <code>feature/名字-角色</code>：<br><code style="display:inline-block;margin-top:6px;">git checkout -b feature/名字-角色</code></div></li>
+          <li><div class="step-num">4</div><div>每人確認自己的 branch 已完成最後一次 <strong>commit + push</strong></div></li>
+          <li><div class="step-num">5</div><div>向技術 Lead 發出 <strong>Pull Request</strong>，附上簡短說明（我做了什麼）</div></li>
+          <li><div class="step-num">6</div><div>技術 Lead 審查並 <strong>merge</strong> 到 main，發現衝突時請 Bob 協助解決</div></li>
+          <li><div class="step-num">7</div><div>所有人從 main <strong>pull</strong> 最新版本，確認本地端與 GitHub 同步</div></li>
+          <li><div class="step-num">8</div><div>確認 GitHub repo 上每人都有 <strong>commit 紀錄</strong>，README 完整</div></li>
+        </ul>
 
         <div class="cta-banner">
           <h3>你不需要成為工程師才能參與 GitHub</h3>
@@ -720,26 +503,6 @@ clone 完成後，請顯示目前目錄內容（ls 或 dir）以及目前所在�
 </div><!-- /page-container -->
 
 <div class="page-footer">Made with IBM Bob</div>
-
-<script>
-  (function () {
-    document.querySelectorAll('.prompt-copy-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var targetId = btn.getAttribute('data-target');
-        var pre = document.getElementById(targetId);
-        if (!pre) return;
-        navigator.clipboard.writeText(pre.innerText).then(function () {
-          btn.textContent = '已複製 ✓';
-          btn.classList.add('copied');
-          setTimeout(function () {
-            btn.textContent = '複製 Prompt';
-            btn.classList.remove('copied');
-          }, 2000);
-        });
-      });
-    });
-  })();
-</script>
 
 </body>
 </html>
