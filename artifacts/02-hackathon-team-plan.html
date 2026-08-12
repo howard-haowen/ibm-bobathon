@@ -136,6 +136,19 @@
   .highlight strong { color: #0f62fe; }
   .warning { border-left: 4px solid #f1c21b; background: #f4f4f4; padding: 16px 20px; margin-bottom: 24px; font-size: 14px; color: #161616; letter-spacing: 0.16px; line-height: 1.6; }
 
+  /* ── Workflow banner ── */
+  .workflow-banner { background: #edf4ff; border: 2px solid #0f62fe; padding: 20px 24px; margin-bottom: 32px; }
+  .workflow-banner .workflow-title { font-size: 15px; font-weight: 600; color: #0f62fe; letter-spacing: 0.16px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .workflow-banner .workflow-title .workflow-icon { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: #0f62fe; color: #ffffff; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .workflow-steps { display: flex; flex-direction: column; gap: 0; }
+  .workflow-step { display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-bottom: 1px solid #d0e2ff; }
+  .workflow-step:last-child { border-bottom: none; padding-bottom: 0; }
+  .workflow-step-badge { flex-shrink: 0; background: #0f62fe; color: #ffffff; font-size: 11px; font-weight: 600; letter-spacing: 0.32px; padding: 3px 10px; white-space: nowrap; margin-top: 1px; }
+  .workflow-step-badge.ask { background: #6929c4; }
+  .workflow-step-body { font-size: 14px; color: #161616; letter-spacing: 0.16px; line-height: 1.6; }
+  .workflow-step-body strong { color: #0f62fe; }
+  .workflow-step-body.ask strong { color: #6929c4; }
+
   /* ── Notice banner ── */
   .notice-banner { background: #fff8e1; border: 2px solid #f1c21b; padding: 20px 24px; margin-bottom: 32px; }
   .notice-banner .notice-title { font-size: 15px; font-weight: 600; color: #161616; letter-spacing: 0.16px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
@@ -219,6 +232,27 @@
 
       <!-- ══ PANEL 1：分工原則與規劃 ══ -->
       <div class="tab-panel" id="panel-plan">
+
+        <div class="workflow-banner">
+          <div class="workflow-title">
+            <span class="workflow-icon">→</span>
+            與 IBM Bob 協作的建議流程
+          </div>
+          <div class="workflow-steps">
+            <div class="workflow-step">
+              <span class="workflow-step-badge">Plan Mode</span>
+              <div class="workflow-step-body">向 Bob 說明你的目標與背景，讓 Bob 產生一個<strong>具體的計劃方案</strong>（步驟、分工、預期產出）；針對計劃內容來回討論，<strong>修正與確認</strong>每個細節，直到你滿意為止</div>
+            </div>
+            <div class="workflow-step">
+              <span class="workflow-step-badge">Agent Mode</span>
+              <div class="workflow-step-body">計劃確定後切換到 Agent Mode，請 Bob <strong>開始執行</strong>——寫程式、建檔案、操作 Git，Bob 會逐步完成</div>
+            </div>
+            <div class="workflow-step">
+              <span class="workflow-step-badge ask">Ask Mode</span>
+              <div class="workflow-step-body ask"><strong>任何時候有疑問</strong>，切換到 Ask Mode 向 Bob 提問——了解概念、確認步驟，或請 Bob 解釋剛才做了什麼</div>
+            </div>
+          </div>
+        </div>
 
         <div class="section-title">核心前提</div>
         <p class="section-sub">整個計劃的設計基礎</p>
