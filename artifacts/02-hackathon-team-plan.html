@@ -608,19 +608,49 @@ clone 完成後，請顯示目前目錄內容（ls 或 dir）以及目前所在�
 
         <hr class="section-sep">
 
-        <div class="section-title">GitHub 協作操作流程</div>
-        <p class="section-sub">從建立 repo 到整合，完整的 GitHub 協作步驟</p>
+        <div class="section-title">整合組員成果流程</div>
+        <p class="section-sub">由 Repo 創建者（組長）負責，將所有組員的 branch 整合進 main</p>
 
-        <ul class="step-list">
-          <li><div class="step-num">1</div><div>派一位代表在 GitHub 上<strong>新增團隊 repo</strong>，並在 Settings → Collaborators 將所有其他成員加入<strong>協作者</strong></div></li>
-          <li><div class="step-num">2</div><div>其他成員收到邀請並接受後，在自己的電腦執行 <strong>git clone</strong> 將 repo 複製到本地：<br><code style="display:inline-block;margin-top:6px;">git clone https://github.com/帳號/repo名稱.git</code></div></li>
-          <li><div class="step-num">3</div><div>每位成員進入 repo 目錄，依照自己的角色<strong>新增個人 branch</strong>，建議命名規則 <code>feature/暱稱-角色</code>：<br><code style="display:inline-block;margin-top:6px;">git checkout -b feature/暱稱-角色</code></div></li>
-          <li><div class="step-num">4</div><div>每人確認自己的 branch 已完成最後一次 <strong>commit + push</strong></div></li>
-          <li><div class="step-num">5</div><div>向技術 Lead 發出 <strong>Pull Request</strong>，附上簡短說明（我做了什麼）</div></li>
-          <li><div class="step-num">6</div><div>技術 Lead 審查並 <strong>merge</strong> 到 main，發現衝突時請 Bob 協助解決</div></li>
-          <li><div class="step-num">7</div><div>所有人從 main <strong>pull</strong> 最新版本，確認本地端與 GitHub 同步</div></li>
-          <li><div class="step-num">8</div><div>確認 GitHub repo 上每人都有 <strong>commit 紀錄</strong>，README 完整</div></li>
-        </ul>
+        <div class="highlight" style="margin-bottom:16px;">
+          <strong>整合流程共三步：</strong>
+          <ul style="margin-top:10px;padding-left:20px;line-height:2;">
+            <li>Step 1 &nbsp;確認所有組員已完成 push，列出 remote 的所有 branch</li>
+            <li>Step 2 &nbsp;逐一將每個 feature branch merge 進 main，遇到衝突請 Bob 協助解決</li>
+            <li>Step 3 &nbsp;確認 main 已包含所有人的成果，通知全隊從 main pull 最新版本</li>
+          </ul>
+        </div>
+
+        <div class="prompt-card">
+          <div class="prompt-card-header">
+            <span><span class="step-tag">整合負責人</span> &nbsp;一鍵整合所有 feature branch 進 main</span>
+            <button class="prompt-copy-btn" data-target="pc7">複製 Prompt</button>
+          </div>
+          <pre id="pc7">請幫我把所有組員 push 到 GitHub 的 feature branch 整合進 main，步驟如下：
+
+1. 先從 remote 抓取最新狀態，確認有哪些 branch 尚未合併：
+   git fetch --all
+   git branch -r
+
+2. 切換到 main 並更新到最新版本：
+   git checkout main
+   git pull origin main
+
+3. 逐一將每個 feature branch merge 進 main（請列出所有 feature/ 開頭的 branch 並依序執行）：
+   git merge origin/feature/【暱稱-角色】 --no-ff -m "merge: 整合 feature/【暱稱-角色】"
+
+4. 如果 merge 過程出現衝突，請告訴我衝突的檔案，並引導我逐一解決後執行：
+   git add .
+   git commit -m "fix: 解決 merge 衝突"
+
+5. 所有 branch 整合完成後，push main 到 GitHub：
+   git push origin main
+
+6. 最後確認 main 上的 commit 歷史，確認每位組員都有出現：
+   git log --oneline --graph --all
+
+請在開始前先執行 git branch -r，列出所有 remote branch 讓我確認。</pre>
+          <div class="prompt-note">💡 整合前請先在群組確認所有組員都已完成最後一次 push，避免遺漏任何人的成果。</div>
+        </div>
 
         <div class="cta-banner">
           <h3>你不需要成為工程師才能參與 GitHub</h3>
