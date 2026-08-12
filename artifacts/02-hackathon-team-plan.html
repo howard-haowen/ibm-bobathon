@@ -136,6 +136,14 @@
   .highlight strong { color: #0f62fe; }
   .warning { border-left: 4px solid #f1c21b; background: #f4f4f4; padding: 16px 20px; margin-bottom: 24px; font-size: 14px; color: #161616; letter-spacing: 0.16px; line-height: 1.6; }
 
+  /* ── Notice banner ── */
+  .notice-banner { background: #fff8e1; border: 2px solid #f1c21b; padding: 20px 24px; margin-bottom: 32px; }
+  .notice-banner .notice-title { font-size: 15px; font-weight: 600; color: #161616; letter-spacing: 0.16px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .notice-banner .notice-title .notice-icon { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: #f1c21b; color: #161616; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+  .notice-banner ol { padding-left: 20px; margin: 8px 0 0; }
+  .notice-banner li { font-size: 14px; color: #161616; letter-spacing: 0.16px; line-height: 1.8; }
+  .notice-banner .notice-sub { font-size: 13px; color: #525252; margin-top: 10px; letter-spacing: 0.16px; }
+
   /* ── Code block ── */
   .code-block { background: #161616; color: #f4f4f4; font-family: 'IBM Plex Mono', 'Courier New', monospace; font-size: 13px; padding: 16px 20px; margin-bottom: 16px; line-height: 1.6; letter-spacing: 0; overflow-x: auto; white-space: pre; }
   code { background: #e0e0e0; padding: 2px 6px; font-family: 'IBM Plex Mono', 'Courier New', monospace; font-size: 13px; }
@@ -376,6 +384,19 @@
 
       <!-- ══ PANEL 2：Git 與 Bob 操作指南 ══ -->
       <div class="tab-panel" id="panel-git">
+
+        <div class="notice-banner">
+          <div class="notice-title">
+            <span class="notice-icon">!</span>
+            在請 Bob 執行 git clone 之前，請先完成以下步驟
+          </div>
+          <ol>
+            <li>在 IBM Bob 左側邊欄的<strong>檔案總管</strong>中，點選你想存放專案的資料夾（例如桌面或指定的工作目錄）</li>
+            <li>確認該資料夾已被選取並顯示在檔案總管中，Bob 會將 repo clone 到這個位置</li>
+            <li>完成後再把 clone 的 prompt 貼給 Bob</li>
+          </ol>
+          <p class="notice-sub">⚠️ 若未先選擇資料夾，clone 下來的檔案可能會放在預設位置，之後難以找到。</p>
+        </div>
 
         <div class="section-title">Git 是什麼？</div>
         <p class="section-sub">你不需要記住任何指令，只需要理解「我在做什麼、為什麼這樣做」</p>
