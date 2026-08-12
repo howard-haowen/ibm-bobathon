@@ -445,7 +445,7 @@
         <table class="data-table">
           <thead><tr><th>你想做的事</th><th>告訴 Bob 這句話</th></tr></thead>
           <tbody>
-            <tr><td>建立自己的分支</td><td><code>請幫我建立一個 branch，名稱是 feature/名字-角色</code></td></tr>
+            <tr><td>建立自己的分支</td><td><code>請幫我建立一個 branch，名稱是 feature/暱稱-角色</code></td></tr>
             <tr><td>存檔（Commit）</td><td><code>請幫我把目前的修改 commit，訊息是「新增：設計規格文件」</code></td></tr>
             <tr><td>上傳到 GitHub（Push）</td><td><code>請幫我把這個 branch push 到 GitHub</code></td></tr>
             <tr><td>申請合併（PR）</td><td><code>請幫我對 main branch 發一個 Pull Request</code></td></tr>
@@ -587,23 +587,23 @@ clone 完成後，請顯示目前目錄內容（ls 或 dir）以及目前所在�
           </div>
           <pre id="pc6">請幫我依序完成以下步驟：
 
-1. 建立並切換到新 branch，命名規則為 feature/名字-角色：
-   git checkout -b feature/【你的名字】-【你的角色】
+1. 建立並切換到新 branch，命名規則為 feature/暱稱-角色：
+   git checkout -b feature/【你的暱稱】-【你的角色】
 
-2. 在這個 branch 新增一個技能分享檔案，檔名為 skill-【你的名字】.md，內容包含：
+2. 在這個 branch 新增一個技能分享檔案，檔名為 skill-【你的暱稱】.md，內容包含：
    - 你擅長的一項技能（例如：資料分析、簡報設計、文案撰寫、UI設計…）
    - 這個技能在黑客松中可以如何幫助團隊
    - 你願意在哪個環節貢獻這個技能
 
 3. 將新檔案加入追蹤並 commit：
    git add .
-   git commit -m "新增：【你的名字】技能分享"
+   git commit -m "新增：【你的暱稱】技能分享"
 
 4. 將 branch push 到 GitHub：
-   git push origin feature/【你的名字】-【你的角色】
+   git push origin feature/【你的暱稱】-【你的角色】
 
 完成後請顯示 git log --oneline -3 確認 commit 已記錄。</pre>
-          <div class="prompt-note">💡 將 【你的名字】 和 【你的角色】 替換為實際內容，例如：<code>feature/小明-視覺設計</code>。技能分享檔案內容為公開可見，請勿填寫個人隱私資料。</div>
+          <div class="prompt-note">💡 將 【你的暱稱】 和 【你的角色】 替換為實際內容，例如：<code>feature/小明-視覺設計</code>。請使用暱稱，無需填寫真實姓名。</div>
         </div>
 
         <hr class="section-sep">
@@ -614,7 +614,7 @@ clone 完成後，請顯示目前目錄內容（ls 或 dir）以及目前所在�
         <ul class="step-list">
           <li><div class="step-num">1</div><div>派一位代表在 GitHub 上<strong>新增團隊 repo</strong>，並在 Settings → Collaborators 將所有其他成員加入<strong>協作者</strong></div></li>
           <li><div class="step-num">2</div><div>其他成員收到邀請並接受後，在自己的電腦執行 <strong>git clone</strong> 將 repo 複製到本地：<br><code style="display:inline-block;margin-top:6px;">git clone https://github.com/帳號/repo名稱.git</code></div></li>
-          <li><div class="step-num">3</div><div>每位成員進入 repo 目錄，依照自己的角色<strong>新增個人 branch</strong>，建議命名規則 <code>feature/名字-角色</code>：<br><code style="display:inline-block;margin-top:6px;">git checkout -b feature/名字-角色</code></div></li>
+          <li><div class="step-num">3</div><div>每位成員進入 repo 目錄，依照自己的角色<strong>新增個人 branch</strong>，建議命名規則 <code>feature/暱稱-角色</code>：<br><code style="display:inline-block;margin-top:6px;">git checkout -b feature/暱稱-角色</code></div></li>
           <li><div class="step-num">4</div><div>每人確認自己的 branch 已完成最後一次 <strong>commit + push</strong></div></li>
           <li><div class="step-num">5</div><div>向技術 Lead 發出 <strong>Pull Request</strong>，附上簡短說明（我做了什麼）</div></li>
           <li><div class="step-num">6</div><div>技術 Lead 審查並 <strong>merge</strong> 到 main，發現衝突時請 Bob 協助解決</div></li>
