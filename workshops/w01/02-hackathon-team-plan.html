@@ -519,23 +519,35 @@
         <div class="surface-card" style="margin-bottom:16px;">
           <div class="role-badge">非技術成員</div>
           <h3 style="margin-top:8px;">使用 gh CLI（最簡單）</h3>
-          <p style="margin-bottom:12px;">請 Bob 在終端機安裝 gh CLI，再執行登入：</p>
-          <div class="code-block">請幫我安裝 gh CLI，然後執行 gh auth login，引導我完成 GitHub 認證。</div>
-          <p style="margin-bottom:10px;"><code>gh auth login</code> 會進行互動式問答，依序選擇：</p>
+          <p style="margin-bottom:12px;">請 Bob 安裝 gh CLI 並完成 GitHub 登入認證。告訴 Bob：</p>
+          <div class="prompt-card" style="margin-bottom:12px;">
+            <div class="prompt-card-header">
+              <span style="font-size:13px;color:#161616;">安裝 gh CLI 並完成認證</span>
+              <button class="prompt-copy-btn" data-target="pc-ghcli-inline">複製 Prompt</button>
+            </div>
+            <pre id="pc-ghcli-inline">請幫我安裝 gh CLI，然後引導我完成 GitHub 認證。請依照我的作業系統給我適合的步驟。</pre>
+          </div>
+          <p style="margin-bottom:10px;">認證過程是互動式問答，Bob 會引導你依序選擇：</p>
           <ul>
-            <li>Account → <strong>GitHub.com</strong></li>
-            <li>Protocol → <strong>HTTPS</strong></li>
-            <li>Authenticate Git with your GitHub credentials → <strong>Yes</strong></li>
-            <li>How to authenticate → <strong>Login with a web browser</strong></li>
+            <li>帳號類型 → <strong>GitHub.com</strong></li>
+            <li>連線協定 → <strong>HTTPS</strong></li>
+            <li>是否用 GitHub 帳號驗證 Git → <strong>Yes</strong></li>
+            <li>認證方式 → <strong>Login with a web browser</strong>（瀏覽器登入）</li>
           </ul>
-          <p style="margin-top:10px;">瀏覽器開啟後登入 GitHub 並授權，完成後 <code>git push</code> 即可直接使用，不需要輸入密碼。</p>
+          <p style="margin-top:10px;">瀏覽器開啟後登入 GitHub 並授權，完成後就能直接推送，不需要輸入密碼。</p>
         </div>
 
         <div class="surface-card">
           <div class="role-badge gray">技術成員</div>
           <h3 style="margin-top:8px;">使用 SSH Key</h3>
-          <p style="margin-bottom:12px;">在 Bob 的終端機生成 SSH key，再將公鑰加入 GitHub：</p>
-          <div class="code-block">請幫我生成一組 SSH key pair，並說明如何將公鑰加入 GitHub。</div>
+          <p style="margin-bottom:12px;">請 Bob 幫你產生 SSH 金鑰並完成設定。告訴 Bob：</p>
+          <div class="prompt-card" style="margin-bottom:12px;">
+            <div class="prompt-card-header">
+              <span style="font-size:13px;color:#161616;">產生 SSH 金鑰並加入 GitHub</span>
+              <button class="prompt-copy-btn" data-target="pc-ssh-inline">複製 Prompt</button>
+            </div>
+            <pre id="pc-ssh-inline">請幫我在這台電腦上產生一組 SSH 金鑰，並說明如何將公鑰加入 GitHub 帳號，讓我之後 push 不需要輸入密碼。請依我的作業系統調整步驟。</pre>
+          </div>
           <p>完成後，clone repo 時使用 SSH 網址（<code>git@github.com:帳號/repo名稱.git</code>），往後 push 不需要輸入密碼。</p>
         </div>
 
@@ -550,8 +562,8 @@
         <div class="highlight" style="margin-bottom:16px;">
           <strong>組長任務（組長 = Repo 創建者）：創建團隊 GitHub Repo 並邀請所有組員為協作者</strong>
           <ul style="margin-top:10px;padding-left:20px;line-height:2;">
-            <li>Step 1 &nbsp;確認並安裝 git 與 gh CLI</li>
-            <li>Step 2 &nbsp;執行 <code style="background:#e0e0e0;padding:1px 5px;">gh auth login</code>，透過瀏覽器完成 GitHub 認證</li>
+            <li>Step 1 &nbsp;確認並安裝 git 與 gh CLI（Bob 會依你的作業系統給步驟）</li>
+            <li>Step 2 &nbsp;透過瀏覽器完成 GitHub 帳號認證</li>
             <li>Step 3 &nbsp;用 gh CLI 創建團隊 repo，並在 GitHub 網頁邀請所有組員為協作者</li>
           </ul>
         </div>
@@ -561,9 +573,8 @@
             <span><span class="step-tag">組長 Step 1</span> &nbsp;安裝 git 與 gh CLI</span>
             <button class="prompt-copy-btn" data-target="pc1">複製 Prompt</button>
           </div>
-          <pre id="pc1">請幫我確認系統是否已安裝 git 和 gh CLI。如果尚未安裝，請依照我的作業系統（macOS / Windows / Linux）給我安裝指令，並在安裝完成後執行以下指令確認版本：
-git --version
-gh --version</pre>
+          <pre id="pc1">請幫我確認這台電腦是否已安裝 git 和 gh CLI。如果尚未安裝，請依照我目前使用的作業系統給我對應的安裝方式，不要假設作業系統，請先偵測或詢問我。安裝完成後，請確認兩個工具都能正常使用並顯示版本號。</pre>
+          <div class="prompt-note">💡 Bob 會先偵測你的作業系統（macOS / Windows / Linux），再給你適合的安裝方式，不需要自己查指令。</div>
         </div>
 
         <div class="prompt-card">
@@ -571,13 +582,8 @@ gh --version</pre>
             <span><span class="step-tag">組長 Step 2</span> &nbsp;透過瀏覽器完成 GitHub 認證</span>
             <button class="prompt-copy-btn" data-target="pc2">複製 Prompt</button>
           </div>
-          <pre id="pc2">請幫我執行 gh auth login，並引導我完成以下選項：
-- GitHub.com
-- HTTPS
-- Authenticate Git with your GitHub credentials → Yes
-- Login with a web browser
-
-瀏覽器開啟後，我會登入 GitHub 並授權。完成後請確認認證狀態：gh auth status</pre>
+          <pre id="pc2">請幫我用 gh CLI 完成 GitHub 帳號認證。我想透過瀏覽器登入的方式授權，使用 HTTPS 協定。請引導我完成互動式問答的每一步，並在最後確認認證是否成功。</pre>
+          <div class="prompt-note">💡 認證完成後，往後的 push 和 pull 都不需要手動輸入密碼。</div>
         </div>
 
         <div class="prompt-card">
@@ -585,11 +591,8 @@ gh --version</pre>
             <span><span class="step-tag">組長 Step 3</span> &nbsp;創建團隊 Repo 並邀請組員</span>
             <button class="prompt-copy-btn" data-target="pc3">複製 Prompt</button>
           </div>
-          <pre id="pc3">請幫我用 gh CLI 創建一個新的 GitHub repo，設定為 public，並加入簡短描述「黑客松團隊專案」。創建完成後，請告訴我如何在 GitHub 網頁上進入 Settings → Collaborators，把其他組員的 GitHub 帳號加入為協作者。
-
-⚠️ 注意：請在執行前把以下指令中的 repo 名稱「hackathon-team」替換成你們團隊實際決定的名稱：
-gh repo create hackathon-team --public --description "黑客松團隊專案"</pre>
-          <div class="prompt-note">⚠️ <strong>「hackathon-team」只是範例名稱，請務必替換成你們團隊實際的 repo 名稱再執行。</strong>例如：<code>gh repo create team-alpha-2025 --public --description "黑客松團隊專案"</code></div>
+          <pre id="pc3">請幫我用 gh CLI 在 GitHub 上建立一個新的公開 repo，名稱是「【替換成你的 repo 名稱】」，描述為「黑客松團隊專案」。建立完成後，請告訴我如何在 GitHub 網頁上將其他組員的 GitHub 帳號加入為協作者。</pre>
+          <div class="prompt-note">⚠️ <strong>請將「【替換成你的 repo 名稱】」換成你們團隊實際決定的名稱再執行，</strong>例如：<code>team-alpha-2025</code>。</div>
         </div>
 
         <!-- 組員任務 -->
@@ -597,8 +600,8 @@ gh repo create hackathon-team --public --description "黑客松團隊專案"</pr
           <strong>所有組員任務（a → b → c）：認證 → Clone → 建立 Branch → Commit → Push</strong><br>
           <span style="font-size:13px;font-weight:400;color:#525252;">組員 = 除 Repo 創建者以外的所有團隊成員</span>
           <ul style="margin-top:10px;padding-left:20px;line-height:2;">
-            <li>Step a &nbsp;確認並安裝 git 與 gh CLI，執行 <code style="background:#e0e0e0;padding:1px 5px;">gh auth login</code> 透過瀏覽器完成 GitHub 認證</li>
-            <li>Step b &nbsp;執行 <code style="background:#e0e0e0;padding:1px 5px;">git clone</code> 將組長建立的 repo 複製到本地端</li>
+            <li>Step a &nbsp;確認並安裝 git 與 gh CLI，透過瀏覽器完成 GitHub 認證（Bob 會依你的作業系統調整步驟）</li>
+            <li>Step b &nbsp;將組長建立的 repo 複製到本地端</li>
             <li>Step c &nbsp;建立個人 branch，新增一個技能分享檔案後 commit，再 push 到 GitHub</li>
           </ul>
         </div>
@@ -610,16 +613,10 @@ gh repo create hackathon-team --public --description "黑客松團隊專案"</pr
           </div>
           <pre id="pc4">請幫我依序完成以下兩件事：
 
-1. 確認系統是否已安裝 git 和 gh CLI。如果尚未安裝，請依照我的作業系統給我安裝指令。
+1. 確認這台電腦是否已安裝 git 和 gh CLI。如果尚未安裝，請先偵測我的作業系統，再給我對應的安裝方式。
 
-2. 安裝完成後，執行 gh auth login 並引導我完成 GitHub 認證，選項依序為：
-   - GitHub.com
-   - HTTPS
-   - Authenticate Git with your GitHub credentials → Yes
-   - Login with a web browser
-   
-瀏覽器開啟後我會登入並授權。完成後請執行 gh auth status 確認認證成功。</pre>
-          <div class="prompt-note">💡 每位組員在自己的電腦上各執行一次，設定完成後才能 clone 和 push。</div>
+2. 安裝完成後，幫我用 gh CLI 完成 GitHub 帳號認證，使用 HTTPS 協定並透過瀏覽器登入授權。請引導我完成整個互動流程，並在最後確認認證是否成功。</pre>
+          <div class="prompt-note">💡 每位組員在自己的電腦上各執行一次，設定完成後才能 clone 和 push。Bob 會依你的作業系統（macOS / Windows / Linux）自動調整步驟。</div>
         </div>
 
         <div class="prompt-card">
@@ -627,12 +624,10 @@ gh repo create hackathon-team --public --description "黑客松團隊專案"</pr
             <span><span class="step-tag gray">組員 Step b</span> &nbsp;Clone 組長建立的 Repo</span>
             <button class="prompt-copy-btn" data-target="pc5">複製 Prompt</button>
           </div>
-          <pre id="pc5">請幫我 clone 以下 GitHub repo 到本地端，並進入該目錄：
-git clone https://github.com/【組長帳號】/【repo名稱】.git
-cd 【repo名稱】
+          <pre id="pc5">請幫我把以下 GitHub repo 複製到本地端，然後進入該資料夾，並告訴我目前目錄裡有什麼檔案、目前在哪個 branch：
 
-clone 完成後，請顯示目前目錄內容（ls 或 dir）以及目前所在的 branch（git branch）。</pre>
-          <div class="prompt-note">⚠️ <strong>請替換兩處佔位符再執行：</strong>「【組長帳號】」換成組長的 GitHub 帳號，「【repo名稱】」換成組長在 Step 3 建立的實際 repo 名稱。例如：<code>git clone https://github.com/john123/team-alpha-2025.git</code></div>
+repo 網址：https://github.com/【組長帳號】/【repo名稱】</pre>
+          <div class="prompt-note">⚠️ <strong>請替換兩處佔位符：</strong>「【組長帳號】」換成組長的 GitHub 帳號，「【repo名稱】」換成組長建立的實際 repo 名稱。例如：<code>https://github.com/john123/team-alpha-2025</code></div>
         </div>
 
         <div class="prompt-card">
@@ -640,24 +635,18 @@ clone 完成後，請顯示目前目錄內容（ls 或 dir）以及目前所在�
             <span><span class="step-tag gray">組員 Step c</span> &nbsp;建立 Branch、新增檔案、Commit 並 Push</span>
             <button class="prompt-copy-btn" data-target="pc6">複製 Prompt</button>
           </div>
-          <pre id="pc6">請幫我依序完成以下步驟：
+          <pre id="pc6">請幫我完成以下四件事：
 
-1. 建立並切換到新 branch，命名規則為 feature/暱稱-角色：
-   git checkout -b feature/【你的暱稱】-【你的角色】
+1. 建立一個新 branch，命名為 feature/【你的暱稱】-【你的角色】，並切換到這個 branch。
 
-2. 在這個 branch 新增一個技能分享檔案，檔名為 skill-【你的暱稱】.md，內容包含：
+2. 在這個 branch 新增一個 Markdown 檔案，檔名為 skill-【你的暱稱】.md，內容包含：
    - 你擅長的一項技能（例如：資料分析、簡報設計、文案撰寫、UI設計…）
    - 這個技能在黑客松中可以如何幫助團隊
    - 你願意在哪個環節貢獻這個技能
 
-3. 將新檔案加入追蹤並 commit：
-   git add .
-   git commit -m "新增：【你的暱稱】技能分享"
+3. 將這個新檔案存檔並提交（commit），commit 訊息為「新增：【你的暱稱】技能分享」。
 
-4. 將 branch push 到 GitHub：
-   git push origin feature/【你的暱稱】-【你的角色】
-
-完成後請顯示 git log --oneline -3 確認 commit 已記錄。</pre>
+4. 把這個 branch 推送到 GitHub，並在完成後讓我確認 commit 已成功記錄。</pre>
           <div class="prompt-note">💡 將 【你的暱稱】 和 【你的角色】 替換為實際內容，例如：<code>feature/小明-視覺設計</code>。請使用暱稱，無需填寫真實姓名。</div>
         </div>
 
@@ -680,30 +669,17 @@ clone 完成後，請顯示目前目錄內容（ls 或 dir）以及目前所在�
             <span><span class="step-tag">整合負責人</span> &nbsp;一鍵整合所有 feature branch 進 main</span>
             <button class="prompt-copy-btn" data-target="pc7">複製 Prompt</button>
           </div>
-          <pre id="pc7">請幫我把所有組員 push 到 GitHub 的 feature branch 整合進 main，步驟如下：
+          <pre id="pc7">請幫我把所有組員已 push 到 GitHub 的 feature branch 整合進 main，目標是讓 main 包含所有人的成果。請依序完成以下事項：
 
-1. 先從 remote 抓取最新狀態，確認有哪些 branch 尚未合併：
-   git fetch --all
-   git branch -r
+1. 先從 GitHub 抓取最新狀態，列出所有尚未合併的 remote branch，讓我確認清單。
 
-2. 切換到 main 並更新到最新版本：
-   git checkout main
-   git pull origin main
+2. 切換到 main 並更新到最新版本。
 
-3. 逐一將每個 feature branch merge 進 main（請列出所有 feature/ 開頭的 branch 並依序執行）：
-   git merge origin/feature/【暱稱-角色】 --no-ff -m "merge: 整合 feature/【暱稱-角色】"
+3. 逐一將每個 feature/ 開頭的 branch 合併進 main。遇到衝突時，請告訴我哪個檔案有衝突、衝突的內容是什麼，並引導我解決後繼續。
 
-4. 如果 merge 過程出現衝突，請告訴我衝突的檔案，並引導我逐一解決後執行：
-   git add .
-   git commit -m "fix: 解決 merge 衝突"
+4. 所有 branch 整合完成後，把最新的 main 推送到 GitHub。
 
-5. 所有 branch 整合完成後，push main 到 GitHub：
-   git push origin main
-
-6. 最後確認 main 上的 commit 歷史，確認每位組員都有出現：
-   git log --oneline --graph --all
-
-請在開始前先執行 git branch -r，列出所有 remote branch 讓我確認。</pre>
+5. 最後顯示 main 的 commit 歷史，讓我確認每位組員的成果都已出現。</pre>
           <div class="prompt-note">💡 整合前請先在群組確認所有組員都已完成最後一次 push，避免遺漏任何人的成果。</div>
         </div>
 
