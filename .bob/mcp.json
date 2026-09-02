@@ -1,0 +1,8 @@
+{
+    "mcpServers": {
+        "apple-books-mcp": {
+            "command": "uvx",
+            "args": [ "apple-books-mcp@latest" ]
+        }
+    }
+}
