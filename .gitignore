@@ -1,7 +1,4 @@
-.vscode/
-plans/
-docs/
+# 學員操作產出物 — 不進版控
+output/*
+!output/.gitkeep
 .worktrees/
-/artifacts/
-/_site/
-.bob/artifacts/
