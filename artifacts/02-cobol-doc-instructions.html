@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用 IBM Bob 解讀、文件化與傳承 COBOL 程式</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&display=swap">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: 0.16px;
+      color: #161616;
+      background: #ffffff;
+    }
+
+    /* Utility bar */
+    .utility-bar {
+      background: #f4f4f4;
+      color: #525252;
+      font-size: 12px;
+      letter-spacing: 0.32px;
+      line-height: 1.33;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    /* Top nav */
+    .top-nav {
+      background: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+    }
+    .top-nav .logo {
+      font-size: 18px;
+      font-weight: 600;
+      color: #161616;
+      text-decoration: none;
+    }
+    .top-nav .logo span { color: #0f62fe; }
+    .top-nav .back-link {
+      font-size: 14px;
+      color: #0f62fe;
+      text-decoration: none;
+      letter-spacing: 0.16px;
+    }
+    .top-nav .back-link:hover { text-decoration: underline; }
+
+    /* Main content */
+    .page-content {
+      max-width: 1056px;
+      margin: 0 auto;
+      padding: 64px 32px 96px;
+    }
+
+    /* Hero */
+    .hero {
+      margin-bottom: 48px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .hero-eyebrow {
+      font-size: 14px;
+      color: #525252;
+      letter-spacing: 0.16px;
+      line-height: 1.29;
+      margin-bottom: 12px;
+    }
+    .hero h1 {
+      font-size: 42px;
+      font-weight: 300;
+      line-height: 1.20;
+      color: #161616;
+      margin-bottom: 16px;
+    }
+    .hero p {
+      font-size: 18px;
+      color: #525252;
+      line-height: 1.5;
+      max-width: 760px;
+    }
+
+    /* Section title */
+    .section-title {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.33;
+      color: #161616;
+      margin-top: 48px;
+      margin-bottom: 24px;
+    }
+
+    .section-desc {
+      font-size: 16px;
+      color: #525252;
+      line-height: 1.5;
+      margin-bottom: 24px;
+      max-width: 760px;
+    }
+
+    /* Table */
+    .carbon-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 32px;
+      text-align: left;
+    }
+    .carbon-table th {
+      background: #f4f4f4;
+      color: #161616;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 12px 16px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .carbon-table td {
+      color: #525252;
+      font-size: 14px;
+      padding: 16px;
+      border-bottom: 1px solid #e0e0e0;
+      line-height: 1.5;
+    }
+    .carbon-table tr:hover td {
+      background: #f4f4f4;
+    }
+
+    /* Code Block */
+    pre {
+      background: #f4f4f4;
+      padding: 16px 20px;
+      border-left: 4px solid #0f62fe;
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      font-size: 13.5px;
+      color: #161616;
+      line-height: 1.6;
+      overflow-x: auto;
+      margin: 16px 0 24px;
+    }
+    code {
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      font-size: 13px;
+    }
+
+    /* Prompt Showcase */
+    .prompt-showcase {
+      border: 1px solid #e0e0e0;
+      background: #f4f4f4;
+      padding: 24px;
+      margin: 24px 0;
+    }
+    .prompt-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .prompt-header {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #0f62fe;
+      text-transform: uppercase;
+      margin-bottom: 0;
+    }
+    .copy-btn {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #0f62fe;
+      background: #ffffff;
+      border: 1px solid #0f62fe;
+      padding: 3px 10px;
+      cursor: pointer;
+      font-family: inherit;
+      white-space: nowrap;
+      transition: background 0.15s, color 0.15s;
+    }
+    .copy-btn:hover { background: #0f62fe; color: #ffffff; }
+    .copy-btn.copied { background: #198038; border-color: #198038; color: #ffffff; }
+    .prompt-text {
+      font-style: italic;
+      color: #161616;
+      font-size: 15px;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    .response-header {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #198038;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .response-content {
+      font-size: 14px;
+      color: #525252;
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    footer {
+      background: #161616;
+      color: #c6c6c6;
+      font-size: 14px;
+      letter-spacing: 0.16px;
+      line-height: 1.29;
+      padding: 64px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    footer span { font-size: 12px; color: #8c8c8c; }
+
+    /* CTA Section */
+    .cta-banner {
+      background: #0f62fe;
+      color: #ffffff;
+      padding: 48px;
+      margin-top: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .cta-banner h3 {
+      font-size: 24px;
+      font-weight: 300;
+      line-height: 1.25;
+    }
+    .cta-banner p {
+      font-size: 16px;
+      line-height: 1.5;
+      max-width: 600px;
+      opacity: 0.9;
+    }
+
+    /* Info callout */
+    .callout {
+      background: #f4f4f4;
+      padding: 16px;
+      border-left: 4px solid #0f62fe;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: #525252;
+      max-width: 760px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="utility-bar">IBM Bob · 工作坊教學材料</div>
+
+  <nav class="top-nav">
+    <a class="logo" href="index.html">IBM <span>Bob</span></a>
+    <a class="back-link" href="index.html">← 回索引</a>
+  </nav>
+
+  <main class="page-content">
+
+    <div class="hero">
+      <p class="hero-eyebrow">工作坊教材 · COBOL 傳承</p>
+      <h1>用 IBM Bob 解讀、文件化與傳承 COBOL 程式</h1>
+      <p>本單元以 IBM cics-genapp 保險核心交易系統的 COBOL 原始碼為素材，帶你依序體驗 Ask、Plan、Agent 三種模式：從認識陌生專案，到產出技術文件，最後在隔離的 Git worktree 中新增水災險功能。全程在本機進行，不需要 Mainframe 環境。</p>
+    </div>
+
+    <div class="callout" style="margin-bottom: 40px;">
+      ⚠️ <strong>本 repo 的 COBOL 版本為 ACU COBOL（ACUCOBOL-GT / Rocket extend）</strong>，並非原始 IBM z/OS COBOL。程式已從 CICS 環境轉置，以標準 <code>CALL/GOBACK</code> 取代 CICS 指令，不需要 Mainframe 或 CICS 環境。但本 repo 共 27 支程式中，<strong>9 支 DB2 存取層程式</strong>（<code>LGxDB01</code>）含有 <code>EXEC SQL</code> 語句，需要 DB2 runtime 才能執行；<strong>業務邏輯層</strong>（<code>LGxPOL01</code>）與 <strong>VSAM 存取層</strong>（<code>LGxVS01</code>）則可在本機直接用 GnuCOBOL 進行語法驗證。
+    </div>
+
+    <!-- Section 1: 素材說明 -->
+    <h2 class="section-title">認識練習素材</h2>
+    <p class="section-desc">練習素材已包含在本 repo 中。以 IBM Bob 開啟 repo 根目錄後即可直接開始。</p>
+
+    <pre><code>COBOL/          ← COBOL 原始程式（27 支 .cbl）
+COPY/           ← Copybook 共用資料結構
+DOC-SPEC.md     ← 文件框架規格（任務二使用）
+DESIGN.md       ← HTML 設計規範（任務二使用）
+plans/          ← Planning 階段產出的計畫存放位置
+docs/           ← 任務二產出的五份 .md 文件
+output/         ← 任務二產出的 HTML</code></pre>
+
+    <p class="section-desc">任務二會將整個專案整理為以下五份模組文件：</p>
+
+    <table class="carbon-table">
+      <thead>
+        <tr>
+          <th style="width: 30%;">技術文件</th>
+          <th style="width: 25%;">模組</th>
+          <th style="width: 45%;">涵蓋內容</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>doc-customer.md</strong></td>
+          <td>客戶管理</td>
+          <td>客戶新增、查詢、更新相關程式與資料流</td>
+        </tr>
+        <tr>
+          <td><strong>doc-policy-add-inq.md</strong></td>
+          <td>保單新增與查詢</td>
+          <td>保單建立、查詢與相關資料存取</td>
+        </tr>
+        <tr>
+          <td><strong>doc-policy-upd-del.md</strong></td>
+          <td>保單更新與刪除</td>
+          <td>DB2、VSAM 更新及刪除流程</td>
+        </tr>
+        <tr>
+          <td><strong>doc-infra-tools.md</strong></td>
+          <td>基礎設施與工具</td>
+          <td>系統支援、資料庫與共用工具程式</td>
+        </tr>
+        <tr>
+          <td><strong>doc-copybooks.md</strong></td>
+          <td>共用 Copybook</td>
+          <td>共用通訊區與保單資料結構</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Section 2: 任務流程 -->
+    <h2 class="section-title">三個實作任務</h2>
+    <p class="section-desc">假設你剛拿到這份程式碼庫，對 COBOL 也不熟悉。接下來請依序體驗 <strong>Ask → Plan → Agent</strong> 三種模式，從建立系統全貌，到完成文件，最後安全地實作新功能。</p>
+
+    <!-- Task 1 -->
+    <h2 class="section-title" style="font-size: 20px; font-weight: 600;">任務一：Onboarding — 用 Ask Mode 認識陌生專案</h2>
+    <p class="section-desc">切換到 <strong>Ask 模式</strong>。不需要先讀任何程式碼，直接用自然語言問 Bob。</p>
+
+    <div class="prompt-showcase">
+      <div class="prompt-header-row">
+        <div class="prompt-header">Prompt 1-A：認識系統</div>
+        <button class="copy-btn" data-target="p1a">複製</button>
+      </div>
+      <div class="prompt-text" id="p1a">這是一個我完全陌生的專案，請幫我認識這個系統是做什麼的、目錄怎麼組織，以及我該從哪裡開始看。</div>
+      <div class="response-header">預期 Bob 的回應方向</div>
+      <div class="response-content">
+        Bob 會主動探索工作區，說明 <code>COBOL/</code>、<code>COPY/</code>、規格文件的用途，並給出適合新手的閱讀路徑。
+      </div>
+    </div>
+
+    <div class="prompt-showcase">
+      <div class="prompt-header-row">
+        <div class="prompt-header">Prompt 1-B：理解業務模組</div>
+        <button class="copy-btn" data-target="p1b">複製</button>
+      </div>
+      <div class="prompt-text" id="p1b">請用繁體中文整理這個系統的主要業務功能與程式分組，說明各組如何互相合作。</div>
+      <div class="response-header">預期 Bob 的回應方向</div>
+      <div class="response-content">
+        Bob 會把 27 支程式歸納成業務模組（客戶管理、保單新增查詢、保單更新刪除、基礎設施、共用 Copybook），協助你從整體架構而非個別檔案開始理解。
+      </div>
+    </div>
+
+    <!-- Task 2 -->
+    <h2 class="section-title" style="font-size: 20px; font-weight: 600;">任務二：Documentation — 從程式碼產出 HTML 技術文件</h2>
+    <p class="section-desc">先切換到 <strong>Plan 模式</strong>建立執行計畫，再切換到 <strong>Agent 模式</strong>依計畫產出五份 Markdown 文件並整合成 HTML。</p>
+
+    <div class="callout">
+      <strong>DOC-SPEC.md</strong> 是文件框架規格，<strong>DESIGN.md</strong> 是 HTML 設計規範。不需要先讀這兩份文件，Bob 會在規劃與執行時參照它們。
+    </div>
+
+    <div class="prompt-showcase">
+      <div class="prompt-header-row">
+        <div class="prompt-header">Prompt 2-A（Plan Mode）：建立文件計畫</div>
+        <button class="copy-btn" data-target="p2a">複製</button>
+      </div>
+      <div class="prompt-text" id="p2a">請閱讀 DOC-SPEC.md 並分析 COBOL/ 與 COPY/，替這個專案規劃五份繁體中文技術文件的產出計畫。計畫需涵蓋各文件的程式範圍、章節結構、Mermaid 圖表需求與驗收標準，以及完整的執行步驟：依 DOC-SPEC.md 產出五份繁體中文Markdown技術文件存到docs/、依 DESIGN.md 整合成 HTML存到output/、完成後驗證所有 Mermaid 圖表語法並自動修正錯誤。計畫儲存到 plans/。</div>
+      <div class="response-header">預期 Bob 的回應方向</div>
+      <div class="response-content">
+        Bob 會盤點所有程式與 Copybook，決定五份文件的邊界，規劃從原始碼分析、Markdown 產出、HTML 整合到圖表驗證的完整步驟，存成計畫檔案。
+      </div>
+    </div>
+
+    <div class="prompt-showcase">
+      <div class="prompt-header-row">
+        <div class="prompt-header">Prompt 2-B（Agent Mode）：執行文件計畫</div>
+        <button class="copy-btn" data-target="p2b">複製</button>
+      </div>
+      <div class="prompt-text" id="p2b">請讀取剛才的文件撰寫計畫並依計畫執行。</div>
+      <div class="response-header">預期 Bob 的回應方向</div>
+      <div class="response-content">
+        Bob 依計畫逐步完成：分析原始碼、產出五份 Markdown 文件至 <code>docs/</code>、整合成 HTML 至 <code>output/</code>，最後掃描並修正所有 Mermaid 圖表語法錯誤。
+      </div>
+    </div>
+
+    <!-- Task 3 -->
+    <h2 class="section-title" style="font-size: 20px; font-weight: 600;">任務三：Feature Development — 使用 Worktree 新增水災險</h2>
+    <p class="section-desc">同樣分成 <strong>Plan → Agent</strong> 兩階段。Bob 會先分析既有險種的實作方式、擬定計畫，再於獨立的 Git worktree 中執行，確保目前工作目錄不受影響。</p>
+
+    <div class="callout">
+      <strong>為什麼使用 worktree？</strong> Worktree 會建立獨立的工作目錄與分支，讓新功能的開發與原始碼完全隔離，即使實作尚未完成，主分支也不會被修改。
+    </div>
+
+    <div class="prompt-showcase">
+      <div class="prompt-header-row">
+        <div class="prompt-header">Prompt 3-A（Plan Mode）：規劃水災險</div>
+        <button class="copy-btn" data-target="p3a">複製</button>
+      </div>
+      <div class="prompt-text" id="p3a">我想新增「水災險」險種。請先不要修改程式碼，分析現有險種的完整實作（資料結構、保單 CRUD、資料存取），找出影響範圍，並建立實作計畫。計畫需涵蓋資料定義、程式變更、測試方式與驗收標準，以及完整的執行步驟：建立獨立的 Git worktree 與功能分支、所有變更只在 worktree 中進行、完成後執行驗收項目並整理摘要。計畫存到 plans/。</div>
+      <div class="response-header">預期 Bob 的回應方向</div>
+      <div class="response-content">
+        Bob 會追蹤現有險種在 Copybook、業務程式、資料存取程式之間的關聯，列出水災險的完整影響範圍，並把 worktree 建立、實作、測試與驗收的完整步驟納入計畫。
+      </div>
+    </div>
+
+    <div class="prompt-showcase">
+      <div class="prompt-header-row">
+        <div class="prompt-header">Prompt 3-B（Agent Mode）：在 Worktree 中實作</div>
+        <button class="copy-btn" data-target="p3b">複製</button>
+      </div>
+      <div class="prompt-text" id="p3b">請讀取剛才的水災險實作計畫並依計畫執行。</div>
+      <div class="response-header">預期 Bob 的回應方向</div>
+      <div class="response-content">
+        Bob 依計畫逐步完成：建立隔離的 worktree 與功能分支，在其中實作水災險的資料結構與 CRUD 功能，執行驗收項目，整理摘要。原工作目錄維持不變。
+      </div>
+    </div>
+
+    <!-- Task 4 -->
+    <h2 class="section-title" style="font-size: 20px; font-weight: 600;">任務四：Verification — 在本機驗證水災險程式</h2>
+    <p class="section-desc">實作完成後，讓 Bob 在 worktree 中對修改過的程式執行語法檢查，確認水災險變更正確、且未破壞現有險種。本機使用 <strong>GnuCOBOL</strong>（免費，Mac/Windows 皆可安裝）進行靜態語法驗證；DB2 與 VSAM 存取層無法在本機執行，但業務邏輯層可完整驗證。</p>
+
+    <div class="callout">
+      <strong>安裝 GnuCOBOL：</strong>
+      macOS：<code>brew install gnucobol</code>&nbsp;&nbsp;／&nbsp;&nbsp;
+      Windows（MSYS2）：<code>pacman -S mingw-w64-x86_64-gnucobol</code>
+    </div>
+
+    <div class="prompt-showcase">
+      <div class="prompt-header-row">
+        <div class="prompt-header">Prompt 4-A（Agent Mode）：語法檢查</div>
+        <button class="copy-btn" data-target="p4a">複製</button>
+      </div>
+      <div class="prompt-text" id="p4a">請在水災險的 worktree 中，用 GnuCOBOL 對所有修改過的 COBOL 程式執行語法檢查（cobc -fsyntax-only -I COPY/），確認水災險相關變更編譯無誤，且現有程式未引入新的編譯錯誤或警告，並整理結果摘要。</div>
+      <div class="response-header">預期 Bob 的回應方向</div>
+      <div class="response-content">
+        Bob 會切換到 worktree 目錄，對修改過的程式逐一執行 <code>cobc -fsyntax-only -I COPY/</code>，回報每支程式的編譯結果，並列出需要修正的錯誤（如有）。
+      </div>
+    </div>
+
+    <div class="prompt-showcase">
+      <div class="prompt-header-row">
+        <div class="prompt-header">Prompt 4-B（Agent Mode）：驗證 Copybook 與資料結構</div>
+        <button class="copy-btn" data-target="p4b">複製</button>
+      </div>
+      <div class="prompt-text" id="p4b">請確認 LGPOLICY.cpy 中水災險的欄位定義完整，保單類型代碼已正確新增，並確認新欄位不與現有險種的欄位衝突。</div>
+      <div class="response-header">預期 Bob 的回應方向</div>
+      <div class="response-content">
+        Bob 會比對現有險種（房屋險、車險等）的 Copybook 結構，確認水災險欄位的命名規範、長度常數與類型代碼都已正確定義，且未破壞現有結構。
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-banner">
+      <h3>完成！您已走過理解、文件化、功能開發與驗證的完整流程</h3>
+      <p>四個任務結束後，您體驗了用 Ask Mode 認識陌生專案、用 Plan + Agent Mode 產出技術文件、透過 worktree 安全地實作新功能，以及用 GnuCOBOL 在本機驗證程式正確性。</p>
+    </div>
+
+  </main>
+
+  <footer>
+    <span>Made with IBM Bob</span>
+  </footer>
+
+<script>
+  document.querySelectorAll('.copy-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var targetId = btn.getAttribute('data-target');
+      var text = document.getElementById(targetId).innerText;
+      navigator.clipboard.writeText(text).then(function() {
+        btn.textContent = '已複製 ✓';
+        btn.classList.add('copied');
+        setTimeout(function() {
+          btn.textContent = '複製';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    });
+  });
+</script>
+</body>
+</html>
