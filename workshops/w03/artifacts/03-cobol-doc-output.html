@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>任務二產出預覽｜COBOL 技術文件</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&display=swap">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: 0.16px;
+      color: #161616;
+      background: #ffffff;
+    }
+
+    .utility-bar {
+      background: #f4f4f4;
+      color: #525252;
+      font-size: 12px;
+      letter-spacing: 0.32px;
+      line-height: 1.33;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .top-nav {
+      background: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+    }
+    .top-nav .logo {
+      font-size: 18px;
+      font-weight: 600;
+      color: #161616;
+      text-decoration: none;
+    }
+    .top-nav .logo span { color: #0f62fe; }
+    .top-nav .back-link {
+      font-size: 14px;
+      color: #0f62fe;
+      text-decoration: none;
+      letter-spacing: 0.16px;
+    }
+    .top-nav .back-link:hover { text-decoration: underline; }
+
+    .page-content {
+      max-width: 1056px;
+      margin: 0 auto;
+      padding: 64px 32px 96px;
+    }
+
+    .hero {
+      margin-bottom: 48px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .hero-eyebrow {
+      font-size: 14px;
+      color: #525252;
+      letter-spacing: 0.16px;
+      line-height: 1.29;
+      margin-bottom: 12px;
+    }
+    .hero h1 {
+      font-size: 42px;
+      font-weight: 300;
+      line-height: 1.20;
+      color: #161616;
+      margin-bottom: 16px;
+    }
+    .hero p {
+      font-size: 18px;
+      color: #525252;
+      line-height: 1.5;
+      max-width: 760px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.33;
+      color: #161616;
+      margin-top: 48px;
+      margin-bottom: 24px;
+      letter-spacing: 0;
+    }
+    .section-desc {
+      font-size: 16px;
+      color: #525252;
+      line-height: 1.5;
+      margin-bottom: 24px;
+      max-width: 760px;
+    }
+
+    /* Doc link list */
+    .doc-list {
+      border-top: 1px solid #e0e0e0;
+      margin-bottom: 48px;
+    }
+    .doc-list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      border-bottom: 1px solid #e0e0e0;
+      gap: 24px;
+    }
+    .doc-list-item:hover { background: #f4f4f4; margin: 0 -16px; padding: 20px 16px; }
+    .doc-meta { flex: 1; }
+    .doc-number {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #0f62fe;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .doc-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #161616;
+      margin-bottom: 4px;
+    }
+    .doc-desc {
+      font-size: 14px;
+      color: #525252;
+      line-height: 1.5;
+    }
+    .doc-link {
+      font-size: 14px;
+      font-weight: 600;
+      color: #0f62fe;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .doc-link:hover { text-decoration: underline; }
+
+    /* Callout */
+    .callout-info {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: #edf4ff;
+      border-left: 4px solid #0f62fe;
+      padding: 16px 20px;
+      margin-bottom: 32px;
+    }
+    .callout-info p {
+      font-size: 14px;
+      color: #161616;
+      line-height: 1.5;
+      margin: 0;
+    }
+    .callout-info strong { font-weight: 600; }
+
+    /* CTA */
+    .cta-banner {
+      background: #0f62fe;
+      color: #ffffff;
+      padding: 48px;
+      margin-top: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .cta-banner h3 {
+      font-size: 24px;
+      font-weight: 300;
+      line-height: 1.25;
+    }
+    .cta-banner p {
+      font-size: 16px;
+      line-height: 1.5;
+      max-width: 600px;
+      opacity: 0.9;
+    }
+    .cta-link {
+      color: #ffffff;
+      font-weight: 600;
+      text-decoration: underline;
+      font-size: 15px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .cta-link:hover { opacity: 0.8; }
+
+    footer {
+      background: #161616;
+      color: #c6c6c6;
+      font-size: 14px;
+      letter-spacing: 0.16px;
+      line-height: 1.29;
+      padding: 64px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    footer span { font-size: 12px; color: #8c8c8c; }
+
+    @media (max-width: 672px) {
+      .utility-bar { display: none; }
+      .page-content { padding: 40px 16px 64px; }
+      .hero h1 { font-size: 32px; }
+      .cta-banner { padding: 32px 24px; }
+      .doc-list-item { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="utility-bar">IBM Bob · 工作坊教學材料</div>
+
+  <nav class="top-nav">
+    <a class="logo" href="index.html">IBM <span>Bob</span></a>
+    <a class="back-link" href="index.html">← 回索引</a>
+  </nav>
+
+  <main class="page-content">
+
+    <div class="hero">
+      <p class="hero-eyebrow">工作坊教材 · 單元二產出預覽</p>
+      <h1>COBOL 技術文件產出結果</h1>
+      <p>本頁面是執行完單元二「任務二：文件化」後的預期成果。Bob 依照計畫分析 COBOL 原始碼，產出五份繁體中文 HTML 技術文件，完整涵蓋系統架構、業務 CRUD、資料結構與基礎設施。</p>
+    </div>
+
+    <div class="callout-info">
+      <span style="font-size:18px;line-height:1;">ℹ️</span>
+      <p><strong>這些文件從何而來？</strong>在單元二的任務二中，您先以 Plan 模式讓 Bob 規劃五份技術文件的章節結構與程式範圍，再切換至 Agent 模式讓 Bob 自動讀取 COBOL 原始碼、撰寫 Markdown、整合成 HTML，最後自動驗證並修正所有 Mermaid 圖表語法。</p>
+    </div>
+
+    <h2 class="section-title">五份產出文件</h2>
+    <p class="section-desc">點擊下方任一文件即可預覽 Bob 的實際產出內容：</p>
+
+    <div class="doc-list">
+      <div class="doc-list-item">
+        <div class="doc-meta">
+          <div class="doc-number">文件一</div>
+          <div class="doc-title">GENAPP 系統總覽與架構</div>
+          <div class="doc-desc">系統背景、程式清單、目錄組織、業務模組分組與整體資料流說明。</div>
+        </div>
+        <a class="doc-link" href="doc-01-system-overview.html">開啟文件 →</a>
+      </div>
+      <div class="doc-list-item">
+        <div class="doc-meta">
+          <div class="doc-number">文件二</div>
+          <div class="doc-title">保單 CRUD 業務層技術文件</div>
+          <div class="doc-desc">保單新增、查詢、刪除、更新的業務邏輯、DB2 存取與 VSAM 存取程式說明。</div>
+        </div>
+        <a class="doc-link" href="doc-02-policy-crud.html">開啟文件 →</a>
+      </div>
+      <div class="doc-list-item">
+        <div class="doc-meta">
+          <div class="doc-number">文件三</div>
+          <div class="doc-title">客戶 CRUD 業務層技術文件</div>
+          <div class="doc-desc">客戶新增、查詢、更新與批次匯入的業務程式、驗證邏輯與條件編譯說明。</div>
+        </div>
+        <a class="doc-link" href="doc-03-customer-crud.html">開啟文件 →</a>
+      </div>
+      <div class="doc-list-item">
+        <div class="doc-meta">
+          <div class="doc-number">文件四</div>
+          <div class="doc-title">資料結構與 Copybook 技術文件</div>
+          <div class="doc-desc">共用 COMMAREA、保單欄位定義、REDEFINES 對應與 DB2 Host Variable 說明。</div>
+        </div>
+        <a class="doc-link" href="doc-04-data-structures.html">開啟文件 →</a>
+      </div>
+      <div class="doc-list-item">
+        <div class="doc-meta">
+          <div class="doc-number">文件五</div>
+          <div class="doc-title">基礎設施與監控技術文件</div>
+          <div class="doc-desc">系統初始化、交易統計、背景監控與錯誤記錄程式的架構與實作說明。</div>
+        </div>
+        <a class="doc-link" href="doc-05-infrastructure.html">開啟文件 →</a>
+      </div>
+    </div>
+
+    <div class="cta-banner">
+      <h3>從這裡開始閱讀</h3>
+      <p>建議從系統總覽出發，掌握整體架構後再深入各業務模組的細節。</p>
+      <p>
+        <a href="doc-01-system-overview.html" class="cta-link">開啟文件一：GENAPP 系統總覽與架構 →</a>
+      </p>
+    </div>
+
+  </main>
+
+  <footer>
+    <span>Made with IBM Bob</span>
+  </footer>
+
+</body>
+</html>
