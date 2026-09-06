@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GENAPP 基礎設施與監控 | COBOL 技術文件</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--ibm-blue:#0f62fe;--ibm-bg:#fff;--ibm-surface:#f4f4f4;--ibm-border:#e0e0e0;--ibm-text:#161616;--ibm-muted:#6f6f6f;--nav-h:48px}
+  body{font-family:'IBM Plex Sans',sans-serif;font-size:14px;line-height:1.6;color:var(--ibm-text);background:var(--ibm-bg)}
+  nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:#161616;display:flex;align-items:center;padding:0 16px;gap:4px;z-index:100}
+  nav a{color:#f4f4f4;text-decoration:none;padding:6px 12px;font-size:13px}
+  nav a:hover{background:#393939}
+  nav a.active{border-bottom:2px solid var(--ibm-blue)}
+  nav .nav-title{color:#8d8d8d;font-size:13px;margin-right:8px;padding-right:12px;border-right:1px solid #393939}
+  .page-wrap{display:flex;margin-top:var(--nav-h)}
+  aside{width:220px;flex-shrink:0;position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));overflow-y:auto;background:var(--ibm-surface);border-right:1px solid var(--ibm-border);padding:16px 0}
+  aside h3{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--ibm-muted);padding:0 16px 8px}
+  aside a{display:block;padding:6px 16px;font-size:13px;color:var(--ibm-text);text-decoration:none;border-left:3px solid transparent}
+  aside a:hover{background:var(--ibm-border)}
+  main{flex:1;padding:32px 40px;max-width:960px}
+  h1{font-size:28px;font-weight:300;margin-bottom:4px}
+  .doc-meta{font-size:12px;color:var(--ibm-muted);margin-bottom:32px;padding-bottom:16px;border-bottom:1px solid var(--ibm-border)}
+  h2{font-size:20px;font-weight:500;margin:40px 0 16px;padding-bottom:8px;border-bottom:2px solid var(--ibm-blue)}
+  h3{font-size:16px;font-weight:500;margin:24px 0 12px}
+  h4{font-size:14px;font-weight:600;margin:16px 0 8px}
+  p{margin-bottom:12px}
+  .tbl-wrap{overflow-x:auto;margin:16px 0}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{background:#e8e8e8;font-weight:600;text-align:left;padding:8px 12px;border-bottom:2px solid var(--ibm-border)}
+  td{padding:7px 12px;border-bottom:1px solid var(--ibm-border);vertical-align:top}
+  tr:nth-child(even) td{background:var(--ibm-surface)}
+  code{font-family:'IBM Plex Mono',monospace;font-size:12px;background:#e8e8e8;padding:1px 5px}
+  pre{background:#282828;color:#f4f4f4;padding:16px;overflow-x:auto;margin:12px 0;font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.5}
+  .callout{border-left:4px solid;padding:12px 16px;margin:16px 0;font-size:13px}
+  .callout.warn{border-color:#ff832b;background:#fff2e8}
+  .callout.info{border-color:var(--ibm-blue);background:#edf5ff}
+  .callout.danger{border-color:#da1e28;background:#fff1f1}
+  .callout strong{display:block;margin-bottom:4px}
+  .mermaid-wrap{background:var(--ibm-surface);border:1px solid var(--ibm-border);padding:16px;margin:16px 0}
+  .mermaid-wrap h4{font-size:13px;color:var(--ibm-muted);margin-bottom:12px}
+  .mermaid{text-align:center}
+  .badge{display:inline-block;padding:2px 8px;font-size:11px;font-weight:600}
+  .badge-green{background:#defbe6;color:#0e6027}
+  .badge-yellow{background:#fdf1c2;color:#735a00}
+  .badge-red{background:#fff1f1;color:#a2191f}
+  .tbd{color:#ff832b;font-style:italic;font-size:12px}
+  footer{text-align:center;font-size:12px;color:var(--ibm-muted);padding:24px 16px;border-top:1px solid var(--ibm-border);margin-top:48px}
+</style>
+</head>
+<body>
+<nav>
+  <span class="nav-title">GENAPP COBOL 技術文件</span>
+  <a href="doc-01-system-overview.html">01 系統總覽</a>
+  <a href="doc-02-policy-crud.html">02 保單 CRUD</a>
+  <a href="doc-03-customer-crud.html">03 客戶 CRUD</a>
+  <a href="doc-04-data-structures.html">04 資料結構</a>
+  <a href="doc-05-infrastructure.html" class="active">05 基礎設施</a>
+</nav>
+<div class="page-wrap">
+<aside>
+  <h3>本文件章節</h3>
+  <a href="#overview">基礎設施概覽</a>
+  <a href="#external">IS EXTERNAL 機制</a>
+  <a href="#lgsetup">LGSETUP</a>
+  <a href="#lgastat1">LGASTAT1</a>
+  <a href="#lgwebst5">LGWEBST5</a>
+  <a href="#lgstsq">LGSTSQ</a>
+  <a href="#dataflow">IS EXTERNAL 資料流</a>
+  <a href="#ops">運維注意事項</a>
+  <a href="#envvars">環境變數清單</a>
+  <a href="#diagrams">圖表</a>
+</aside>
+<main>
+<h1>GENAPP 基礎設施與監控技術文件</h1>
+<div class="doc-meta">文件版本：1.0 ｜ 產出日期：2026-05-08 ｜ 盤點人：<span class="tbd">TBD</span> ｜ 審核人：<span class="tbd">TBD</span></div>
+
+<h2 id="overview">第一章：程式總表</h2>
+<div class="tbl-wrap"><table>
+  <tr><th>程式</th><th>功能</th><th>執行時機</th><th>DFHCOMMAREA</th></tr>
+  <tr><td><code>LGSETUP</code></td><td>環境初始化</td><td>系統啟動時執行一次</td><td>無（獨立執行）</td></tr>
+  <tr><td><code>LGASTAT1</code></td><td>統計計數器更新</td><td>每次交易完成後呼叫</td><td>有</td></tr>
+  <tr><td><code>LGWEBST5</code></td><td>統計輸出背景服務</td><td>C$SLEEP 永久迴圈（每 60 秒）</td><td>無（獨立背景行程）</td></tr>
+  <tr><td><code>LGSTSQ</code></td><td>錯誤訊息日誌服務</td><td>所有業務程式錯誤時呼叫</td><td>有（PIC X(90) 訊息）</td></tr>
+</table></div>
+
+<h2 id="external">第二章：IS EXTERNAL 計數陣列共用機制</h2>
+
+<div class="callout info">
+  <strong>技術背景</strong>
+  原始 IBM z/OS 使用 CICS Named Counter Service（NCS）維護 27 個計數器（GENACUSTNUM + GENACNT100 ~ GENACNTI99）。<br>
+  ACUCOBOL-GT 轉置後改為 IS EXTERNAL 計數陣列（手冊 p.90），由 LGSETUP 初始化，各執行緒透過 IS EXTERNAL 共用同一記憶體區塊。
+</div>
+
+<h3>GENA-COUNTERS 結構</h3>
+<pre>01 GENA-COUNTERS IS EXTERNAL.
+   03 GENA-CUSTNUM    PIC S9(9) COMP  -- 客戶流水號計數器（LGACDB01 使用）
+   03 GENA-CNT        PIC S9(9) COMP
+      OCCURS 26 TIMES                  -- 各操作成功/失敗計數器（索引 1-26）</pre>
+
+<h3>計數器索引對照（部分已確認）</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>索引</th><th>原 CICS NCS 名稱</th><th>業務含義</th></tr>
+  <tr><td>CUSTNUM</td><td>GENACUSTNUM</td><td>客戶流水號（LGACDB01 遞增）</td></tr>
+  <tr><td>CNT(1)</td><td>GENACNT100</td><td>查詢客戶成功</td></tr>
+  <tr><td>CNT(2)</td><td>GENACNT199</td><td>查詢客戶失敗</td></tr>
+  <tr><td>CNT(3)～CNT(26)</td><td><span class="tbd">TBD</span></td><td><span class="tbd">TBD（完整對照表待確認）</span></td></tr>
+</table></div>
+
+<h2 id="lgsetup">第三章：LGSETUP — 環境初始化</h2>
+<div class="tbl-wrap"><table>
+  <tr><th>項目</th><th>內容</th></tr>
+  <tr><td>Program-ID</td><td><code>LGSETUP</code></td></tr>
+  <tr><td>功能</td><td>初始化客戶流水號計數器、26 個操作計數器、建立日誌檔</td></tr>
+  <tr><td>執行方式</td><td><code>acurun LGSETUP</code>（命令列，無 CICS 環境需求）</td></tr>
+  <tr><td>結束方式</td><td>STOP RUN（初始化完成後終止，不用 GOBACK）</td></tr>
+</table></div>
+
+<h3>程式流程</h3>
+<ol style="margin:0 0 16px 20px;font-size:13px;line-height:2">
+  <li><code>ACCEPT WS-RECV-DATA FROM ENVIRONMENT 'GENAPP_INITIAL_CUSTNUM'</code></li>
+  <li>初始化 IS EXTERNAL：GENA-CUSTNUM = 初始值</li>
+  <li>清零 26 個 GENA-CNT(i)（原為 EXEC CICS Delete/Define Counter）</li>
+  <li>建立/覆蓋日誌檔（LINE SEQUENTIAL，GENAPP_LOG_FILE 指定）</li>
+  <li>寫入初始化完成訊息（原為 EXEC CICS SEND TEXT）</li>
+  <li>STOP RUN</li>
+</ol>
+
+<h3>日誌檔設計</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>項目</th><th>內容</th></tr>
+  <tr><td>邏輯名稱</td><td>GENAPP-LOG</td></tr>
+  <tr><td>實體路徑</td><td>環境變數 <code>GENAPP_LOG_FILE</code></td></tr>
+  <tr><td>組織</td><td>LINE SEQUENTIAL（跨平台相容文字模式）</td></tr>
+  <tr><td>記錄格式</td><td>PIC X(80)</td></tr>
+  <tr><td>存取模式</td><td>OUTPUT（初始化時覆蓋建立）</td></tr>
+</table></div>
+
+<h3>IBM 原始 vs ACUCOBOL 轉置對照</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>IBM 原始指令</th><th>ACUCOBOL-GT 替代</th></tr>
+  <tr><td><code>EXEC CICS RECEIVE INTO</code>（取得初始客戶號）</td><td><code>ACCEPT FROM ENVIRONMENT 'GENAPP_INITIAL_CUSTNUM'</code></td></tr>
+  <tr><td><code>EXEC CICS DeleteQ TS</code>（清除日誌 Queue）</td><td>跳過（重開日誌檔等效）</td></tr>
+  <tr><td><code>EXEC CICS WriteQ TS</code>（STSQ-NAME）</td><td>LINE SEQUENTIAL WRITE</td></tr>
+  <tr><td><code>EXEC CICS Delete/Define Counter</code>（26 組）</td><td>IS EXTERNAL 計數陣列清零</td></tr>
+  <tr><td><code>EXEC CICS SEND TEXT</code></td><td>DISPLAY</td></tr>
+  <tr><td><code>EXEC CICS RETURN</code></td><td>STOP RUN</td></tr>
+</table></div>
+
+<h2 id="lgastat1">第四章：LGASTAT1 — 統計計數器更新</h2>
+<div class="tbl-wrap"><table>
+  <tr><th>項目</th><th>內容</th></tr>
+  <tr><td>Program-ID</td><td><code>LGASTAT1</code></td></tr>
+  <tr><td>功能</td><td>讀取交易代碼與返回碼，更新對應 IS EXTERNAL 計數器</td></tr>
+  <tr><td>呼叫時機</td><td><span class="tbd">TBD（由哪個程式呼叫待確認）</span></td></tr>
+</table></div>
+
+<h3>Channel/Container 替代設計</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>原始 CICS Channel/Container</th><th>轉置後環境變數</th></tr>
+  <tr><td><code>EXEC CICS Get Container(DFHEP.DATA.00001)</code></td><td><code>ACCEPT FROM ENVIRONMENT 'GENAPP_STAT_REQ'</code></td></tr>
+  <tr><td><code>EXEC CICS Get Container(DFHEP.DATA.00002)</code></td><td><code>ACCEPT FROM ENVIRONMENT 'GENAPP_STAT_RC'</code></td></tr>
+  <tr><td><code>EXEC CICS ReadQ TS Queue(GENASTRT)</code></td><td><code>ACCEPT FROM ENVIRONMENT 'GENAPP_START_TIME'</code></td></tr>
+  <tr><td><code>EXEC CICS WriteQ TS Queue(GENASTRT)</code></td><td>若 GENAPP_START_TIME 未設定則記錄啟動時間</td></tr>
+</table></div>
+
+<h2 id="lgwebst5">第五章：LGWEBST5 — 統計輸出背景服務</h2>
+<div class="tbl-wrap"><table>
+  <tr><th>項目</th><th>內容</th></tr>
+  <tr><td>Program-ID</td><td><code>LGWEBST5</code></td></tr>
+  <tr><td>功能</td><td>每 60 秒從 IS EXTERNAL 讀取統計資料並輸出</td></tr>
+  <tr><td>執行方式</td><td>獨立背景行程（PROCEDURE DIVISION 無 USING）</td></tr>
+  <tr><td>終止方式</td><td>設定 GENAPP_STOP_LGWEBST5 = 'STOP' 觸發優雅停止</td></tr>
+</table></div>
+
+<div class="callout info">
+  <strong>C$SLEEP 永久迴圈設計（客戶確認決策）</strong>
+  原始 IBM CICS：<code>EXEC CICS Start Transid('SSST') After Minutes(1)</code><br>
+  ACUCOBOL-GT 替代：<code>C$SLEEP 60</code> 永久迴圈，每 60 秒執行一次統計輸出。<br>
+  C$SLEEP 為 ACUCOBOL-GT 系統程式庫函式（接收秒數），等效於原始 After Minutes(1) 語義。<br>
+  此設計為客戶確認決策，保留於程式注解中。
+</div>
+
+<h3>優雅停止機制</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>環境變數</th><th>值</th><th>效果</th></tr>
+  <tr><td><code>GENAPP_STOP_LGWEBST5</code></td><td>'STOP'</td><td>下次迴圈開始時正常 GOBACK 退出</td></tr>
+  <tr><td><code>GENAPP_STOP_LGWEBST5</code></td><td>其他或未設定</td><td>繼續執行永久迴圈</td></tr>
+</table></div>
+
+<h3>IBM 原始 vs ACUCOBOL 轉置</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>IBM 原始</th><th>ACUCOBOL-GT 替代</th></tr>
+  <tr><td><code>EXEC CICS Start Transid After Minutes(1)</code></td><td>C$SLEEP 60 永久迴圈</td></tr>
+  <tr><td><code>EXEC CICS Query Counter（GENAcount）</code></td><td>讀取 IS EXTERNAL 計數陣列</td></tr>
+  <tr><td><code>EXEC CICS ReadQ/WriteQ/DeleteQ TS</code></td><td>暫存陣列 WS-TSQ-STORE</td></tr>
+  <tr><td><code>EXEC CICS ASSIGN APPLID</code></td><td><code>ACCEPT FROM ENVIRONMENT 'GENAPP_APPLID'</code></td></tr>
+  <tr><td><code>EXEC CICS ASKTIME / FORMATTIME</code></td><td><code>ACCEPT FROM CENTURY-DATE / TIME</code></td></tr>
+</table></div>
+
+<h2 id="lgstsq">第六章：LGSTSQ — 錯誤訊息日誌服務</h2>
+<div class="tbl-wrap"><table>
+  <tr><th>項目</th><th>內容</th></tr>
+  <tr><td>Program-ID</td><td><code>LGSTSQ</code></td></tr>
+  <tr><td>功能</td><td>接收錯誤訊息並寫入日誌檔（取代 CICS TDQ/TSQ 輸出）</td></tr>
+  <tr><td>呼叫介面</td><td><code>CALL 'LGSTSQ' USING BY REFERENCE LOG-MESSAGE（PIC X(90)）</code></td></tr>
+  <tr><td>日誌檔路徑</td><td>環境變數 <code>GENAPP_LOG_FILE</code>（預設 <code>genapp.log</code>）</td></tr>
+</table></div>
+
+<h3>程式流程</h3>
+<ol style="margin:0 0 16px 20px;font-size:13px;line-height:2">
+  <li><code>ACCEPT WS-SYSID FROM ENVIRONMENT 'GENAPP_SYSID'</code>（預設 'SYS1'）</li>
+  <li><code>ACCEPT WS-INVOKEPROG FROM ENVIRONMENT 'GENAPP_INVOKING_PROG'</code>（預設 'UNKNOWN'）</li>
+  <li><code>ACCEPT WS-LOG-PATH FROM ENVIRONMENT 'GENAPP_LOG_FILE'</code>（預設 'genapp.log'）</li>
+  <li><code>ACCEPT WS-DATE-8 FROM CENTURY-DATE</code>（YYYYMMDD）</li>
+  <li><code>ACCEPT WS-TIME-8 FROM TIME</code>（HHMMSSss）</li>
+  <li>組裝日誌記錄：[日期][時間][程式名][訊息]</li>
+  <li><code>OPEN EXTEND LOG-FILE</code>（附加模式，若失敗則 OPEN OUTPUT 新建）</li>
+  <li><code>WRITE LOG-RECORD</code></li>
+  <li><code>CLOSE LOG-FILE</code></li>
+  <li>若非程式呼叫（INVOKEPROG=SPACES）：<code>DISPLAY WINDOW ERASE</code></li>
+  <li>GOBACK</li>
+</ol>
+
+<h3>日誌記錄格式（109 bytes）</h3>
+<pre>[YYYYMMDD] [HHMMSSss] [PROG    ] [訊息內容（90 bytes）             ]</pre>
+<div class="tbl-wrap"><table>
+  <tr><th>欄位</th><th>PIC</th><th>說明</th></tr>
+  <tr><td>WS-LE-DATE</td><td>X(8)</td><td>日期（YYYYMMDD）</td></tr>
+  <tr><td>WS-LE-TIME</td><td>X(8)</td><td>時間（HHMMSSss）</td></tr>
+  <tr><td>WS-LE-PROG</td><td>X(8)</td><td>呼叫程式名稱（GENAPP_INVOKING_PROG）</td></tr>
+  <tr><td>WS-LE-MSG</td><td>X(90)</td><td>訊息內容（COMMA-DATA）</td></tr>
+</table></div>
+
+<h3>呼叫此程式的完整清單</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>程式</th><th>呼叫時機</th></tr>
+  <tr><td>LGAPOL01 / LGIPOL01 / LGDPOL01 / LGUPOL01</td><td>WRITE-ERROR-MESSAGE 段落（COMMAREA 錯誤、ABEND）</td></tr>
+  <tr><td>LGAPDB01 / LGIPDB01 / LGDPDB01 / LGUPDB01</td><td>SQL 錯誤（SQLCODE 非零）</td></tr>
+  <tr><td>LGACUS01 / LGICUS01 / LGUCUS01</td><td>WRITE-ERROR-MESSAGE 段落</td></tr>
+  <tr><td>LGACDB01 / LGICDB01 / LGUCDB01 / LGACDB02</td><td>SQL 錯誤</td></tr>
+  <tr><td>LGAPVS01 等 VSAM 層程式</td><td>VSAM 寫入錯誤</td></tr>
+</table></div>
+
+<h2 id="dataflow">第七章：IS EXTERNAL 三程式共用資料流</h2>
+<pre>系統啟動
+    LGSETUP
+        GENA-CUSTNUM = GENAPP_INITIAL_CUSTNUM
+        GENA-CNT(1-26) = 0
+        建立 GENAPP-LOG 日誌檔
+
+交易處理（每次業務操作）
+    業務程式 → 發生錯誤 → CALL LGSTSQ（寫入 genapp.log）
+    LGASTAT1 → ACCEPT 交易碼/返回碼 → GENA-CNT(i) += 1
+
+背景監控（每 60 秒）
+    LGWEBST5 → 讀取 GENA-CUSTNUM, GENA-CNT(1-26) → 輸出統計
+
+新增客戶時
+    LGACDB01 → GENA-CUSTNUM += 1 → 以新流水號作為 CA-CUSTOMER-NUM</pre>
+
+<h2 id="ops">第八章：運維注意事項</h2>
+
+<div class="callout danger">
+  <strong>⚠ 啟動順序關鍵</strong>
+  <code>LGSETUP</code> 必須在任何業務程式前執行，否則 IS EXTERNAL 計數陣列未初始化，LGACDB01 無法取得正確客戶流水號（初始值 = 0 視為未初始化）。
+</div>
+
+<h3>常見問題排查</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>問題現象</th><th>可能原因</th><th>解決方式</th></tr>
+  <tr><td>客戶號碼從 0 開始</td><td>LGSETUP 未執行</td><td>先執行 LGSETUP，設定 GENAPP_INITIAL_CUSTNUM</td></tr>
+  <tr><td>日誌無輸出</td><td>GENAPP_LOG_FILE 路徑不存在</td><td>確認目錄存在且有寫入權限</td></tr>
+  <tr><td>LGWEBST5 無法停止</td><td>GENAPP_STOP_LGWEBST5 未設定</td><td><code>export GENAPP_STOP_LGWEBST5=STOP</code></td></tr>
+  <tr><td>統計計數不準確</td><td>LGASTAT1 環境變數設定錯誤</td><td>確認 GENAPP_STAT_REQ 和 GENAPP_STAT_RC</td></tr>
+</table></div>
+
+<h2 id="envvars">第九章：完整環境變數清單</h2>
+<div class="tbl-wrap"><table>
+  <tr><th>環境變數</th><th>使用程式</th><th>必要性</th><th>預設值</th><th>說明</th></tr>
+  <tr><td><code>GENAPP_INITIAL_CUSTNUM</code></td><td>LGSETUP</td><td><span class="badge badge-red">必要</span></td><td>—</td><td>客戶流水號初始值</td></tr>
+  <tr><td><code>GENAPP_LOG_FILE</code></td><td>LGSTSQ, LGSETUP</td><td><span class="badge badge-yellow">建議</span></td><td>genapp.log</td><td>日誌檔絕對路徑</td></tr>
+  <tr><td><code>GENAPP_SYSID</code></td><td>LGSTSQ</td><td><span class="badge badge-green">可選</span></td><td>SYS1</td><td>系統識別碼（4 字元）</td></tr>
+  <tr><td><code>GENAPP_INVOKING_PROG</code></td><td>LGSTSQ</td><td>自動設定</td><td>UNKNOWN</td><td>呼叫程式名稱</td></tr>
+  <tr><td><code>GENAPP_START_TIME</code></td><td>LGASTAT1</td><td>自動設定</td><td>—</td><td>系統啟動時間戳記</td></tr>
+  <tr><td><code>GENAPP_STAT_REQ</code></td><td>LGASTAT1</td><td><span class="badge badge-red">必要</span></td><td>—</td><td>統計請求交易代碼</td></tr>
+  <tr><td><code>GENAPP_STAT_RC</code></td><td>LGASTAT1</td><td><span class="badge badge-red">必要</span></td><td>—</td><td>統計請求返回碼</td></tr>
+  <tr><td><code>GENAPP_STOP_LGWEBST5</code></td><td>LGWEBST5</td><td>運維用</td><td>—</td><td>設為 'STOP' 停止背景服務</td></tr>
+  <tr><td><code>GENAPP_APPLID</code></td><td>LGWEBST5</td><td><span class="badge badge-green">可選</span></td><td><span class="tbd">TBD</span></td><td>應用識別碼</td></tr>
+  <tr><td><code>GENAPP_TRANSID</code></td><td>所有業務程式</td><td><span class="badge badge-green">可選</span></td><td>LGAP/LGAC</td><td>交易識別碼</td></tr>
+  <tr><td><code>GENAPP_TERMID</code></td><td>所有業務程式</td><td><span class="badge badge-green">可選</span></td><td>ACU1</td><td>終端識別碼</td></tr>
+  <tr><td><code>GENAPP_TASKNUM</code></td><td>所有業務程式</td><td><span class="badge badge-green">可選</span></td><td>0</td><td>任務號碼</td></tr>
+</table></div>
+
+<h2 id="diagrams">圖表</h2>
+
+<div class="mermaid-wrap">
+  <h4>圖 5-1：基礎設施程式互動圖</h4>
+  <div class="mermaid">
+flowchart LR
+  subgraph INIT["初始化（系統啟動）"]
+    LGSETUP["LGSETUP"]
+  end
+  subgraph BIZ["業務交易（每次操作）"]
+    BUS["業務程式群\nLGAPOL01 等"]
+    LGASTAT1["LGASTAT1\n統計計數更新"]
+  end
+  subgraph MON["背景監控（每 60 秒）"]
+    LGWEBST5["LGWEBST5\n統計輸出"]
+  end
+  subgraph LOG["錯誤日誌（共用）"]
+    LGSTSQ["LGSTSQ\n錯誤日誌服務"]
+  end
+  EXT["IS EXTERNAL\nGENA-COUNTERS\n計數陣列"]
+  LOGFILE[("genapp.log")]
+
+  LGSETUP -->|初始化| EXT
+  BUS -->|遞增流水號| EXT
+  BUS -->|錯誤時| LGSTSQ
+  LGASTAT1 -->|遞增計數器| EXT
+  LGWEBST5 -->|定期讀取| EXT
+  LGSTSQ -->|寫入| LOGFILE
+  </div>
+</div>
+
+<div class="mermaid-wrap">
+  <h4>圖 5-2：LGWEBST5 C$SLEEP 背景服務狀態圖</h4>
+  <div class="mermaid">
+stateDiagram-v2
+  [*] --> 啟動
+  啟動 --> 檢查停止旗標 : acurun LGWEBST5
+  檢查停止旗標 --> 正常退出 : GENAPP_STOP_LGWEBST5 = STOP
+  檢查停止旗標 --> 讀取計數陣列 : 否則繼續
+  讀取計數陣列 --> 組裝統計輸出
+  組裝統計輸出 --> 輸出統計報告
+  輸出統計報告 --> 等待60秒 : C$SLEEP 60
+  等待60秒 --> 檢查停止旗標
+  正常退出 --> [*]
+  </div>
+</div>
+
+<div class="mermaid-wrap">
+  <h4>圖 5-3：LGASTAT1 計數器更新流程</h4>
+  <div class="mermaid">
+flowchart TD
+  Start([MAINLINE 進入]) --> AccReq[ACCEPT GENAPP_STAT_REQ\n取得交易代碼]
+  AccReq --> AccRC[ACCEPT GENAPP_STAT_RC\n取得返回碼]
+  AccRC --> AccTime[ACCEPT GENAPP_START_TIME\n檢查啟動時間]
+  AccTime --> ChkTime{GENAPP_START_TIME\n已設定}
+  ChkTime -->|否| SetTime[記錄當前時間為啟動時間]
+  ChkTime -->|是| Match
+  SetTime --> Match[比對交易代碼\n找出 GENA-CNT 索引]
+  Match --> Incr[GENA-CNT 對應索引 += 1]
+  Incr --> End([GOBACK])
+  </div>
+</div>
+
+<footer>Made with IBM Bob</footer>
+</main>
+</div>
+<script>mermaid.initialize({startOnLoad:true,theme:'default',securityLevel:'loose'});</script>
+</body>
+</html>

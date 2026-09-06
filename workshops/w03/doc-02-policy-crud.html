@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GENAPP 保單 CRUD 業務層 | COBOL 技術文件</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --ibm-blue:#0f62fe; --ibm-bg:#fff; --ibm-surface:#f4f4f4; --ibm-border:#e0e0e0; --ibm-text:#161616; --ibm-muted:#6f6f6f; --nav-h:48px; }
+  body { font-family:'IBM Plex Sans',sans-serif; font-size:14px; line-height:1.6; color:var(--ibm-text); background:var(--ibm-bg); }
+  nav { position:fixed; top:0; left:0; right:0; height:var(--nav-h); background:#161616; display:flex; align-items:center; padding:0 16px; gap:4px; z-index:100; }
+  nav a { color:#f4f4f4; text-decoration:none; padding:6px 12px; font-size:13px; }
+  nav a:hover { background:#393939; }
+  nav a.active { border-bottom:2px solid var(--ibm-blue); }
+  nav .nav-title { color:#8d8d8d; font-size:13px; margin-right:8px; padding-right:12px; border-right:1px solid #393939; }
+  .page-wrap { display:flex; margin-top:var(--nav-h); }
+  aside { width:220px; flex-shrink:0; position:sticky; top:var(--nav-h); height:calc(100vh - var(--nav-h)); overflow-y:auto; background:var(--ibm-surface); border-right:1px solid var(--ibm-border); padding:16px 0; }
+  aside h3 { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:var(--ibm-muted); padding:0 16px 8px; }
+  aside a { display:block; padding:6px 16px; font-size:13px; color:var(--ibm-text); text-decoration:none; border-left:3px solid transparent; }
+  aside a:hover { background:var(--ibm-border); }
+  main { flex:1; padding:32px 40px; max-width:960px; }
+  h1 { font-size:28px; font-weight:300; margin-bottom:4px; }
+  .doc-meta { font-size:12px; color:var(--ibm-muted); margin-bottom:32px; padding-bottom:16px; border-bottom:1px solid var(--ibm-border); }
+  h2 { font-size:20px; font-weight:500; margin:40px 0 16px; padding-bottom:8px; border-bottom:2px solid var(--ibm-blue); }
+  h3 { font-size:16px; font-weight:500; margin:24px 0 12px; }
+  h4 { font-size:14px; font-weight:600; margin:16px 0 8px; }
+  p { margin-bottom:12px; }
+  .tbl-wrap { overflow-x:auto; margin:16px 0; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th { background:#e8e8e8; font-weight:600; text-align:left; padding:8px 12px; border-bottom:2px solid var(--ibm-border); }
+  td { padding:7px 12px; border-bottom:1px solid var(--ibm-border); vertical-align:top; }
+  tr:nth-child(even) td { background:var(--ibm-surface); }
+  code { font-family:'IBM Plex Mono',monospace; font-size:12px; background:#e8e8e8; padding:1px 5px; }
+  pre { background:#282828; color:#f4f4f4; padding:16px; overflow-x:auto; margin:12px 0; font-family:'IBM Plex Mono',monospace; font-size:12px; line-height:1.5; }
+  .callout { border-left:4px solid; padding:12px 16px; margin:16px 0; font-size:13px; }
+  .callout.warn { border-color:#ff832b; background:#fff2e8; }
+  .callout.info { border-color:var(--ibm-blue); background:#edf5ff; }
+  .callout strong { display:block; margin-bottom:4px; }
+  .mermaid-wrap { background:var(--ibm-surface); border:1px solid var(--ibm-border); padding:16px; margin:16px 0; }
+  .mermaid-wrap h4 { font-size:13px; color:var(--ibm-muted); margin-bottom:12px; }
+  .mermaid { text-align:center; }
+  .badge { display:inline-block; padding:2px 8px; font-size:11px; font-weight:600; }
+  .badge-green { background:#defbe6; color:#0e6027; }
+  .badge-blue { background:#edf5ff; color:#0043ce; }
+  .badge-yellow { background:#fdf1c2; color:#735a00; }
+  .tbd { color:#ff832b; font-style:italic; font-size:12px; }
+  footer { text-align:center; font-size:12px; color:var(--ibm-muted); padding:24px 16px; border-top:1px solid var(--ibm-border); margin-top:48px; }
+</style>
+</head>
+<body>
+<nav>
+  <span class="nav-title">GENAPP COBOL 技術文件</span>
+  <a href="doc-01-system-overview.html">01 系統總覽</a>
+  <a href="doc-02-policy-crud.html" class="active">02 保單 CRUD</a>
+  <a href="doc-03-customer-crud.html">03 客戶 CRUD</a>
+  <a href="doc-04-data-structures.html">04 資料結構</a>
+  <a href="doc-05-infrastructure.html">05 基礎設施</a>
+</nav>
+<div class="page-wrap">
+<aside>
+  <h3>本文件章節</h3>
+  <a href="#overview">程式總表</a>
+  <a href="#domain">保單業務域</a>
+  <a href="#add">新增保單 ADD</a>
+  <a href="#inq">查詢保單 INQ</a>
+  <a href="#del">刪除保單 DEL</a>
+  <a href="#upd">更新保單 UPD</a>
+  <a href="#error-msg">錯誤訊息段落</a>
+  <a href="#returns">返回碼定義</a>
+  <a href="#diagrams">圖表</a>
+</aside>
+<main>
+<h1>GENAPP 保單 CRUD 業務層技術文件</h1>
+<div class="doc-meta">文件版本：1.0 ｜ 產出日期：2026-05-08 ｜ 盤點人：<span class="tbd">TBD</span> ｜ 審核人：<span class="tbd">TBD</span></div>
+
+<h2 id="overview">第一章：程式總表</h2>
+<div class="tbl-wrap"><table>
+  <tr><th>操作</th><th>業務邏輯層</th><th>DB2 存取層</th><th>VSAM 存取層</th></tr>
+  <tr><td>新增（ADD）</td><td><code>LGAPOL01</code></td><td><code>LGAPDB01</code></td><td><code>LGAPVS01</code></td></tr>
+  <tr><td>查詢（INQ）</td><td><code>LGIPOL01</code></td><td><code>LGIPDB01</code></td><td><code>LGIPVS01</code></td></tr>
+  <tr><td>刪除（DEL）</td><td><code>LGDPOL01</code></td><td><code>LGDPDB01</code></td><td><code>LGDPVS01</code></td></tr>
+  <tr><td>更新（UPD）</td><td><code>LGUPOL01</code></td><td><code>LGUPDB01</code></td><td><code>LGUPVS01</code></td></tr>
+</table></div>
+
+<h2 id="domain">第二章：保單業務域說明</h2>
+<h3>五種保單類型</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>類型代碼</th><th>類型名稱</th><th>關鍵欄位</th></tr>
+  <tr><td>E</td><td>Endowment（養老保險）</td><td>收益分享、股票、基金、保期、保額、被保人</td></tr>
+  <tr><td>H</td><td>House（房屋保險）</td><td>房產類型、臥室數、房屋估值、地址</td></tr>
+  <tr><td>M</td><td>Motor（汽車保險）</td><td>廠牌、型號、車牌、排氣量、保費、事故記錄</td></tr>
+  <tr><td>B</td><td>Commercial（商業保險）</td><td>地址、座標、火災/犯罪/洪水/天候四類風險溢價</td></tr>
+  <tr><td>C</td><td>Claim（理賠）</td><td>理賠編號、日期、已付金額、理賠金額、原因</td></tr>
+</table></div>
+
+<h2 id="add">第三章：新增保單（ADD Policy）</h2>
+
+<h3>LGAPOL01 — 業務邏輯層</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>項目</th><th>內容</th></tr>
+  <tr><td>Program-ID</td><td><code>LGAPOL01</code></td></tr>
+  <tr><td>功能</td><td>新增保單業務邏輯層；驗證 COMMAREA、套用業務規則（可選）、呼叫 DB2 新增層</td></tr>
+  <tr><td>進入點</td><td>MAINLINE SECTION</td></tr>
+  <tr><td>退出點</td><td>GOBACK（正常）/ STOP RUN（ABEND）</td></tr>
+  <tr><td>使用 Copybook</td><td>LGCMAREA.cpy（LINKAGE SECTION）</td></tr>
+</table></div>
+
+<h4>程式流程</h4>
+<ol style="margin:0 0 16px 20px; font-size:13px; line-height:2">
+  <li>初始化 WS-HEADER（WS-EYECATCHER = <code>'LGAPOL01------WS'</code>）</li>
+  <li><code>ACCEPT WS-TRANSID FROM ENVIRONMENT 'GENAPP_TRANSID'</code></li>
+  <li>驗證 DFHCOMMAREA 不為 SPACES（否則 STOP RUN）</li>
+  <li>設定 <code>CA-RETURN-CODE = '00'</code></li>
+  <li>驗證 <code>LENGTH OF DFHCOMMAREA &lt; WS-CA-HEADER-LEN（28）</code> → 返回碼 <code>98</code></li>
+  <li>若 <code>IN-RULES-MODE = 'Y'</code> 且 <code>CA-REQUEST-ID = '01AEND'</code> → <code>CALL 'LGAPBR01'</code>（ODM，<span class="tbd">TBD</span>）</li>
+  <li><code>CALL 'LGAPDB01' USING BY REFERENCE DFHCOMMAREA RETURNING WS-DB-RETURN-CODE</code></li>
+  <li>若 <code>CA-RETURN-CODE &gt; 0</code> → GOBACK</li>
+  <li>正常結束：GOBACK</li>
+</ol>
+
+<h4>關鍵資料結構</h4>
+<div class="tbl-wrap"><table>
+  <tr><th>名稱</th><th>型態</th><th>說明</th></tr>
+  <tr><td><code>WS-CA-HEADER-LEN</code></td><td>Level 78 VALUE 28</td><td>COMMAREA 最小長度編譯期常數</td></tr>
+  <tr><td><code>BUSINESS-RULES</code></td><td>PIC X</td><td>ODM 模式旗標（'N'=標準, 'Y'=業務規則）</td></tr>
+  <tr><td><code>IN-STANDARD-MODE</code></td><td>88-level VALUE 'N'</td><td>預設啟用</td></tr>
+  <tr><td><code>IN-RULES-MODE</code></td><td>88-level VALUE 'Y'</td><td>需手動設定</td></tr>
+  <tr><td><code>WS-DB-RETURN-CODE</code></td><td>PIC 9(2)</td><td>子程式回傳碼</td></tr>
+  <tr><td><code>WS-VARY-FIELD</code></td><td>49/49 VARCHAR</td><td>ENDOWMENT PADDINGDATA 長度暫存</td></tr>
+</table></div>
+
+<h4>錯誤處理</h4>
+<div class="tbl-wrap"><table>
+  <tr><th>返回碼</th><th>條件</th><th>處理方式</th></tr>
+  <tr><td><code>98</code></td><td>COMMAREA 長度不足</td><td>MOVE '98' TO CA-RETURN-CODE; GOBACK</td></tr>
+  <tr><td>ABEND</td><td>DFHCOMMAREA 為 SPACES</td><td>DISPLAY UPON SYSERR; STOP RUN</td></tr>
+</table></div>
+
+<h3>LGAPDB01 — DB2 存取層</h3>
+<p><strong>功能</strong>：INSERT POLICY 主表及各類保單子表；計算 PADDINGDATA VARCHAR 長度；呼叫 LGAPVS01</p>
+
+<h4>SQL 操作彙整</h4>
+<div class="tbl-wrap"><table>
+  <tr><th>操作類型</th><th>目標表</th><th>觸發條件</th></tr>
+  <tr><td>INSERT</td><td>POLICY</td><td>每次新增保單</td></tr>
+  <tr><td>INSERT</td><td>ENDOWMENT</td><td>CA-REQUEST-ID = '01AEND'</td></tr>
+  <tr><td>INSERT</td><td>HOUSE</td><td>CA-REQUEST-ID = '01AHOU'</td></tr>
+  <tr><td>INSERT</td><td>MOTOR</td><td>CA-REQUEST-ID = '01AMOT'</td></tr>
+  <tr><td>INSERT</td><td>COMMERCIAL</td><td>CA-REQUEST-ID = '01ACOM'</td></tr>
+  <tr><td>INSERT</td><td>CLAIM</td><td>CA-REQUEST-ID = '01ACLM'</td></tr>
+</table></div>
+
+<div class="callout info">
+  <strong>PADDINGDATA VARCHAR 特殊計算</strong>
+  ENDOWMENT 的 DB2-E-PADDINGDATA 為可變長度欄位，長度由：<br>
+  <code>WS-VARY-LEN = LENGTH OF DFHCOMMAREA - WS-REQUIRED-CA-LEN</code><br>
+  計算（原始 z/OS 使用 EIBCALEN，轉置後等效替代）
+</div>
+
+<h3>LGAPVS01 — VSAM 存取層</h3>
+<h4>VSAM 檔案定義</h4>
+<div class="tbl-wrap"><table>
+  <tr><th>項目</th><th>內容</th></tr>
+  <tr><td>邏輯名稱</td><td>KSDSPOLY-FILE</td></tr>
+  <tr><td>實體路徑</td><td>由環境變數 DYNAMIC WS-KSDSPOLY-PATH 指定</td></tr>
+  <tr><td>組織</td><td>INDEXED（取代 z/OS VSAM KSDS）</td></tr>
+  <tr><td>存取模式</td><td>RANDOM</td></tr>
+  <tr><td>記錄長度</td><td>64 bytes</td></tr>
+</table></div>
+<pre>WF-Policy-Key（21 bytes）
+├── WF-Request-ID      PIC X       (1)  保單類型代碼
+├── WF-Customer-Num    PIC X(10)   (10) 客戶號碼
+└── WF-Policy-Num      PIC X(10)   (10) 保單號碼
+
+WF-Policy-Data（43 bytes）
+└── WF-C-Policy-Data REDEFINES（商業保險特用）
+    ├── WF-B-Postcode   PIC X(8)
+    ├── WF-B-Status     PIC 9(4)
+    └── WF-B-Customer   PIC X(31)</pre>
+
+<h2 id="inq">第四章：查詢保單（INQ Policy）</h2>
+
+<h3>LGIPOL01 — 業務邏輯層</h3>
+<div class="callout info">
+  <strong>ICOM Channel/Container 轉置設計</strong>
+  原始 z/OS 版本使用 CICS Channel/Container 回傳多筆商業保單，轉置後改為額外 BY REFERENCE 參數：
+  <br><code>ICOM-RECORD PIC X(1202)</code> — 單筆資料緩衝區
+  <br><code>ICOM-RECORD-COUNT PIC S9(4)</code> — 實際回傳筆數
+</div>
+
+<h3>LGIPDB01 / LGIPVS01</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>程式</th><th>操作</th><th>目標</th></tr>
+  <tr><td>LGIPDB01</td><td>SELECT</td><td>POLICY + 各保單子表（依類型）</td></tr>
+  <tr><td>LGIPVS01</td><td>READ（RANDOM）</td><td>KSDSPOLY-FILE（以複合鍵）</td></tr>
+</table></div>
+
+<h2 id="del">第五章：刪除保單（DEL Policy）</h2>
+
+<h3>LGDPOL01 — 業務邏輯層</h3>
+<div class="callout warn">
+  <strong>VSAM 刪除段落注意</strong>
+  LGDPOL01 中的 <code>*DELETE-POLICY-VSAM</code> 段落在原始程式中為注掉狀態，轉置時原樣保留。VSAM 刪除由 LGDPDB01 負責呼叫 LGDPVS01。
+</div>
+
+<h3>LGDPDB01 — DB2 存取層</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>操作類型</th><th>目標表</th><th>說明</th></tr>
+  <tr><td>DELETE</td><td>POLICY</td><td>以客戶號+保單號刪除；FK CASCADE 傳播至子表</td></tr>
+</table></div>
+<div class="callout warn">
+  <strong>原始程式已知問題</strong>
+  原始 IBM 程式 ERROR-MSG 的程式名稱誤植為 <code>LGDPOL01</code>（應為 <code>LGDPDB01</code>），轉置版本已更正。
+</div>
+
+<h2 id="upd">第六章：更新保單（UPD Policy）</h2>
+
+<h3>LGUPOL01 — 業務邏輯層（動態長度驗證）</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>保單類型</th><th>使用常數</th><th>值（bytes）</th></tr>
+  <tr><td>Endowment</td><td>WS-FULL-ENDOW-LEN</td><td>124</td></tr>
+  <tr><td>House</td><td>WS-FULL-HOUSE-LEN</td><td>130</td></tr>
+  <tr><td>Motor</td><td>WS-FULL-MOTOR-LEN</td><td>137</td></tr>
+  <tr><td>Commercial</td><td>WS-FULL-COMM-LEN</td><td>1174</td></tr>
+  <tr><td>Claim</td><td>WS-FULL-CLAIM-LEN</td><td>618</td></tr>
+</table></div>
+
+<h3>LGUPDB01 — DB2 存取層（游標鎖定）</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>操作類型</th><th>目標表</th><th>說明</th></tr>
+  <tr><td>SELECT FOR UPDATE（游標）</td><td>POLICY</td><td>POLICY_CURSOR 定位更新用</td></tr>
+  <tr><td>UPDATE</td><td>ENDOWMENT / HOUSE / MOTOR</td><td>更新保單子表</td></tr>
+  <tr><td>ROLLBACK</td><td>—</td><td>原 EXEC CICS SYNCPOINT ROLLBACK → AcuSQL EXEC SQL ROLLBACK</td></tr>
+</table></div>
+<div class="callout warn">
+  <strong>PADDINGDATA 欄位注意</strong>
+  ENDOWMENT UPDATE 中的 PADDINGDATA 欄位有原始 STEW 標記（注掉），轉置後原樣保留。
+</div>
+
+<h2 id="error-msg">第七章：WRITE-ERROR-MESSAGE 共用段落</h2>
+<p>所有保單程式均包含此段落，呼叫 <code>LGSTSQ</code> 記錄錯誤：</p>
+<pre>WRITE-ERROR-MESSAGE.
+    ACCEPT WS-DATE FROM CENTURY-DATE      &lt;-- 手冊 p.190 Format 3
+    ACCEPT WS-TIME FROM TIME
+    MOVE WS-DATE(1:8) TO EM-DATE
+    MOVE WS-TIME(1:6) TO EM-TIME
+    CALL 'LGSTSQ' USING BY REFERENCE ERROR-MSG     &lt;-- 手冊 p.217
+    MOVE DFHCOMMAREA(1:90) TO CA-DATA
+    CALL 'LGSTSQ' USING BY REFERENCE CA-ERROR-MSG</pre>
+<div class="tbl-wrap"><table>
+  <tr><th>欄位</th><th>PIC</th><th>說明</th></tr>
+  <tr><td>EM-DATE</td><td>X(8)</td><td>日期（YYYYMMDD）</td></tr>
+  <tr><td>EM-TIME</td><td>X(6)</td><td>時間（HHMMSS）</td></tr>
+  <tr><td>EM-PROG（FILLER）</td><td>X(9)</td><td>程式名稱（如 ' LGAPDB01'）</td></tr>
+  <tr><td>EM-CUSNUM</td><td>X(10)</td><td>客戶號碼</td></tr>
+  <tr><td>EM-POLNUM</td><td>X(10)</td><td>保單號碼</td></tr>
+  <tr><td>EM-SQLREQ</td><td>X(16)</td><td>SQL 操作描述</td></tr>
+  <tr><td>EM-SQLRC</td><td>+9(5)</td><td>SQLCODE 值</td></tr>
+</table></div>
+
+<h2 id="returns">第八章：返回碼定義</h2>
+<div class="tbl-wrap"><table>
+  <tr><th>返回碼</th><th>含義</th><th>設定程式</th></tr>
+  <tr><td><code>00</code></td><td><span class="badge badge-green">成功</span></td><td>所有保單業務邏輯層</td></tr>
+  <tr><td><code>98</code></td><td><span class="badge badge-yellow">COMMAREA 長度不足</span></td><td>LGAPOL01、LGUPOL01 等</td></tr>
+  <tr><td><code>99</code></td><td><span class="tbd">TBD（一般錯誤）</span></td><td>TBD</td></tr>
+</table></div>
+
+<h2 id="diagrams">圖表</h2>
+
+<div class="mermaid-wrap">
+  <h4>圖 2-1：保單 ADD 呼叫鏈（sequenceDiagram）</h4>
+  <div class="mermaid">
+sequenceDiagram
+  participant C as 呼叫端
+  participant P01 as LGAPOL01
+  participant PDB as LGAPDB01
+  participant PVS as LGAPVS01
+  participant SQ as LGSTSQ
+
+  C->>P01: CALL USING DFHCOMMAREA
+  P01->>P01: 驗證 COMMAREA 長度 >= 28
+  alt COMMAREA 長度不足
+    P01-->>C: CA-RETURN-CODE = 98
+  end
+  opt IN-RULES-MODE = Y 且 01AEND
+    P01->>P01: CALL LGAPBR01 ODM規則
+  end
+  P01->>PDB: CALL USING DFHCOMMAREA
+  PDB->>PDB: INSERT POLICY
+  PDB->>PDB: INSERT 保單子表
+  alt DB2 錯誤
+    PDB->>SQ: CALL USING ERROR-MSG
+    PDB-->>P01: 返回碼 gt 0
+  end
+  PDB->>PVS: CALL USING DFHCOMMAREA
+  PVS->>PVS: WRITE KSDSPOLY-FILE
+  PVS-->>PDB: 返回碼 = 0
+  PDB-->>P01: 返回碼 = 0
+  P01-->>C: CA-RETURN-CODE = 00
+  </div>
+</div>
+
+<div class="mermaid-wrap">
+  <h4>圖 2-2：新增保單業務流程</h4>
+  <div class="mermaid">
+flowchart TD
+  Start([MAINLINE 進入]) --> Init[初始化 WS-HEADER]
+  Init --> AccEnv[ACCEPT FROM ENVIRONMENT]
+  AccEnv --> ChkCA{DFHCOMMAREA = SPACES}
+  ChkCA -->|是| Abend[DISPLAY UPON SYSERR\nSTOP RUN]
+  ChkCA -->|否| SetRC[CA-RETURN-CODE = 00]
+  SetRC --> ChkLen{LENGTH OF DFHCOMMAREA\n小於 WS-CA-HEADER-LEN 28}
+  ChkLen -->|是| RC98[CA-RETURN-CODE = 98\nGOBACK]
+  ChkLen -->|否| ChkODM{IN-RULES-MODE = Y\n且 01AEND}
+  ChkODM -->|是| CallODM[CALL LGAPBR01]
+  ChkODM -->|否| CallDB[CALL LGAPDB01]
+  CallODM --> CallDB
+  CallDB --> ChkRC{CA-RETURN-CODE gt 0}
+  ChkRC -->|是| GBErr[GOBACK 含錯誤碼]
+  ChkRC -->|否| GBOk[GOBACK 正常]
+  </div>
+</div>
+
+<div class="mermaid-wrap">
+  <h4>圖 2-3：保單類型資料分支（LGAPDB01 內部）</h4>
+  <div class="mermaid">
+flowchart LR
+  Start[收到 DFHCOMMAREA] --> InsertPol[INSERT POLICY 主表]
+  InsertPol --> Check{CA-REQUEST-ID}
+  Check -->|01AEND| InsEnd[INSERT ENDOWMENT\n計算 PADDINGDATA 長度]
+  Check -->|01AHOU| InsHou[INSERT HOUSE]
+  Check -->|01AMOT| InsMot[INSERT MOTOR]
+  Check -->|01ACOM| InsCom[INSERT COMMERCIAL]
+  Check -->|01ACLM| InsClm[INSERT CLAIM]
+  InsEnd & InsHou & InsMot & InsCom & InsClm --> CallVS[CALL LGAPVS01]
+  </div>
+</div>
+
+<div class="mermaid-wrap">
+  <h4>圖 2-4：VSAM KSDS 複合鍵結構</h4>
+  <div class="mermaid">
+classDiagram
+  class KSDSPOLY_RECORD {
+    string POLICY_KEY
+    string POLICY_DATA
+  }
+  class WF_Policy_Key {
+    string WF_REQUEST_ID
+    string WF_CUSTOMER_NUM
+    string WF_POLICY_NUM
+  }
+  class WF_Policy_Data {
+    string WF_POLICY_TYPE
+    string WF_ISSUE_DATE
+    string WF_EXPIRY_DATE
+    string WF_BROKER_ID
+  }
+  class WF_C_Policy_Data {
+    string WF_B_POSTCODE
+    string WF_B_STATUS
+    string WF_B_CUSTOMER
+  }
+  KSDSPOLY_RECORD --> WF_Policy_Key
+  KSDSPOLY_RECORD --> WF_Policy_Data
+  WF_Policy_Data <-- WF_C_Policy_Data : REDEFINES
+  </div>
+</div>
+
+<footer>Made with IBM Bob</footer>
+</main>
+</div>
+<script>mermaid.initialize({ startOnLoad:true, theme:'default', securityLevel:'loose' });</script>
+</body>
+</html>

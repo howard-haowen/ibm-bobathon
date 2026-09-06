@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GENAPP 客戶 CRUD 業務層 | COBOL 技術文件</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--ibm-blue:#0f62fe;--ibm-bg:#fff;--ibm-surface:#f4f4f4;--ibm-border:#e0e0e0;--ibm-text:#161616;--ibm-muted:#6f6f6f;--nav-h:48px}
+  body{font-family:'IBM Plex Sans',sans-serif;font-size:14px;line-height:1.6;color:var(--ibm-text);background:var(--ibm-bg)}
+  nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:#161616;display:flex;align-items:center;padding:0 16px;gap:4px;z-index:100}
+  nav a{color:#f4f4f4;text-decoration:none;padding:6px 12px;font-size:13px}
+  nav a:hover{background:#393939}
+  nav a.active{border-bottom:2px solid var(--ibm-blue)}
+  nav .nav-title{color:#8d8d8d;font-size:13px;margin-right:8px;padding-right:12px;border-right:1px solid #393939}
+  .page-wrap{display:flex;margin-top:var(--nav-h)}
+  aside{width:220px;flex-shrink:0;position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));overflow-y:auto;background:var(--ibm-surface);border-right:1px solid var(--ibm-border);padding:16px 0}
+  aside h3{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--ibm-muted);padding:0 16px 8px}
+  aside a{display:block;padding:6px 16px;font-size:13px;color:var(--ibm-text);text-decoration:none;border-left:3px solid transparent}
+  aside a:hover{background:var(--ibm-border)}
+  main{flex:1;padding:32px 40px;max-width:960px}
+  h1{font-size:28px;font-weight:300;margin-bottom:4px}
+  .doc-meta{font-size:12px;color:var(--ibm-muted);margin-bottom:32px;padding-bottom:16px;border-bottom:1px solid var(--ibm-border)}
+  h2{font-size:20px;font-weight:500;margin:40px 0 16px;padding-bottom:8px;border-bottom:2px solid var(--ibm-blue)}
+  h3{font-size:16px;font-weight:500;margin:24px 0 12px}
+  h4{font-size:14px;font-weight:600;margin:16px 0 8px}
+  p{margin-bottom:12px}
+  .tbl-wrap{overflow-x:auto;margin:16px 0}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{background:#e8e8e8;font-weight:600;text-align:left;padding:8px 12px;border-bottom:2px solid var(--ibm-border)}
+  td{padding:7px 12px;border-bottom:1px solid var(--ibm-border);vertical-align:top}
+  tr:nth-child(even) td{background:var(--ibm-surface)}
+  code{font-family:'IBM Plex Mono',monospace;font-size:12px;background:#e8e8e8;padding:1px 5px}
+  pre{background:#282828;color:#f4f4f4;padding:16px;overflow-x:auto;margin:12px 0;font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.5}
+  .callout{border-left:4px solid;padding:12px 16px;margin:16px 0;font-size:13px}
+  .callout.warn{border-color:#ff832b;background:#fff2e8}
+  .callout.info{border-color:var(--ibm-blue);background:#edf5ff}
+  .callout strong{display:block;margin-bottom:4px}
+  .mermaid-wrap{background:var(--ibm-surface);border:1px solid var(--ibm-border);padding:16px;margin:16px 0}
+  .mermaid-wrap h4{font-size:13px;color:var(--ibm-muted);margin-bottom:12px}
+  .mermaid{text-align:center}
+  .badge{display:inline-block;padding:2px 8px;font-size:11px;font-weight:600}
+  .badge-green{background:#defbe6;color:#0e6027}
+  .badge-yellow{background:#fdf1c2;color:#735a00}
+  .tbd{color:#ff832b;font-style:italic;font-size:12px}
+  footer{text-align:center;font-size:12px;color:var(--ibm-muted);padding:24px 16px;border-top:1px solid var(--ibm-border);margin-top:48px}
+</style>
+</head>
+<body>
+<nav>
+  <span class="nav-title">GENAPP COBOL 技術文件</span>
+  <a href="doc-01-system-overview.html">01 系統總覽</a>
+  <a href="doc-02-policy-crud.html">02 保單 CRUD</a>
+  <a href="doc-03-customer-crud.html" class="active">03 客戶 CRUD</a>
+  <a href="doc-04-data-structures.html">04 資料結構</a>
+  <a href="doc-05-infrastructure.html">05 基礎設施</a>
+</nav>
+<div class="page-wrap">
+<aside>
+  <h3>本文件章節</h3>
+  <a href="#overview">程式總表</a>
+  <a href="#domain">客戶業務域</a>
+  <a href="#add">新增客戶 ADD</a>
+  <a href="#inq">查詢客戶 INQ</a>
+  <a href="#upd">更新客戶 UPD</a>
+  <a href="#newcust">批次匯入 NEWCUST</a>
+  <a href="#sql">SQL 操作彙整</a>
+  <a href="#issues">已知問題</a>
+  <a href="#diagrams">圖表</a>
+</aside>
+<main>
+<h1>GENAPP 客戶 CRUD 業務層技術文件</h1>
+<div class="doc-meta">文件版本：1.0 ｜ 產出日期：2026-05-08 ｜ 盤點人：<span class="tbd">TBD</span> ｜ 審核人：<span class="tbd">TBD</span></div>
+
+<h2 id="overview">第一章：程式總表</h2>
+<div class="tbl-wrap"><table>
+  <tr><th>操作</th><th>業務邏輯層</th><th>DB2 存取層</th><th>VSAM 存取層</th></tr>
+  <tr><td>新增（ADD）</td><td><code>LGACUS01</code></td><td><code>LGACDB01</code>（+ <code>LGACDB02</code>）</td><td><code>LGACVS01</code></td></tr>
+  <tr><td>查詢（INQ）</td><td><code>LGICUS01</code></td><td><code>LGICDB01</code></td><td><code>LGICVS01</code></td></tr>
+  <tr><td>更新（UPD）</td><td><code>LGUCUS01</code></td><td><code>LGUCDB01</code></td><td><code>LGUCVS01</code></td></tr>
+  <tr><td>批次匯入</td><td colspan="3"><code>NEWCUST</code>（獨立批次程式，不屬於 CICS 交易）</td></tr>
+</table></div>
+
+<h2 id="domain">第二章：客戶業務域說明</h2>
+<h3>CA-CUSTOMER-REQUEST 欄位定義</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>欄位名稱</th><th>PIC</th><th>Bytes</th><th>說明</th></tr>
+  <tr><td><code>CA-FIRST-NAME</code></td><td>X(10)</td><td>10</td><td>名字</td></tr>
+  <tr><td><code>CA-LAST-NAME</code></td><td>X(20)</td><td>20</td><td>姓氏</td></tr>
+  <tr><td><code>CA-DOB</code></td><td>X(10)</td><td>10</td><td>出生日期（⚠ 第 1 字元被 LGICDB01 覆寫為 '3'）</td></tr>
+  <tr><td><code>CA-HOUSE-NAME</code></td><td>X(20)</td><td>20</td><td>房屋名稱</td></tr>
+  <tr><td><code>CA-HOUSE-NUM</code></td><td>X(4)</td><td>4</td><td>門牌號碼</td></tr>
+  <tr><td><code>CA-POSTCODE</code></td><td>X(8)</td><td>8</td><td>郵遞區號（須通過 CHECK-FIRST-COBOL 驗證）</td></tr>
+  <tr><td><code>CA-NUM-POLICIES</code></td><td>9(3)</td><td>3</td><td>客戶保單數量</td></tr>
+  <tr><td><code>CA-PHONE-MOBILE</code></td><td>X(20)</td><td>20</td><td>手機號碼（詐欺檢查：長度 &gt;= 7）</td></tr>
+  <tr><td><code>CA-PHONE-HOME</code></td><td>X(20)</td><td>20</td><td>家用電話</td></tr>
+  <tr><td><code>CA-EMAIL-ADDRESS</code></td><td>X(100)</td><td>100</td><td>電子郵件</td></tr>
+  <tr><td><code>CA-POLICY-DATA</code></td><td>X(32267)</td><td>32267</td><td>保單摘要附加資料</td></tr>
+</table></div>
+
+<h2 id="add">第三章：新增客戶（ADD Customer）</h2>
+
+<h3>LGACUS01 — 業務邏輯層</h3>
+<p><strong>ACUCOBOL-GT 特性 A：$IF/$SET/$END 條件編譯（手冊 p.30-34）</strong></p>
+
+<div class="callout info">
+  <strong>詐欺檢查模式控制</strong>
+  <code>$IF FRAUD-COBOL-MODE</code> 控制詐欺檢查的實作路徑：<br>
+  ● 已定義：純 COBOL 版本 — 檢查手機號碼長度 &gt;= 7<br>
+  ● 預留介面：可擴充為外部服務（原為 CALL JAVA USING LGACJV01）
+</div>
+
+<h4>Java Interop 移除說明</h4>
+<div class="callout warn">
+  <strong>⚠ Java Interop 已完全移除</strong>
+  原始 IBM COBOL 程式包含兩處 <code>CALL JAVA</code>，轉置後全部移除：
+</div>
+<div class="tbl-wrap"><table>
+  <tr><th>原 CALL JAVA</th><th>功能</th><th>轉置後處理</th></tr>
+  <tr><td>LGACJV01</td><td>手機號碼詐欺檢查</td><td>改為純 COBOL 長度檢查（&gt;= 7 位）</td></tr>
+  <tr><td>LGACJV02</td><td>郵遞區號格式檢查（Java 版）</td><td>改用 CHECK-FIRST-COBOL 段落（原已存在的備選版本），CHECK-FIRST-JAVA 段落整個移除</td></tr>
+</table></div>
+
+<h4>關鍵 Level 78 常數</h4>
+<div class="tbl-wrap"><table>
+  <tr><th>名稱</th><th>值</th><th>說明</th></tr>
+  <tr><td><code>WS-CA-HEADER-LEN</code></td><td>18</td><td>客戶 COMMAREA 最小標頭長度（比保單版 28 更小）</td></tr>
+</table></div>
+
+<h4>程式流程</h4>
+<ol style="margin:0 0 16px 20px;font-size:13px;line-height:2">
+  <li><code>ACCEPT FROM ENVIRONMENT</code> — 取得執行期識別資訊</li>
+  <li>驗證 COMMAREA 存在與長度（&gt;= 18）</li>
+  <li>執行 <code>CHECK-FIRST-COBOL</code>（郵遞區號驗證）</li>
+  <li><code>$IF FRAUD-COBOL-MODE</code>：手機號碼長度 &gt;= 7 驗證</li>
+  <li><code>CALL 'LGACDB01' USING BY REFERENCE DFHCOMMAREA RETURNING WS-DB-RETURN-CODE</code></li>
+  <li>GOBACK</li>
+</ol>
+
+<h3>LGACDB01 — DB2 存取層</h3>
+<div class="callout info">
+  <strong>IS EXTERNAL 客戶流水號機制（特性 G，手冊 p.90）</strong>
+  原始 z/OS 使用 <code>EXEC CICS Get Counter(GENACUSTNUM)</code>，轉置後改為 IS EXTERNAL 共用計數區。<br>
+  由 LGSETUP 初始化，LGACDB01 讀取後遞增寫回。若初始值 = 0 則視為未初始化。
+</div>
+
+<h4>CDB2AREA — 呼叫 LGACDB02 的介面結構</h4>
+<div class="tbl-wrap"><table>
+  <tr><th>欄位</th><th>PIC</th><th>說明</th></tr>
+  <tr><td>D2-REQUEST-ID</td><td>X(6)</td><td>請求碼（02ACUS）</td></tr>
+  <tr><td>D2-RETURN-CODE</td><td>9(2)</td><td>返回碼</td></tr>
+  <tr><td>D2-CUSTOMER-NUM</td><td>9(10)</td><td>新分配的客戶號碼</td></tr>
+  <tr><td>D2-CUSTSECR-PASS</td><td>X(32)</td><td>初始密碼（雜湊值）</td></tr>
+  <tr><td>D2-CUSTSECR-COUNT</td><td>X(4)</td><td><span class="tbd">TBD</span></td></tr>
+  <tr><td>D2-CUSTSECR-STATE</td><td>X</td><td><span class="tbd">TBD</span></td></tr>
+  <tr><td>D2-CUSTSECR-DATA</td><td>X(32445)</td><td>安全附加資料</td></tr>
+</table></div>
+
+<h3>LGACDB02 — 客戶安全資料 DB2 層</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>項目</th><th>內容</th></tr>
+  <tr><td>Program-ID</td><td><code>LGACDB02</code></td></tr>
+  <tr><td>功能</td><td>INSERT CUSTOMER_SECURE（呼叫者：LGACDB01）</td></tr>
+  <tr><td>請求碼</td><td>02ACUS</td></tr>
+  <tr><td>使用 Copybook</td><td>LGPOLICY.cpy（Level 78 常數）</td></tr>
+</table></div>
+
+<h2 id="inq">第四章：查詢客戶（INQ Customer）</h2>
+
+<h3>LGICDB01 — DB2 存取層</h3>
+<div class="callout warn">
+  <strong>⚠ 已知行為：CA-DOB(1:1) 被強制覆寫為 '3'</strong>
+  <code>GET-CUSTOMER-INFO</code> 段落在 SQL SELECT 執行後，<code>CA-DOB(1:1)</code> 會被強制覆寫為字元 <code>'3'</code>（維持與 z/OS 生產系統的行為一致性）。<br><br>
+  <strong>下游使用注意</strong>：若需使用出生日期，請使用 <code>CA-DOB(2:9)</code> 取得原始值，而非 <code>CA-DOB</code>。
+</div>
+<div class="callout warn">
+  <strong>⚠ 原始程式 ERROR-MSG 程式名誤植</strong>
+  原始 IBM 版本 EM-PROG 填入 <code>'LGICUS01'</code> 而非 <code>'LGICDB01'</code>，轉置版本已更正。
+</div>
+
+<h2 id="upd">第五章：更新客戶（UPD Customer）</h2>
+<div class="tbl-wrap"><table>
+  <tr><th>程式</th><th>功能</th><th>SQL</th></tr>
+  <tr><td>LGUCUS01</td><td>更新客戶業務邏輯層</td><td>—</td></tr>
+  <tr><td>LGUCDB01</td><td>更新客戶 DB2 存取層</td><td>UPDATE CUSTOMER（以 CA-CUSTOMER-NUM 為條件）</td></tr>
+  <tr><td>LGUCVS01</td><td>更新客戶 VSAM 存取層</td><td>READ + REWRITE（RANDOM）</td></tr>
+</table></div>
+
+<h2 id="newcust">第六章：批次客戶匯入（NEWCUST）</h2>
+<div class="tbl-wrap"><table>
+  <tr><th>項目</th><th>內容</th></tr>
+  <tr><td>Program-ID</td><td><code>NEWCUST</code></td></tr>
+  <tr><td>程式類型</td><td>獨立批次程式（無 DFHCOMMAREA，無 CICS 環境需求）</td></tr>
+  <tr><td>功能</td><td>從循序輸入檔讀取客戶資料，批次 INSERT 進 DB2 CUSTOMER</td></tr>
+  <tr><td>輸入檔路徑</td><td>環境變數 <code>INFILE</code> 指定</td></tr>
+  <tr><td>記錄長度</td><td>140 bytes</td></tr>
+</table></div>
+
+<h4>AcuSQL 兩階段編譯流程</h4>
+<pre># 步驟一：AcuSQL 預處理
+acusql NEWCUST.cbl NEWCUST.cbl.i
+
+# 步驟二：ACUCOBOL-GT 編譯
+ccbl32 -Da4 NEWCUST.cbl.i
+
+# 執行
+export INFILE=/data/newcust.dat
+acurun NEWCUST</pre>
+
+<h4>轉置說明</h4>
+<div class="tbl-wrap"><table>
+  <tr><th>原始 IBM COBOL</th><th>轉置後</th></tr>
+  <tr><td><code>EXEC SQL INCLUDE CUSTOMER</code></td><td><code>COPY "CUSTOMER.def"</code>（AcuSQL 展開為 DCLCUSTOMER）</td></tr>
+  <tr><td><code>EXEC SQL INCLUDE SQLCA</code></td><td><code>COPY "sqlca.def"</code></td></tr>
+  <tr><td><code>RECORDING MODE IS F</code></td><td>移除（ACUCOBOL 不支援 z/OS 特定子句）</td></tr>
+  <tr><td><code>LABEL RECORDS STANDARD</code></td><td>移除</td></tr>
+  <tr><td><code>BLOCK CONTAINS 0 RECORDS</code></td><td>移除</td></tr>
+</table></div>
+
+<h2 id="sql">第七章：SQL 操作彙整</h2>
+<div class="tbl-wrap"><table>
+  <tr><th>程式</th><th>SQL 類型</th><th>資料表</th><th>宿主變數</th><th>交易控制</th></tr>
+  <tr><td>LGACDB01</td><td>INSERT</td><td>CUSTOMER</td><td>DB2-CUSTOMER</td><td><span class="tbd">TBD</span></td></tr>
+  <tr><td>LGACDB02</td><td>INSERT</td><td>CUSTOMER_SECURE</td><td><span class="tbd">TBD</span></td><td><span class="tbd">TBD</span></td></tr>
+  <tr><td>LGICDB01</td><td>SELECT</td><td>CUSTOMER</td><td>DB2-CUSTOMER</td><td>READ-ONLY</td></tr>
+  <tr><td>LGUCDB01</td><td>UPDATE</td><td>CUSTOMER</td><td>DB2-CUSTOMER</td><td><span class="tbd">TBD</span></td></tr>
+  <tr><td>NEWCUST</td><td>INSERT</td><td>CUSTOMER</td><td>DCLCUSTOMER</td><td><span class="tbd">TBD</span></td></tr>
+</table></div>
+
+<h2 id="issues">第八章：已知問題記錄</h2>
+<div class="tbl-wrap"><table>
+  <tr><th>問題</th><th>所在程式</th><th>詳情</th><th>處理</th></tr>
+  <tr><td>CA-DOB(1:1) 被強制覆寫為 '3'</td><td>LGICDB01</td><td>GET-CUSTOMER-INFO 段落，維持 z/OS 生產行為</td><td>使用 CA-DOB(2:9) 取原始值</td></tr>
+  <tr><td>EM-PROG 填入 'LGICUS01' 而非 'LGICDB01'</td><td>LGICDB01（原始版）</td><td>ERROR-MSG 程式名誤植</td><td>轉置版本已更正</td></tr>
+</table></div>
+
+<h2 id="diagrams">圖表</h2>
+
+<div class="mermaid-wrap">
+  <h4>圖 3-1：客戶 ADD 呼叫鏈（sequenceDiagram）</h4>
+  <div class="mermaid">
+sequenceDiagram
+  participant C as 呼叫端
+  participant A01 as LGACUS01
+  participant ADB as LGACDB01
+  participant ADB2 as LGACDB02
+  participant AVS as LGACVS01
+  participant SQ as LGSTSQ
+
+  C->>A01: CALL USING DFHCOMMAREA
+  A01->>A01: 驗證 COMMAREA 長度 >= 18
+  A01->>A01: CHECK-FIRST-COBOL 郵遞區號驗證
+  A01->>A01: IF FRAUD-COBOL-MODE 手機號碼長度驗證
+  alt 驗證失敗
+    A01-->>C: CA-RETURN-CODE 非零
+  end
+  A01->>ADB: CALL USING DFHCOMMAREA
+  ADB->>ADB: 取得 IS EXTERNAL 客戶流水號
+  ADB->>ADB: INSERT CUSTOMER
+  alt DB2 錯誤
+    ADB->>SQ: CALL USING ERROR-MSG
+  end
+  ADB->>AVS: CALL USING DFHCOMMAREA
+  AVS->>AVS: WRITE 客戶 VSAM 檔
+  AVS-->>ADB: 返回碼 = 0
+  ADB->>ADB2: CALL USING CDB2AREA
+  ADB2->>ADB2: INSERT CUSTOMER_SECURE
+  ADB2-->>ADB: 返回碼 = 0
+  ADB-->>A01: 返回碼 = 0
+  A01-->>C: CA-RETURN-CODE = 00
+  </div>
+</div>
+
+<div class="mermaid-wrap">
+  <h4>圖 3-2：新增客戶業務流程（含條件編譯分支）</h4>
+  <div class="mermaid">
+flowchart TD
+  Start([MAINLINE 進入]) --> AccEnv[ACCEPT FROM ENVIRONMENT]
+  AccEnv --> ChkCA{DFHCOMMAREA = SPACES}
+  ChkCA -->|是| Abend[STOP RUN]
+  ChkCA -->|否| ChkLen{COMMAREA 長度 >= 18}
+  ChkLen -->|否| RC98[CA-RETURN-CODE = 98 GOBACK]
+  ChkLen -->|是| PostCode[CHECK-FIRST-COBOL\n郵遞區號驗證]
+  PostCode --> ChkFraud{FRAUD-COBOL-MODE\n已定義}
+  ChkFraud -->|是| FraudChk[手機號碼長度 >= 7 驗證\n純 COBOL 實作]
+  ChkFraud -->|否| CallDB[CALL LGACDB01]
+  FraudChk --> CallDB
+  CallDB --> ChkRC{CA-RETURN-CODE gt 0}
+  ChkRC -->|是| GBErr[GOBACK 含錯誤碼]
+  ChkRC -->|否| GBOk[GOBACK 正常]
+  </div>
+</div>
+
+<div class="mermaid-wrap">
+  <h4>圖 3-3：NEWCUST 批次匯入流程</h4>
+  <div class="mermaid">
+flowchart LR
+  Start([acurun NEWCUST]) --> AccEnv[ACCEPT INFILE\nFROM ENVIRONMENT]
+  AccEnv --> Open[OPEN INPUT INFILE]
+  Open --> Read[READ INPUT01-FILE]
+  Read --> AtEnd{AT END}
+  AtEnd -->|否| Insert[EXEC SQL INSERT\nINTO CUSTOMER]
+  Insert --> ChkSQL{SQLCODE = 0}
+  ChkSQL -->|是| Read
+  ChkSQL -->|否| ErrHandle[記錄 SQL 錯誤]
+  ErrHandle --> Read
+  AtEnd -->|是| Close[CLOSE INPUT01-FILE]
+  Close --> End([GOBACK])
+  </div>
+</div>
+
+<footer>Made with IBM Bob</footer>
+</main>
+</div>
+<script>mermaid.initialize({startOnLoad:true,theme:'default',securityLevel:'loose'});</script>
+</body>
+</html>
