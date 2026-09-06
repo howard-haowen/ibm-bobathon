@@ -282,6 +282,48 @@
       .hero h1 { font-size: 32px; }
       .cta-banner { padding: 32px 24px; }
     }
+
+    /* Copy button / prompt block */
+    .prompt-block {
+      position: relative;
+      background: #f4f4f4;
+      border-left: 4px solid #0f62fe;
+      margin: 16px 0 24px;
+    }
+    .prompt-block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 12px 0 12px;
+    }
+    .prompt-block-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #525252;
+      text-transform: uppercase;
+    }
+    .copy-btn {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #0f62fe;
+      background: #ffffff;
+      border: 1px solid #0f62fe;
+      padding: 3px 10px;
+      cursor: pointer;
+      font-family: inherit;
+      white-space: nowrap;
+      transition: background 0.15s, color 0.15s;
+    }
+    .copy-btn:hover { background: #0f62fe; color: #ffffff; }
+    .copy-btn.copied { background: #198038; border-color: #198038; color: #ffffff; }
+    .prompt-block pre {
+      margin: 0;
+      border-left: none;
+      background: transparent;
+      padding: 10px 20px 16px;
+    }
   </style>
 </head>
 <body>
@@ -308,18 +350,69 @@
     <div class="card-grid">
       <div class="card">
         <p class="card-eyebrow">Mode 1</p>
-        <h3>Plan 規劃模式</h3>
-        <p>專注於分析複雜需求、架構設計或擬定步驟。在此模式下，Bob 會在不撰寫繁複代碼的前提下，幫助您列出技術規範、分析影響範圍與生成 ADR 文件。</p>
+        <h3>Ask 知識模式</h3>
+        <p>專門用來檢索知識、讀懂代碼，或查閱技術文件。適合在新進入一個 Codebase、解讀 COBOL 舊系統或排查日誌錯誤時使用，此模式不會隨意修改您的本地檔案。</p>
       </div>
       <div class="card">
         <p class="card-eyebrow">Mode 2</p>
-        <h3>Ask 知識模式</h3>
-        <p>專門用來檢索知識、讀懂代碼，或查閱技術文件。適合在新進入一個 Codebase、解讀 COBOL 舊系統或排查日誌錯誤時使用，此模式不會隨意修改您的本地檔案。</p>
+        <h3>Plan 規劃模式</h3>
+        <p>專注於分析複雜需求、架構設計或擬定步驟。在此模式下，Bob 會在不撰寫繁複代碼的前提下，幫助您列出技術規範、分析影響範圍與生成 ADR 文件。</p>
       </div>
       <div class="card">
         <p class="card-eyebrow">Mode 3</p>
         <h3>Agent 執行模式</h3>
         <p>具備完整代碼編輯、命令執行、工具呼叫等高權限功能。當規劃與觀念確定後，切換至此模式可讓 Bob 自動為您修改程式碼、建立檔案與執行本地測試。</p>
+      </div>
+    </div>
+
+    <!-- Section 1b: 快速上手 -->
+    <h2 class="section-title">快速上手：你的第一個 AI 對話</h2>
+    <p class="section-desc">以一個 COBOL 程式為例，示範如何依序切換三種模式完成一項文件化任務。</p>
+
+    <div class="steps-container">
+      <div class="step-item">
+        <div class="step-number">01</div>
+        <div class="step-content">
+          <h4>Ask 模式 — 理解程式用途</h4>
+          <p>切換至 Ask 模式，詢問 Bob 某隻 COBOL 程式的功能，不修改任何檔案。</p>
+          <div class="prompt-block">
+            <div class="prompt-block-header">
+              <span class="prompt-block-label">提示詞範例</span>
+              <button class="copy-btn" data-target="prompt-01">複製</button>
+            </div>
+            <pre id="prompt-01">COBOL/LGAPOL01.cbl 這隻程式是做什麼用的？它的主要業務邏輯是什麼？</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-number">02</div>
+        <div class="step-content">
+          <h4>Plan 模式 — 規劃文件產生計畫</h4>
+          <p>切換至 Plan 模式，讓 Bob 擬定文件化的步驟與結構，確認後再動手。</p>
+          <div class="prompt-block">
+            <div class="prompt-block-header">
+              <span class="prompt-block-label">提示詞範例</span>
+              <button class="copy-btn" data-target="prompt-02">複製</button>
+            </div>
+            <pre id="prompt-02">請為 COBOL/LGAPOL01.cbl 規劃一份技術文件的產生計畫，說明要涵蓋哪些章節與內容。</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-number">03</div>
+        <div class="step-content">
+          <h4>Agent 模式 — 實作並輸出文件</h4>
+          <p>切換至 Agent 模式，依據計畫讓 Bob 實際產出 HTML 技術文件並寫入本地檔案。</p>
+          <div class="prompt-block">
+            <div class="prompt-block-header">
+              <span class="prompt-block-label">提示詞範例</span>
+              <button class="copy-btn" data-target="prompt-03">複製</button>
+            </div>
+            <pre id="prompt-03">請依照剛才的計畫，產出 COBOL/LGAPOL01.cbl 的技術文件並儲存為 output/lgapol01-doc.html。</pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -339,84 +432,78 @@
         <tr>
           <td><strong>Mode (模式)</strong></td>
           <td>設定 AI 的行為守則與可用工具集。</td>
-          <td>防止 AI 在您只想問問題時隨意修改您的程式碼，提升安全與效率。</td>
+          <td>用 <strong>Ask 模式</strong>讀懂 COBOL 程式結構；切換至 <strong>Plan 模式</strong>規劃文件化的章節與範圍；最後用 <strong>Agent 模式</strong>實際產出 HTML 技術文件。</td>
         </tr>
         <tr>
           <td><strong>Skill (技能)</strong></td>
           <td>一組可重複使用的特定工作流與專業指導原則。</td>
-          <td>讓 Bob 立即載入「COBOL 萃取」、「Ansible 撰寫」等特殊領域的專家知識。</td>
+          <td>使用 <strong>using-git-worktrees</strong> Skill 在安全的隔離分支中進行 COBOL 程式修改，不影響主線；使用 <strong>find-skills</strong> Skill 尋找更多可協助 COBOL 分析的技能。</td>
         </tr>
         <tr>
           <td><strong>MCP Server</strong></td>
           <td>Model Context Protocol 伺服器，連接外部工具與資料源。</td>
-          <td>讓 Bob 能夠直接讀取 Excel、檢索 Obsidian 知識庫或查詢本地開發環境。</td>
+          <td>透過已設定的 <strong>docs-mcp-server</strong>（SSE，port 6280），讓 Bob 即時查詢技術文件，回答相關的問題。</td>
         </tr>
       </tbody>
     </table>
 
-    <!-- Section 3 -->
-    <h2 class="section-title">快速上手：你的第一個 AI 對話</h2>
-    <p class="section-desc">接下來，我們將模擬一個常見的開發任務：向 Bob 描述需求、生成一份專案報告，並將其轉換成 HTML 頁面。</p>
-
-    <div class="steps-container">
-      <div class="step-item">
-        <div class="step-number">01</div>
-        <div class="step-content">
-          <h4>分析需求 (Plan 模式)</h4>
-          <p>首先將模式切換至 Plan，向 Bob 詢問：「我想做一個 AI 應用的簡報報告，請幫我規劃報告大綱與包含的章節。」</p>
-          <pre># 提示詞範例
-我目前需要設計一份關於 IBM Bob 核心價值的報告，請幫我規劃包含三大核心痛點的大綱。</pre>
-        </div>
-      </div>
-
-      <div class="step-item">
-        <div class="step-number">02</div>
-        <div class="step-content">
-          <h4>產生報告內容 (Agent 模式)</h4>
-          <p>對大綱滿意後，切換至 Agent 模式，讓 Bob 直接在本地建立 Markdown 檔案。</p>
-          <pre># 提示詞範例
-請在本地建立 artifacts/report.md，並將剛才規劃的三大核心痛點大綱，擴寫成完整的繁體中文內容。</pre>
-        </div>
-      </div>
-
-      <div class="step-item">
-        <div class="step-number">03</div>
-        <div class="step-content">
-          <h4>轉換報告為 HTML</h4>
-          <p>讓 Bob 一次性將報告渲染成符合特定風格的 HTML。</p>
-          <pre># 提示詞範例
-請使用 markdown-to-html 技能，將 report.md 轉換成 report.html，並使用 Carbon Design System 的極簡無陰影樣式。</pre>
-        </div>
-      </div>
-    </div>
-
     <!-- Section 4 -->
     <h2 class="section-title">如何安裝與啟動一個 Skill</h2>
-    <p class="section-desc">Bob 的能力是可無限擴展的。您可以透過對話直接載入系統中已註冊的專業 Skill：</p>
+    <p class="section-desc">Bob 的能力是可無限擴展的。本專案目前已安裝下列兩個專案級 Skill，您可以在對話中直接啟用它們：</p>
 
-    <pre># 尋找可用的技能
-請幫我列出專案中所有的可載入技能。
+    <table class="carbon-table">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Skill 名稱</th>
+          <th style="width: 75%;">用途說明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>find-skills</code></td>
+          <td>協助使用者探索並安裝 Agent Skill。當您詢問「有沒有可以做 X 的技能？」時，Bob 會透過此 Skill 搜尋可用的技能生態系，並提供安裝指令。</td>
+        </tr>
+        <tr>
+          <td><code>using-git-worktrees</code></td>
+          <td>在執行實作計畫或需要隔離工作區時啟動。引導 Bob 建立獨立的 Git Worktree，確保功能開發不污染目前分支，並自動偵測現有隔離狀態。</td>
+        </tr>
+      </tbody>
+    </table>
 
-# 使用特定技能 (例如：使用 find-skills 技能)
-# 小技巧：在對話框輸入 "/" 可快速選擇已安裝的技能
-/find-skills</pre>
+    <pre># 使用特定技能的 Prompt 範例
+
+# 啟用 find-skills：尋找適合的技能
+有沒有可以幫我做 COBOL 程式碼文件化的技能？
+
+# 啟用 using-git-worktrees：建立隔離工作區
+請在開始實作前幫我建立一個獨立的 Git Worktree。</pre>
+
+    <div style="display: flex; align-items: flex-start; gap: 12px; background: #defbe6; border-left: 4px solid #24a148; padding: 16px 20px; margin: 0 0 24px;">
+      <span style="font-size: 18px; line-height: 1;">💡</span>
+      <div>
+        <p style="font-size: 14px; font-weight: 600; color: #161616; margin-bottom: 4px;">小技巧</p>
+        <p style="font-size: 14px; color: #161616; margin: 0;">在對話框輸入 <code style="background: #b7efca; padding: 2px 6px;">/</code> 可快速選擇已安裝的技能，例如輸入 <code style="background: #b7efca; padding: 2px 6px;">/find-skills</code> 直接啟用。</p>
+      </div>
+    </div>
 
     <!-- Section 5 -->
     <h2 class="section-title">如何設定 MCP</h2>
-    <p class="section-desc">MCP（Model Context Protocol）可讓 Bob 連接外部工具與服務，擴展其原生能力。您只需將設定描述給 Bob，它便能協助您完成設定：</p>
+    <p class="section-desc">MCP（Model Context Protocol）可讓 Bob 連接外部工具與服務，擴展其原生能力。本專案目前的 MCP 設定（<code>.bob/mcp.json</code>）如下：</p>
 
     <div class="card" style="background: #f4f4f4; border: none; margin-bottom: 16px;">
-      <p class="card-eyebrow">Prompt 範例</p>
-      <p style="font-size: 14px; color: #161616; margin-bottom: 12px;">將以下設定貼給 Bob，請它協助您完成 MCP 設定流程：</p>
-      <pre style="background: #ffffff; border: 1px solid #e0e0e0; padding: 16px; font-size: 13px; line-height: 1.6; white-space: pre-wrap; word-break: break-all;">請幫我設定以下 MCP server，並說明設定完成後我可以用它做什麼：
-
-"apple-books-mcp": {
-    "command": "uvx",
-    "args": [ "apple-books-mcp@latest" ]
+      <p class="card-eyebrow">目前的 MCP 設定</p>
+      <p style="font-size: 14px; color: #161616; margin-bottom: 12px;">已連接 <strong>docs-mcp-server</strong>，透過 SSE 傳輸協定提供本地文件檢索服務：</p>
+      <pre style="background: #ffffff; border: 1px solid #e0e0e0; padding: 16px; font-size: 13px; line-height: 1.6; white-space: pre-wrap; word-break: break-all;">{
+  "mcpServers": {
+    "docs-mcp-server": {
+      "type": "sse",
+      "url": "http://localhost:6280/sse"
+    }
+  }
 }</pre>
     </div>
 
-    <p style="font-size: 14px; color: #525252; margin-bottom: 24px;">Bob 會引導您找到正確的設定檔路徑、確認系統相依套件（如 <code>uv</code>）是否已安裝，並驗證設定是否生效。</p>
+    <p style="font-size: 14px; color: #525252; margin-bottom: 24px;">若您需要新增其他 MCP Server，只需將設定描述給 Bob，它便能協助您完成設定並驗證是否生效。</p>
 
     <div class="card" style="border: 1px solid #0f62fe; background: #edf4ff; margin-bottom: 48px;">
       <p class="card-eyebrow" style="color: #0f62fe;">專業提示 (Pro Tip)</p>
@@ -429,7 +516,7 @@
       <h3>準備好進入下一階段了嗎？</h3>
       <p>恭喜您完成了第一個小時的基礎操作！接下來我們將進入核心傳承主題，展示如何用 Bob 讀懂與重構企業最棘手的 COBOL 核心程式。</p>
       <p>
-        <a href="02-cobol-documentation.html" class="cta-link">進入單元二：COBOL 傳承與解讀 →</a>
+        <a href="02-cobol-doc-instructions.html" class="cta-link">進入單元二：COBOL 傳承與解讀 →</a>
       </p>
     </div>
 
@@ -439,5 +526,21 @@
     <span>Made with IBM Bob</span>
   </footer>
 
+<script>
+  document.querySelectorAll('.copy-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var targetId = btn.getAttribute('data-target');
+      var text = document.getElementById(targetId).innerText;
+      navigator.clipboard.writeText(text).then(function() {
+        btn.textContent = '已複製 ✓';
+        btn.classList.add('copied');
+        setTimeout(function() {
+          btn.textContent = '複製';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    });
+  });
+</script>
 </body>
 </html>

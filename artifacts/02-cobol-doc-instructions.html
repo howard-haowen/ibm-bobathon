@@ -425,44 +425,10 @@ output/         ← 任務二產出的 HTML</code></pre>
       </div>
     </div>
 
-    <!-- Task 4 -->
-    <h2 class="section-title" style="font-size: 20px; font-weight: 600;">任務四：Verification — 在本機驗證水災險程式</h2>
-    <p class="section-desc">實作完成後，讓 Bob 在 worktree 中對修改過的程式執行語法檢查，確認水災險變更正確、且未破壞現有險種。本機使用 <strong>GnuCOBOL</strong>（免費，Mac/Windows 皆可安裝）進行靜態語法驗證；DB2 與 VSAM 存取層無法在本機執行，但業務邏輯層可完整驗證。</p>
-
-    <div class="callout">
-      <strong>安裝 GnuCOBOL：</strong>
-      macOS：<code>brew install gnucobol</code>&nbsp;&nbsp;／&nbsp;&nbsp;
-      Windows（MSYS2）：<code>pacman -S mingw-w64-x86_64-gnucobol</code>
-    </div>
-
-    <div class="prompt-showcase">
-      <div class="prompt-header-row">
-        <div class="prompt-header">Prompt 4-A（Agent Mode）：語法檢查</div>
-        <button class="copy-btn" data-target="p4a">複製</button>
-      </div>
-      <div class="prompt-text" id="p4a">請在水災險的 worktree 中，用 GnuCOBOL 對所有修改過的 COBOL 程式執行語法檢查（cobc -fsyntax-only -I COPY/），確認水災險相關變更編譯無誤，且現有程式未引入新的編譯錯誤或警告，並整理結果摘要。</div>
-      <div class="response-header">預期 Bob 的回應方向</div>
-      <div class="response-content">
-        Bob 會切換到 worktree 目錄，對修改過的程式逐一執行 <code>cobc -fsyntax-only -I COPY/</code>，回報每支程式的編譯結果，並列出需要修正的錯誤（如有）。
-      </div>
-    </div>
-
-    <div class="prompt-showcase">
-      <div class="prompt-header-row">
-        <div class="prompt-header">Prompt 4-B（Agent Mode）：驗證 Copybook 與資料結構</div>
-        <button class="copy-btn" data-target="p4b">複製</button>
-      </div>
-      <div class="prompt-text" id="p4b">請確認 LGPOLICY.cpy 中水災險的欄位定義完整，保單類型代碼已正確新增，並確認新欄位不與現有險種的欄位衝突。</div>
-      <div class="response-header">預期 Bob 的回應方向</div>
-      <div class="response-content">
-        Bob 會比對現有險種（房屋險、車險等）的 Copybook 結構，確認水災險欄位的命名規範、長度常數與類型代碼都已正確定義，且未破壞現有結構。
-      </div>
-    </div>
-
     <!-- CTA -->
     <div class="cta-banner">
-      <h3>完成！您已走過理解、文件化、功能開發與驗證的完整流程</h3>
-      <p>四個任務結束後，您體驗了用 Ask Mode 認識陌生專案、用 Plan + Agent Mode 產出技術文件、透過 worktree 安全地實作新功能，以及用 GnuCOBOL 在本機驗證程式正確性。</p>
+      <h3>完成！您已走過理解、文件化與功能開發的完整流程</h3>
+      <p>三個任務結束後，您體驗了用 Ask Mode 認識陌生專案、用 Plan + Agent Mode 產出技術文件，以及透過 worktree 安全地實作新功能。</p>
     </div>
 
   </main>

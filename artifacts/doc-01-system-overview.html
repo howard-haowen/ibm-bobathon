@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GENAPP 系統總覽與架構 | COBOL 技術文件</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ibm-blue: #0f62fe;
+    --ibm-blue-dark: #0043ce;
+    --ibm-bg: #ffffff;
+    --ibm-surface: #f4f4f4;
+    --ibm-border: #e0e0e0;
+    --ibm-text: #161616;
+    --ibm-muted: #6f6f6f;
+    --ibm-warn: #ff832b;
+    --ibm-success: #24a148;
+    --ibm-danger: #da1e28;
+    --nav-h: 48px;
+  }
+  body { font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; line-height: 1.6; color: var(--ibm-text); background: var(--ibm-bg); }
+
+  /* ── NAV ── */
+  nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); background: #161616; display: flex; align-items: center; padding: 0 16px; gap: 4px; z-index: 100; }
+  nav a { color: #f4f4f4; text-decoration: none; padding: 6px 12px; font-size: 13px; white-space: nowrap; }
+  nav a:hover { background: #393939; }
+  nav a.active { border-bottom: 2px solid var(--ibm-blue); }
+  nav .nav-title { color: #8d8d8d; font-size: 13px; margin-right: 8px; padding-right: 12px; border-right: 1px solid #393939; }
+
+  /* ── LAYOUT ── */
+  .page-wrap { display: flex; margin-top: var(--nav-h); min-height: calc(100vh - var(--nav-h)); }
+  aside { width: 240px; flex-shrink: 0; position: sticky; top: var(--nav-h); height: calc(100vh - var(--nav-h)); overflow-y: auto; background: var(--ibm-surface); border-right: 1px solid var(--ibm-border); padding: 16px 0; }
+  aside h3 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--ibm-muted); padding: 0 16px 8px; }
+  aside a { display: block; padding: 6px 16px; font-size: 13px; color: var(--ibm-text); text-decoration: none; border-left: 3px solid transparent; }
+  aside a:hover { background: var(--ibm-border); }
+  aside a.active, aside a:focus { border-left-color: var(--ibm-blue); color: var(--ibm-blue); background: #e8f1ff; }
+  main { flex: 1; padding: 32px 40px; max-width: 960px; }
+
+  /* ── TYPOGRAPHY ── */
+  h1 { font-size: 28px; font-weight: 300; margin-bottom: 4px; color: var(--ibm-text); }
+  .doc-meta { font-size: 12px; color: var(--ibm-muted); margin-bottom: 32px; padding-bottom: 16px; border-bottom: 1px solid var(--ibm-border); }
+  h2 { font-size: 20px; font-weight: 500; margin: 40px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--ibm-blue); color: var(--ibm-text); }
+  h3 { font-size: 16px; font-weight: 500; margin: 24px 0 12px; color: var(--ibm-text); }
+  h4 { font-size: 14px; font-weight: 600; margin: 16px 0 8px; }
+  p { margin-bottom: 12px; }
+
+  /* ── TABLE ── */
+  .tbl-wrap { overflow-x: auto; margin: 16px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: #e8e8e8; font-weight: 600; text-align: left; padding: 8px 12px; border-bottom: 2px solid var(--ibm-border); white-space: nowrap; }
+  td { padding: 7px 12px; border-bottom: 1px solid var(--ibm-border); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--ibm-surface); }
+
+  /* ── CODE ── */
+  code { font-family: 'IBM Plex Mono', monospace; font-size: 12px; background: #e8e8e8; padding: 1px 5px; }
+  pre { background: #282828; color: #f4f4f4; padding: 16px; overflow-x: auto; margin: 12px 0; font-family: 'IBM Plex Mono', monospace; font-size: 12px; line-height: 1.5; }
+
+  /* ── CALLOUT ── */
+  .callout { border-left: 4px solid; padding: 12px 16px; margin: 16px 0; font-size: 13px; }
+  .callout.info { border-color: var(--ibm-blue); background: #edf5ff; }
+  .callout.warn { border-color: var(--ibm-warn); background: #fff2e8; }
+  .callout strong { display: block; margin-bottom: 4px; }
+
+  /* ── MERMAID ── */
+  .mermaid-wrap { background: var(--ibm-surface); border: 1px solid var(--ibm-border); padding: 16px; margin: 16px 0; }
+  .mermaid-wrap h4 { font-size: 13px; font-weight: 600; color: var(--ibm-muted); margin-bottom: 12px; }
+  .mermaid { text-align: center; }
+
+  /* ── BADGE ── */
+  .badge { display: inline-block; padding: 2px 8px; font-size: 11px; font-weight: 600; }
+  .badge-green { background: #defbe6; color: #0e6027; }
+  .badge-yellow { background: #fdf1c2; color: #735a00; }
+  .badge-blue { background: #edf5ff; color: #0043ce; }
+  .badge-red { background: #fff1f1; color: #a2191f; }
+
+  /* ── TBD ── */
+  .tbd { color: var(--ibm-warn); font-style: italic; font-size: 12px; }
+
+  /* ── FOOTER ── */
+  footer { text-align: center; font-size: 12px; color: var(--ibm-muted); padding: 24px 16px; border-top: 1px solid var(--ibm-border); margin-top: 48px; }
+</style>
+</head>
+<body>
+<!-- NAV -->
+<nav>
+  <span class="nav-title">GENAPP COBOL 技術文件</span>
+  <a href="doc-01-system-overview.html" class="active">01 系統總覽</a>
+  <a href="doc-02-policy-crud.html">02 保單 CRUD</a>
+  <a href="doc-03-customer-crud.html">03 客戶 CRUD</a>
+  <a href="doc-04-data-structures.html">04 資料結構</a>
+  <a href="doc-05-infrastructure.html">05 基礎設施</a>
+</nav>
+
+<div class="page-wrap">
+<!-- SIDEBAR -->
+<aside>
+  <h3>本文件章節</h3>
+  <a href="#ch1">第一章：基本資訊</a>
+  <a href="#ch2">第二章：程式結構</a>
+  <a href="#ch3">第三章：轉置摘要</a>
+  <a href="#ch4">第四章：COMMAREA</a>
+  <a href="#ch5">第五章：相依矩陣</a>
+  <a href="#ch6">第六章：環境變數</a>
+  <a href="#ch7">第七章：品質標準</a>
+  <a href="#diagrams">圖表</a>
+</aside>
+
+<!-- MAIN -->
+<main>
+  <h1>GENAPP 系統總覽與架構</h1>
+  <div class="doc-meta">文件版本：1.0 ｜ 產出日期：2026-05-08 ｜ 盤點人：<span class="tbd">TBD</span> ｜ 審核人：<span class="tbd">TBD</span> ｜ 依據：DOC-SPEC.md COBOL 程式盤點框架 v1.0</div>
+
+  <!-- CH1 -->
+  <h2 id="ch1">第一章：程式基本資訊</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>項目</th><th>內容</th></tr>
+    <tr><td>系統名稱</td><td>GENAPP（General Insurance Application）</td></tr>
+    <tr><td>業務領域</td><td>保險核心系統（客戶管理 + 保單管理）</td></tr>
+    <tr><td>原始技術平台</td><td>IBM z/OS / CICS Transaction Server / DB2 for z/OS</td></tr>
+    <tr><td>轉置目標平台</td><td>ACUCOBOL-GT v11.0（Rocket Software extend Interoperability Suite 11.0.0）</td></tr>
+    <tr><td>COBOL 方言</td><td>IBM Enterprise COBOL → ACUCOBOL-GT v11.0</td></tr>
+    <tr><td>程式數量</td><td>27 支 COBOL 主程式 + 2 份 Copybook</td></tr>
+    <tr><td>原始碼位置</td><td><code>COBOL/</code>（.cbl）、<code>COPY/</code>（.cpy）</td></tr>
+    <tr><td>生產狀態</td><td><span class="tbd">TBD</span></td></tr>
+    <tr><td>最後編譯日期</td><td><span class="tbd">TBD</span></td></tr>
+    <tr><td>最後異動者</td><td><span class="tbd">TBD</span></td></tr>
+  </table></div>
+
+  <!-- CH2 -->
+  <h2 id="ch2">第二章：程式結構與組織</h2>
+
+  <h3>2.1 業務功能摘要</h3>
+  <p>GENAPP 實作保險公司後端核心邏輯，分為兩大業務域與支援服務群：</p>
+
+  <h4>客戶管理（Customer Management）</h4>
+  <div class="tbl-wrap"><table>
+    <tr><th>操作</th><th>程式</th><th>說明</th></tr>
+    <tr><td>新增客戶</td><td><code>LGACUS01 → LGACDB01 → LGACVS01</code></td><td>含郵遞區號驗證、詐欺檢查、客戶流水號分配</td></tr>
+    <tr><td>查詢客戶</td><td><code>LGICUS01 → LGICDB01 → LGICVS01</code></td><td>以客戶號查詢基本資料</td></tr>
+    <tr><td>更新客戶</td><td><code>LGUCUS01 → LGUCDB01 → LGUCVS01</code></td><td>更新客戶基本資料</td></tr>
+  </table></div>
+
+  <h4>保單管理（Policy Management）— 5 種保單類型</h4>
+  <div class="tbl-wrap"><table>
+    <tr><th>操作</th><th>程式</th><th>說明</th></tr>
+    <tr><td>新增保單</td><td><code>LGAPOL01 → LGAPDB01 → LGAPVS01</code></td><td>含 COMMAREA 驗證、ODM 業務規則（可選）</td></tr>
+    <tr><td>查詢保單</td><td><code>LGIPOL01 → LGIPDB01 → LGIPVS01</code></td><td>支援多筆資料回傳</td></tr>
+    <tr><td>刪除保單</td><td><code>LGDPOL01 → LGDPDB01 → LGDPVS01</code></td><td>DB2 DELETE（FK CASCADE）+ VSAM 同步</td></tr>
+    <tr><td>更新保單</td><td><code>LGUPOL01 → LGUPDB01 → LGUPVS01</code></td><td>游標鎖定（FOR UPDATE）+ VSAM 同步</td></tr>
+  </table></div>
+
+  <h3>2.2 程式命名規律</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>前綴</th><th>含義</th><th>後綴</th><th>含義</th></tr>
+    <tr><td><code>LGA</code></td><td>Add（新增）</td><td><code>POL01</code></td><td>保單業務邏輯層</td></tr>
+    <tr><td><code>LGI</code></td><td>Inquire（查詢）</td><td><code>DB01</code></td><td>保單 DB2 存取層</td></tr>
+    <tr><td><code>LGD</code></td><td>Delete（刪除）</td><td><code>VS01</code></td><td>保單 VSAM 存取層</td></tr>
+    <tr><td><code>LGU</code></td><td>Update（更新）</td><td><code>US01</code></td><td>客戶業務邏輯層</td></tr>
+    <tr><td>—</td><td>—</td><td><code>CDB01</code></td><td>客戶 DB2 存取層</td></tr>
+    <tr><td>—</td><td>—</td><td><code>CVS01</code></td><td>客戶 VSAM 存取層</td></tr>
+  </table></div>
+
+  <h3>2.3 完整程式清單（27 支）</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>程式名稱</th><th>功能說明</th><th>層次</th><th>業務域</th></tr>
+    <tr><td><code>LGAPOL01</code></td><td>新增保單 — 業務邏輯層</td><td><span class="badge badge-blue">業務邏輯</span></td><td>保單</td></tr>
+    <tr><td><code>LGIPOL01</code></td><td>查詢保單 — 業務邏輯層</td><td><span class="badge badge-blue">業務邏輯</span></td><td>保單</td></tr>
+    <tr><td><code>LGDPOL01</code></td><td>刪除保單 — 業務邏輯層</td><td><span class="badge badge-blue">業務邏輯</span></td><td>保單</td></tr>
+    <tr><td><code>LGUPOL01</code></td><td>更新保單 — 業務邏輯層</td><td><span class="badge badge-blue">業務邏輯</span></td><td>保單</td></tr>
+    <tr><td><code>LGAPDB01</code></td><td>新增保單 — DB2 存取層</td><td><span class="badge badge-green">DB2</span></td><td>保單</td></tr>
+    <tr><td><code>LGIPDB01</code></td><td>查詢保單 — DB2 存取層</td><td><span class="badge badge-green">DB2</span></td><td>保單</td></tr>
+    <tr><td><code>LGDPDB01</code></td><td>刪除保單 — DB2 存取層</td><td><span class="badge badge-green">DB2</span></td><td>保單</td></tr>
+    <tr><td><code>LGUPDB01</code></td><td>更新保單 — DB2 存取層（含游標）</td><td><span class="badge badge-green">DB2</span></td><td>保單</td></tr>
+    <tr><td><code>LGAPVS01</code></td><td>新增保單 — VSAM 存取層</td><td><span class="badge badge-yellow">VSAM</span></td><td>保單</td></tr>
+    <tr><td><code>LGIPVS01</code></td><td>查詢保單 — VSAM 存取層</td><td><span class="badge badge-yellow">VSAM</span></td><td>保單</td></tr>
+    <tr><td><code>LGDPVS01</code></td><td>刪除保單 — VSAM 存取層</td><td><span class="badge badge-yellow">VSAM</span></td><td>保單</td></tr>
+    <tr><td><code>LGUPVS01</code></td><td>更新保單 — VSAM 存取層</td><td><span class="badge badge-yellow">VSAM</span></td><td>保單</td></tr>
+    <tr><td><code>LGACUS01</code></td><td>新增客戶 — 業務邏輯層（含詐欺/郵遞區號驗證）</td><td><span class="badge badge-blue">業務邏輯</span></td><td>客戶</td></tr>
+    <tr><td><code>LGICUS01</code></td><td>查詢客戶 — 業務邏輯層</td><td><span class="badge badge-blue">業務邏輯</span></td><td>客戶</td></tr>
+    <tr><td><code>LGUCUS01</code></td><td>更新客戶 — 業務邏輯層</td><td><span class="badge badge-blue">業務邏輯</span></td><td>客戶</td></tr>
+    <tr><td><code>LGACDB01</code></td><td>新增客戶 — DB2 存取層（含流水號取得）</td><td><span class="badge badge-green">DB2</span></td><td>客戶</td></tr>
+    <tr><td><code>LGACDB02</code></td><td>新增客戶安全資料 — DB2 存取層</td><td><span class="badge badge-green">DB2</span></td><td>客戶</td></tr>
+    <tr><td><code>LGICDB01</code></td><td>查詢客戶 — DB2 存取層</td><td><span class="badge badge-green">DB2</span></td><td>客戶</td></tr>
+    <tr><td><code>LGUCDB01</code></td><td>更新客戶 — DB2 存取層</td><td><span class="badge badge-green">DB2</span></td><td>客戶</td></tr>
+    <tr><td><code>LGACVS01</code></td><td>新增客戶 — VSAM 存取層</td><td><span class="badge badge-yellow">VSAM</span></td><td>客戶</td></tr>
+    <tr><td><code>LGICVS01</code></td><td>查詢客戶 — VSAM 存取層</td><td><span class="badge badge-yellow">VSAM</span></td><td>客戶</td></tr>
+    <tr><td><code>LGUCVS01</code></td><td>更新客戶 — VSAM 存取層</td><td><span class="badge badge-yellow">VSAM</span></td><td>客戶</td></tr>
+    <tr><td><code>LGASTAT1</code></td><td>統計計數器更新</td><td><span class="badge badge-red">基礎設施</span></td><td>—</td></tr>
+    <tr><td><code>LGWEBST5</code></td><td>統計輸出背景服務（C$SLEEP 永久迴圈）</td><td><span class="badge badge-red">基礎設施</span></td><td>—</td></tr>
+    <tr><td><code>LGSETUP</code></td><td>環境初始化（系統啟動時執行一次）</td><td><span class="badge badge-red">基礎設施</span></td><td>—</td></tr>
+    <tr><td><code>LGSTSQ</code></td><td>錯誤訊息日誌服務（所有程式共用）</td><td><span class="badge badge-red">基礎設施</span></td><td>—</td></tr>
+    <tr><td><code>NEWCUST</code></td><td>批次客戶匯入工具</td><td><span class="badge badge-blue">批次工具</span></td><td>客戶</td></tr>
+  </table></div>
+
+  <!-- CH3 -->
+  <h2 id="ch3">第三章：ACUCOBOL-GT 轉置摘要</h2>
+
+  <h3>3.1 指令對照表</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>IBM 原始指令</th><th>ACUCOBOL-GT 替代</th><th>手冊依據</th></tr>
+    <tr><td><code>EXEC CICS LINK PROGRAM(xxx)</code></td><td><code>CALL 'xxx' USING BY REFERENCE ... RETURNING</code></td><td>手冊 p.217</td></tr>
+    <tr><td><code>EXEC CICS RETURN</code></td><td><code>GOBACK</code></td><td>—</td></tr>
+    <tr><td><code>EXEC CICS ABEND ABCODE(...)</code></td><td><code>DISPLAY '...' UPON SYSERR + STOP RUN</code></td><td>—</td></tr>
+    <tr><td><code>EXEC CICS ASKTIME / FORMATTIME</code></td><td><code>ACCEPT FROM CENTURY-DATE / TIME</code></td><td>手冊 p.190 Format 3</td></tr>
+    <tr><td><code>EIBTRNID / EIBTRMID / EIBTASKN</code></td><td><code>ACCEPT FROM ENVIRONMENT 'GENAPP_TRANSID'</code> 等</td><td>手冊 p.190 Format 5</td></tr>
+    <tr><td><code>EIBCALEN</code></td><td><code>LENGTH OF DFHCOMMAREA</code></td><td>—</td></tr>
+    <tr><td><code>SET ... TO ADDRESS OF DFHCOMMAREA</code></td><td>移除（BY REFERENCE 自動處理）</td><td>—</td></tr>
+    <tr><td><code>EXEC SQL INCLUDE SQLCA</code></td><td><code>COPY "sqlca.def"</code></td><td>AcuSQL</td></tr>
+    <tr><td><code>WS-xxx PIC S9(4) COMP VALUE n</code>（長度常數）</td><td><code>78 WS-xxx VALUE n</code>（Level 78 編譯期常數）</td><td>手冊 p.34</td></tr>
+    <tr><td><code>EXEC CICS Named Counter（GENAcount）</code></td><td>IS EXTERNAL 計數陣列</td><td>手冊 p.90</td></tr>
+    <tr><td><code>EXEC CICS Start Transid After Minutes(1)</code></td><td><code>C$SLEEP 60</code> 永久迴圈</td><td>客戶確認決策</td></tr>
+  </table></div>
+
+  <h3>3.2 ACUCOBOL-GT 特有特性清單</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>特性代號</th><th>特性名稱</th><th>手冊頁碼</th><th>使用程式</th></tr>
+    <tr><td>特性 A</td><td>$IF / $SET / $END 條件編譯</td><td>p.30-34</td><td>LGACUS01</td></tr>
+    <tr><td>特性 B</td><td>ACCEPT FROM CENTURY-DATE / TIME</td><td>p.190 Format 3</td><td>所有業務程式</td></tr>
+    <tr><td>特性 C</td><td>ACCEPT FROM ENVIRONMENT</td><td>p.190 Format 5</td><td>所有業務程式</td></tr>
+    <tr><td>特性 D</td><td>Level 78 編譯期常數</td><td>p.34</td><td>所有業務程式</td></tr>
+    <tr><td>特性 E</td><td>CALL ... USING BY REFERENCE RETURNING</td><td>p.217</td><td>所有業務程式</td></tr>
+    <tr><td>特性 F</td><td>FILE CONTROL INDEXED 組織（VSAM 對應）</td><td>p.73</td><td>LGAPVS01 等</td></tr>
+    <tr><td>特性 G</td><td>IS EXTERNAL 跨程式共用資料</td><td>p.90</td><td>LGSETUP / LGASTAT1 / LGWEBST5 / LGACDB01</td></tr>
+  </table></div>
+
+  <!-- CH4 -->
+  <h2 id="ch4">第四章：COMMAREA 介面設計</h2>
+
+  <h3>4.1 基礎欄位</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>欄位名稱</th><th>PIC</th><th>Bytes</th><th>說明</th></tr>
+    <tr><td><code>CA-REQUEST-ID</code></td><td>X(6)</td><td>6</td><td>請求識別碼（決定 REDEFINES 選用路徑）</td></tr>
+    <tr><td><code>CA-RETURN-CODE</code></td><td>9(2)</td><td>2</td><td>返回碼（00=成功, 98=長度不足, 99=錯誤）</td></tr>
+    <tr><td><code>CA-CUSTOMER-NUM</code></td><td>9(10)</td><td>10</td><td>客戶號碼</td></tr>
+    <tr><td><code>CA-REQUEST-SPECIFIC</code></td><td>X(32482)</td><td>32482</td><td>業務資料區（REDEFINES 重疊）</td></tr>
+  </table></div>
+
+  <h3>4.2 CA-REQUEST-ID 請求碼對照</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>CA-REQUEST-ID</th><th>業務含義</th><th>REDEFINES</th></tr>
+    <tr><td><code>01ACUS</code></td><td>新增客戶</td><td>CA-CUSTOMER-REQUEST</td></tr>
+    <tr><td><code>01ICUS</code></td><td>查詢客戶</td><td>CA-CUSTOMER-REQUEST</td></tr>
+    <tr><td><code>01UCUS</code></td><td>更新客戶</td><td>CA-CUSTOMER-REQUEST</td></tr>
+    <tr><td><code>01AEND</code></td><td>新增養老保險</td><td>CA-POLICY-REQUEST / CA-ENDOWMENT</td></tr>
+    <tr><td><code>01AHOU</code></td><td>新增房屋保險</td><td>CA-POLICY-REQUEST / CA-HOUSE</td></tr>
+    <tr><td><code>01AMOT</code></td><td>新增汽車保險</td><td>CA-POLICY-REQUEST / CA-MOTOR</td></tr>
+    <tr><td><code>01ACOM</code></td><td>新增商業保險</td><td>CA-POLICY-REQUEST / CA-COMMERCIAL</td></tr>
+    <tr><td><code>01ACLM</code></td><td>新增理賠</td><td>CA-POLICY-REQUEST / CA-CLAIM</td></tr>
+    <tr><td><code>02ACUS</code></td><td>新增客戶安全資料</td><td>CA-CUSTSECR-REQUEST</td></tr>
+    <tr><td><span class="tbd">其他查詢/刪除/更新碼</span></td><td><span class="tbd">TBD</span></td><td><span class="tbd">TBD</span></td></tr>
+  </table></div>
+
+  <!-- CH5 -->
+  <h2 id="ch5">第五章：程式相依關係矩陣</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>呼叫端</th><th>被呼叫端</th><th>說明</th></tr>
+    <tr><td>LGAPOL01</td><td>LGAPDB01</td><td>新增保單：呼叫 DB2 層</td></tr>
+    <tr><td>LGAPOL01</td><td>LGAPBR01（<span class="tbd">TBD</span>）</td><td>ODM 業務規則（IN-RULES-MODE='Y' 時啟用）</td></tr>
+    <tr><td>LGAPOL01</td><td>LGSTSQ</td><td>錯誤訊息記錄</td></tr>
+    <tr><td>LGAPDB01</td><td>LGAPVS01</td><td>INSERT 後同步寫入 VSAM</td></tr>
+    <tr><td>LGAPDB01</td><td>LGSTSQ</td><td>錯誤訊息記錄</td></tr>
+    <tr><td>LGIPOL01</td><td>LGIPDB01</td><td>查詢保單：呼叫 DB2 層</td></tr>
+    <tr><td>LGIPDB01</td><td>LGIPVS01</td><td>VSAM 輔助查詢</td></tr>
+    <tr><td>LGDPOL01</td><td>LGDPDB01</td><td>刪除保單：呼叫 DB2 層</td></tr>
+    <tr><td>LGDPDB01</td><td>LGDPVS01</td><td>同步刪除 VSAM</td></tr>
+    <tr><td>LGUPOL01</td><td>LGUPDB01</td><td>更新保單：呼叫 DB2 層</td></tr>
+    <tr><td>LGUPDB01</td><td>LGUPVS01</td><td>同步更新 VSAM</td></tr>
+    <tr><td>LGACUS01</td><td>LGACDB01</td><td>新增客戶：呼叫 DB2 層</td></tr>
+    <tr><td>LGACDB01</td><td>LGACVS01</td><td>同步寫入 VSAM</td></tr>
+    <tr><td>LGACDB01</td><td>LGACDB02</td><td>新增客戶安全資料</td></tr>
+    <tr><td>LGACDB01</td><td>IS EXTERNAL 計數陣列</td><td>遞增客戶流水號</td></tr>
+    <tr><td>LGICUS01</td><td>LGICDB01</td><td>查詢客戶：呼叫 DB2 層</td></tr>
+    <tr><td>LGUCUS01</td><td>LGUCDB01</td><td>更新客戶：呼叫 DB2 層</td></tr>
+    <tr><td>所有業務程式</td><td>LGSTSQ</td><td>錯誤訊息共用服務</td></tr>
+    <tr><td>LGSETUP</td><td>IS EXTERNAL 計數陣列</td><td>初始化</td></tr>
+    <tr><td>LGASTAT1</td><td>IS EXTERNAL 計數陣列</td><td>遞增操作計數器</td></tr>
+    <tr><td>LGWEBST5</td><td>IS EXTERNAL 計數陣列</td><td>讀取並輸出統計</td></tr>
+  </table></div>
+
+  <!-- CH6 -->
+  <h2 id="ch6">第六章：環境變數清單</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>環境變數</th><th>使用程式</th><th>預設值</th><th>說明</th></tr>
+    <tr><td><code>GENAPP_TRANSID</code></td><td>所有業務程式</td><td>LGAP/LGAC 等</td><td>交易識別碼</td></tr>
+    <tr><td><code>GENAPP_TERMID</code></td><td>所有業務程式</td><td>ACU1</td><td>終端識別碼</td></tr>
+    <tr><td><code>GENAPP_TASKNUM</code></td><td>所有業務程式</td><td>0</td><td>任務號碼</td></tr>
+    <tr><td><code>GENAPP_LOG_FILE</code></td><td>LGSTSQ</td><td>genapp.log</td><td>日誌檔路徑</td></tr>
+    <tr><td><code>GENAPP_SYSID</code></td><td>LGSTSQ</td><td>SYS1</td><td>系統識別碼</td></tr>
+    <tr><td><code>GENAPP_INVOKING_PROG</code></td><td>LGSTSQ</td><td>UNKNOWN</td><td>呼叫程式名稱</td></tr>
+    <tr><td><code>GENAPP_INITIAL_CUSTNUM</code></td><td>LGSETUP</td><td><span class="tbd">TBD</span></td><td>初始客戶流水號</td></tr>
+    <tr><td><code>GENAPP_STAT_REQ</code></td><td>LGASTAT1</td><td><span class="tbd">TBD</span></td><td>統計請求交易碼</td></tr>
+    <tr><td><code>GENAPP_STAT_RC</code></td><td>LGASTAT1</td><td><span class="tbd">TBD</span></td><td>統計請求返回碼</td></tr>
+    <tr><td><code>GENAPP_STOP_LGWEBST5</code></td><td>LGWEBST5</td><td>—</td><td>設為 'STOP' 停止背景服務</td></tr>
+    <tr><td><code>GENAPP_APPLID</code></td><td>LGWEBST5</td><td><span class="tbd">TBD</span></td><td>應用識別碼</td></tr>
+    <tr><td><code>INFILE</code></td><td>NEWCUST</td><td>—</td><td>批次輸入檔路徑</td></tr>
+  </table></div>
+
+  <!-- CH7 -->
+  <h2 id="ch7">第七章：品質標準與盤點狀態</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>標準類別</th><th>標準項目</th><th>狀態</th></tr>
+    <tr><td>完整性</td><td>全部 27 支程式列入</td><td><span class="badge badge-green">✓ 完成</span></td></tr>
+    <tr><td>完整性</td><td>2 份 Copybook 記錄</td><td><span class="badge badge-green">✓ 完成（詳見 doc-04）</span></td></tr>
+    <tr><td>完整性</td><td>程式相依關係矩陣</td><td><span class="badge badge-green">✓ 完成</span></td></tr>
+    <tr><td>完整性</td><td>ACUCOBOL 轉置對照</td><td><span class="badge badge-green">✓ 完成</span></td></tr>
+    <tr><td>完整性</td><td>環境變數清單</td><td><span class="badge badge-yellow">⚠ 部分 TBD</span></td></tr>
+    <tr><td>正確性</td><td>CA-REQUEST-ID 完整對照</td><td><span class="badge badge-yellow">⚠ 部分 TBD（查詢/刪除/更新碼）</span></td></tr>
+    <tr><td>可用性</td><td>新人可理解架構</td><td><span class="badge badge-green">✓ 三層架構說明完整</span></td></tr>
+  </table></div>
+
+  <!-- DIAGRAMS -->
+  <h2 id="diagrams">圖表</h2>
+
+  <div class="mermaid-wrap">
+    <h4>圖 1-1：系統整體架構圖</h4>
+    <div class="mermaid">
+graph TD
+  subgraph BIZ["業務邏輯層 Business Logic"]
+    POL_BIZ["LGAPOL01 / LGIPOL01\nLGDPOL01 / LGUPOL01"]
+    CUS_BIZ["LGACUS01 / LGICUS01\nLGUCUS01"]
+  end
+  subgraph DB2["DB2 存取層 DB2 Access"]
+    POL_DB["LGAPDB01 / LGIPDB01\nLGDPDB01 / LGUPDB01"]
+    CUS_DB["LGACDB01 / LGICDB01\nLGUCDB01 / LGACDB02"]
+  end
+  subgraph VSAM["VSAM 存取層 VSAM Access"]
+    POL_VS["LGAPVS01 / LGIPVS01\nLGDPVS01 / LGUPVS01"]
+    CUS_VS["LGACVS01 / LGICVS01\nLGUCVS01"]
+  end
+  subgraph INF["基礎設施 Infrastructure"]
+    LGSTSQ["LGSTSQ 錯誤日誌"]
+    LGSETUP["LGSETUP 初始化"]
+    LGASTAT1["LGASTAT1 統計"]
+    LGWEBST5["LGWEBST5 監控輸出"]
+  end
+  DB2_DATA[("DB2 資料庫")]
+  VSAM_DATA[("VSAM KSDS 檔案")]
+  EXT_DATA[("IS EXTERNAL 計數陣列")]
+
+  POL_BIZ -->|CALL| POL_DB
+  CUS_BIZ -->|CALL| CUS_DB
+  POL_DB -->|CALL| POL_VS
+  CUS_DB -->|CALL| CUS_VS
+  POL_DB -->|EXEC SQL| DB2_DATA
+  CUS_DB -->|EXEC SQL| DB2_DATA
+  POL_VS -->|WRITE/READ| VSAM_DATA
+  CUS_VS -->|WRITE/READ| VSAM_DATA
+  LGSETUP -->|初始化| EXT_DATA
+  LGASTAT1 -->|更新| EXT_DATA
+  LGWEBST5 -->|讀取| EXT_DATA
+  LGACDB01 -->|遞增流水號| EXT_DATA
+  POL_BIZ & CUS_BIZ -->|錯誤時| LGSTSQ
+  POL_DB & CUS_DB -->|錯誤時| LGSTSQ
+    </div>
+  </div>
+
+  <div class="mermaid-wrap">
+    <h4>圖 1-2：程式呼叫依賴圖（以新增保單為代表路徑）</h4>
+    <div class="mermaid">
+sequenceDiagram
+  participant C as 呼叫端
+  participant P01 as LGAPOL01
+  participant PDB as LGAPDB01
+  participant PVS as LGAPVS01
+  participant SQ as LGSTSQ
+
+  C->>P01: CALL USING DFHCOMMAREA
+  P01->>P01: 驗證 COMMAREA 長度
+  alt COMMAREA 不足
+    P01-->>C: CA-RETURN-CODE = 98
+  end
+  P01->>PDB: CALL USING DFHCOMMAREA RETURNING RC
+  PDB->>PDB: INSERT POLICY + 子表
+  alt DB2 錯誤
+    PDB->>SQ: CALL USING ERROR-MSG
+    PDB-->>P01: RC > 0
+    P01-->>C: CA-RETURN-CODE = 錯誤碼
+  end
+  PDB->>PVS: CALL USING DFHCOMMAREA RETURNING RC
+  PVS->>PVS: WRITE KSDSPOLY-FILE
+  PVS-->>PDB: RC = 0
+  PDB-->>P01: RC = 0
+  P01-->>C: CA-RETURN-CODE = 00
+    </div>
+  </div>
+
+  <div class="mermaid-wrap">
+    <h4>圖 1-3：COMMAREA 請求路由圖</h4>
+    <div class="mermaid">
+flowchart TD
+  Start([收到 DFHCOMMAREA]) --> Check{CA-REQUEST-ID}
+  Check -->|01ACUS/01ICUS/01UCUS| CUS[CA-CUSTOMER-REQUEST\n客戶操作路徑]
+  Check -->|02ACUS| SEC[CA-CUSTSECR-REQUEST\n客戶安全資料路徑]
+  Check -->|01AEND/01AHOU/01AMOT\n01ACOM/01ACLM| POL[CA-POLICY-REQUEST\n保單操作路徑]
+  POL --> PolType{CA-POLICY-NUM\n保單號確認}
+  POL -->|01AEND| END[CA-ENDOWMENT 結構]
+  POL -->|01AHOU| HOU[CA-HOUSE 結構]
+  POL -->|01AMOT| MOT[CA-MOTOR 結構]
+  POL -->|01ACOM| COM[CA-COMMERCIAL 結構]
+  POL -->|01ACLM| CLM[CA-CLAIM 結構]
+    </div>
+  </div>
+
+<footer>Made with IBM Bob</footer>
+</main>
+</div>
+
+<script>
+mermaid.initialize({ startOnLoad: true, theme: 'default', securityLevel: 'loose' });
+</script>
+</body>
+</html>

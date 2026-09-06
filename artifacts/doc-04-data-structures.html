@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GENAPP 資料結構與 Copybook | COBOL 技術文件</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--ibm-blue:#0f62fe;--ibm-bg:#fff;--ibm-surface:#f4f4f4;--ibm-border:#e0e0e0;--ibm-text:#161616;--ibm-muted:#6f6f6f;--nav-h:48px}
+  body{font-family:'IBM Plex Sans',sans-serif;font-size:14px;line-height:1.6;color:var(--ibm-text);background:var(--ibm-bg)}
+  nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:#161616;display:flex;align-items:center;padding:0 16px;gap:4px;z-index:100}
+  nav a{color:#f4f4f4;text-decoration:none;padding:6px 12px;font-size:13px}
+  nav a:hover{background:#393939}
+  nav a.active{border-bottom:2px solid var(--ibm-blue)}
+  nav .nav-title{color:#8d8d8d;font-size:13px;margin-right:8px;padding-right:12px;border-right:1px solid #393939}
+  .page-wrap{display:flex;margin-top:var(--nav-h)}
+  aside{width:220px;flex-shrink:0;position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));overflow-y:auto;background:var(--ibm-surface);border-right:1px solid var(--ibm-border);padding:16px 0}
+  aside h3{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--ibm-muted);padding:0 16px 8px}
+  aside a{display:block;padding:6px 16px;font-size:13px;color:var(--ibm-text);text-decoration:none;border-left:3px solid transparent}
+  aside a:hover{background:var(--ibm-border)}
+  main{flex:1;padding:32px 40px;max-width:960px}
+  h1{font-size:28px;font-weight:300;margin-bottom:4px}
+  .doc-meta{font-size:12px;color:var(--ibm-muted);margin-bottom:32px;padding-bottom:16px;border-bottom:1px solid var(--ibm-border)}
+  h2{font-size:20px;font-weight:500;margin:40px 0 16px;padding-bottom:8px;border-bottom:2px solid var(--ibm-blue)}
+  h3{font-size:16px;font-weight:500;margin:24px 0 12px}
+  h4{font-size:14px;font-weight:600;margin:16px 0 8px}
+  p{margin-bottom:12px}
+  .tbl-wrap{overflow-x:auto;margin:16px 0}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{background:#e8e8e8;font-weight:600;text-align:left;padding:8px 12px;border-bottom:2px solid var(--ibm-border)}
+  td{padding:7px 12px;border-bottom:1px solid var(--ibm-border);vertical-align:top}
+  tr:nth-child(even) td{background:var(--ibm-surface)}
+  code{font-family:'IBM Plex Mono',monospace;font-size:12px;background:#e8e8e8;padding:1px 5px}
+  pre{background:#282828;color:#f4f4f4;padding:16px;overflow-x:auto;margin:12px 0;font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.5}
+  .callout{border-left:4px solid;padding:12px 16px;margin:16px 0;font-size:13px}
+  .callout.warn{border-color:#ff832b;background:#fff2e8}
+  .callout.info{border-color:var(--ibm-blue);background:#edf5ff}
+  .callout strong{display:block;margin-bottom:4px}
+  .mermaid-wrap{background:var(--ibm-surface);border:1px solid var(--ibm-border);padding:16px;margin:16px 0}
+  .mermaid-wrap h4{font-size:13px;color:var(--ibm-muted);margin-bottom:12px}
+  .mermaid{text-align:center}
+  .badge{display:inline-block;padding:2px 8px;font-size:11px;font-weight:600}
+  .badge-blue{background:#edf5ff;color:#0043ce}
+  .badge-green{background:#defbe6;color:#0e6027}
+  .badge-yellow{background:#fdf1c2;color:#735a00}
+  .lvl78{background:#fff2e8;color:#a56500;font-weight:600;font-size:11px;padding:1px 6px}
+  .tbd{color:#ff832b;font-style:italic;font-size:12px}
+  footer{text-align:center;font-size:12px;color:var(--ibm-muted);padding:24px 16px;border-top:1px solid var(--ibm-border);margin-top:48px}
+</style>
+</head>
+<body>
+<nav>
+  <span class="nav-title">GENAPP COBOL 技術文件</span>
+  <a href="doc-01-system-overview.html">01 系統總覽</a>
+  <a href="doc-02-policy-crud.html">02 保單 CRUD</a>
+  <a href="doc-03-customer-crud.html">03 客戶 CRUD</a>
+  <a href="doc-04-data-structures.html" class="active">04 資料結構</a>
+  <a href="doc-05-infrastructure.html">05 基礎設施</a>
+</nav>
+<div class="page-wrap">
+<aside>
+  <h3>本文件章節</h3>
+  <a href="#lgcmarea">LGCMAREA.cpy</a>
+  <a href="#header">— 基礎標頭</a>
+  <a href="#customer-req">— CA-CUSTOMER-REQUEST</a>
+  <a href="#custsecr-req">— CA-CUSTSECR-REQUEST</a>
+  <a href="#policy-req">— CA-POLICY-REQUEST</a>
+  <a href="#lgpolicy">LGPOLICY.cpy</a>
+  <a href="#lvl78">— Level 78 常數</a>
+  <a href="#db2-customer">— DB2-CUSTOMER</a>
+  <a href="#db2-policy">— DB2-POLICY</a>
+  <a href="#db2-endowment">— DB2-ENDOWMENT</a>
+  <a href="#db2-others">— 其他 DB2 結構</a>
+  <a href="#mapping">欄位對應表</a>
+  <a href="#diagrams">圖表</a>
+</aside>
+<main>
+<h1>GENAPP 資料結構與 Copybook 技術文件</h1>
+<div class="doc-meta">文件版本：1.0 ｜ 產出日期：2026-05-08 ｜ 盤點人：<span class="tbd">TBD</span> ｜ 審核人：<span class="tbd">TBD</span></div>
+
+<div class="callout info">
+  <strong>本文件涵蓋範圍</strong>
+  ● <code>COPY/LGCMAREA.cpy</code>：所有 CICS 程式的 DFHCOMMAREA 共用結構（含 3 個 REDEFINES 群組、5 種保單子類型）<br>
+  ● <code>COPY/LGPOLICY.cpy</code>：13 個 Level 78 長度常數 + 7 組 DB2 宿主變數
+</div>
+
+<!-- ===== LGCMAREA ===== -->
+<h2 id="lgcmarea">第二章：LGCMAREA.cpy — COMMAREA 共用區</h2>
+
+<div class="tbl-wrap"><table>
+  <tr><th>項目</th><th>內容</th></tr>
+  <tr><td>Copybook 名稱</td><td>LGCMAREA</td></tr>
+  <tr><td>位置</td><td><code>COPY/LGCMAREA.cpy</code></td></tr>
+  <tr><td>版本</td><td><span class="tbd">TBD</span></td></tr>
+  <tr><td>使用程式</td><td>LGAPOL01、LGIPOL01、LGDPOL01、LGUPOL01、LGAPDB01 等全部業務程式</td></tr>
+  <tr><td>用途</td><td>所有 CICS 交易程式的 COMMAREA 標準結構，含請求標頭與各業務域 REDEFINES</td></tr>
+  <tr><td>COMMAREA 總長度</td><td>6 + 2 + 10 + 32482 = <strong>32500 bytes</strong></td></tr>
+</table></div>
+
+<h3 id="header">基礎標頭欄位（Level 03）</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>欄位名稱</th><th>Level</th><th>PIC</th><th>Bytes</th><th>說明</th></tr>
+  <tr><td><code>CA-REQUEST-ID</code></td><td>03</td><td>X(6)</td><td>6</td><td>請求識別碼，決定 REDEFINES 選用</td></tr>
+  <tr><td><code>CA-RETURN-CODE</code></td><td>03</td><td>9(2)</td><td>2</td><td>返回碼（00=成功, 98=長度不足）</td></tr>
+  <tr><td><code>CA-CUSTOMER-NUM</code></td><td>03</td><td>9(10)</td><td>10</td><td>客戶號碼（10 位數字）</td></tr>
+  <tr><td><code>CA-REQUEST-SPECIFIC</code></td><td>03</td><td>X(32482)</td><td>32482</td><td>業務資料區（三個 REDEFINES 重疊）</td></tr>
+</table></div>
+
+<h3 id="customer-req">CA-CUSTOMER-REQUEST（REDEFINES CA-REQUEST-SPECIFIC）</h3>
+<p>用於請求碼：01ACUS / 01ICUS / 01UCUS</p>
+<div class="tbl-wrap"><table>
+  <tr><th>欄位</th><th>Level</th><th>PIC</th><th>Bytes</th><th>說明</th></tr>
+  <tr><td><code>CA-FIRST-NAME</code></td><td>05</td><td>X(10)</td><td>10</td><td>名字</td></tr>
+  <tr><td><code>CA-LAST-NAME</code></td><td>05</td><td>X(20)</td><td>20</td><td>姓氏</td></tr>
+  <tr><td><code>CA-DOB</code></td><td>05</td><td>X(10)</td><td>10</td><td>出生日期 <span style="color:#a2191f">⚠ 第 1 字元被 LGICDB01 覆寫為 '3'</span></td></tr>
+  <tr><td><code>CA-HOUSE-NAME</code></td><td>05</td><td>X(20)</td><td>20</td><td>房屋名稱</td></tr>
+  <tr><td><code>CA-HOUSE-NUM</code></td><td>05</td><td>X(4)</td><td>4</td><td>門牌號碼</td></tr>
+  <tr><td><code>CA-POSTCODE</code></td><td>05</td><td>X(8)</td><td>8</td><td>郵遞區號（需 CHECK-FIRST-COBOL 驗證）</td></tr>
+  <tr><td><code>CA-NUM-POLICIES</code></td><td>05</td><td>9(3)</td><td>3</td><td>保單數量</td></tr>
+  <tr><td><code>CA-PHONE-MOBILE</code></td><td>05</td><td>X(20)</td><td>20</td><td>手機（詐欺檢查：長度&gt;=7）</td></tr>
+  <tr><td><code>CA-PHONE-HOME</code></td><td>05</td><td>X(20)</td><td>20</td><td>家用電話</td></tr>
+  <tr><td><code>CA-EMAIL-ADDRESS</code></td><td>05</td><td>X(100)</td><td>100</td><td>電子郵件</td></tr>
+  <tr><td><code>CA-POLICY-DATA</code></td><td>05</td><td>X(32267)</td><td>32267</td><td>保單摘要附加資料</td></tr>
+  <tr><td colspan="3" style="font-weight:600">合計</td><td>32482</td><td>✓</td></tr>
+</table></div>
+
+<h3 id="custsecr-req">CA-CUSTSECR-REQUEST（REDEFINES CA-REQUEST-SPECIFIC）</h3>
+<p>用於請求碼：02ACUS</p>
+<div class="tbl-wrap"><table>
+  <tr><th>欄位</th><th>PIC</th><th>Bytes</th><th>說明</th></tr>
+  <tr><td><code>CA-CUSTSECR-PASS</code></td><td>X(32)</td><td>32</td><td>客戶密碼（雜湊值）</td></tr>
+  <tr><td><code>CA-CUSTSECR-COUNT</code></td><td>X(4)</td><td>4</td><td><span class="tbd">TBD</span></td></tr>
+  <tr><td><code>CA-CUSTSECR-STATE</code></td><td>X</td><td>1</td><td><span class="tbd">TBD</span>（安全狀態碼）</td></tr>
+  <tr><td><code>CA-CUSTSECR-DATA</code></td><td>X(32445)</td><td>32445</td><td>安全附加資料</td></tr>
+  <tr><td colspan="2" style="font-weight:600">合計</td><td>32482</td><td>✓</td></tr>
+</table></div>
+
+<h3 id="policy-req">CA-POLICY-REQUEST（REDEFINES CA-REQUEST-SPECIFIC）</h3>
+<p>用於請求碼：01AEND / 01AHOU / 01AMOT / 01ACOM / 01ACLM 及 INQ/DEL/UPD 對應碼</p>
+
+<h4>CA-POLICY-COMMON（共用欄位）</h4>
+<div class="tbl-wrap"><table>
+  <tr><th>欄位</th><th>Level</th><th>PIC</th><th>Bytes</th><th>說明</th></tr>
+  <tr><td><code>CA-POLICY-NUM</code></td><td>05</td><td>9(10)</td><td>10</td><td>保單號碼</td></tr>
+  <tr><td><code>CA-ISSUE-DATE</code></td><td>07</td><td>X(10)</td><td>10</td><td>生效日期</td></tr>
+  <tr><td><code>CA-EXPIRY-DATE</code></td><td>07</td><td>X(10)</td><td>10</td><td>到期日期</td></tr>
+  <tr><td><code>CA-LASTCHANGED</code></td><td>07</td><td>X(26)</td><td>26</td><td>最後異動時間戳記</td></tr>
+  <tr><td><code>CA-BROKERID</code></td><td>07</td><td>9(10)</td><td>10</td><td>仲介編號</td></tr>
+  <tr><td><code>CA-BROKERSREF</code></td><td>07</td><td>X(10)</td><td>10</td><td>仲介參照號碼</td></tr>
+  <tr><td><code>CA-PAYMENT</code></td><td>07</td><td>9(6)</td><td>6</td><td>保費金額</td></tr>
+  <tr><td><code>CA-POLICY-SPECIFIC</code></td><td>05</td><td>X(32400)</td><td>32400</td><td>依保單類型 REDEFINES</td></tr>
+</table></div>
+
+<h4>五種保單 REDEFINES（CA-POLICY-SPECIFIC）</h4>
+<div class="tbl-wrap"><table>
+  <tr><th>保單類型</th><th>REDEFINES 名稱</th><th>關鍵欄位</th><th>大小</th></tr>
+  <tr><td>養老保險</td><td><code>CA-ENDOWMENT</code></td><td>WITH-PROFITS, EQUITIES, FUND-NAME, TERM, SUM-ASSURED, LIFE-ASSURED, PADDING-DATA</td><td>32400 bytes ✓</td></tr>
+  <tr><td>房屋保險</td><td><code>CA-HOUSE</code></td><td>PROPERTY-TYPE, BEDROOMS, VALUE, HOUSE-NAME, HOUSE-NUMBER, POSTCODE</td><td>32400 bytes ✓</td></tr>
+  <tr><td>汽車保險</td><td><code>CA-MOTOR</code></td><td>MAKE, MODEL, VALUE, REGNUMBER, COLOUR, CC, MANUFACTURED, PREMIUM, ACCIDENTS</td><td>32400 bytes ✓</td></tr>
+  <tr><td>商業保險</td><td><code>CA-COMMERCIAL</code></td><td>Address, Postcode, Lat/Long, 火災/犯罪/洪水/天候四類 Peril+Premium, Status, RejectReason</td><td>32400 bytes ✓</td></tr>
+  <tr><td>理賠</td><td><code>CA-CLAIM</code></td><td>Num, Date, Paid, Value, Cause, Observations</td><td>32400 bytes ✓</td></tr>
+</table></div>
+
+<!-- ===== LGPOLICY ===== -->
+<h2 id="lgpolicy">第三章：LGPOLICY.cpy — 保單長度常數與 DB2 宿主變數</h2>
+
+<div class="callout info">
+  <strong>ACUCOBOL Level 78 轉置說明</strong>
+  原始 IBM COBOL 使用 <code>WS-POLICY-LENGTHS</code> 群組（PIC S9(4) COMP VALUE n）儲存長度常數，佔執行期記憶體。<br>
+  ACUCOBOL-GT 轉置為 <span class="lvl78">Level 78 編譯期常數</span>，由編譯器解析，不佔執行期記憶體，消除 WS-POLICY-LENGTHS 群組的必要性（手冊 p.34）。
+</div>
+
+<h3 id="lvl78">Level 78 長度常數完整表</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>常數名稱</th><th>值（bytes）</th><th>對應結構 / 用途</th><th>驗算</th></tr>
+  <tr><td><span class="lvl78">WS-CUSTOMER-LEN</span></td><td>72</td><td>DB2-CUSTOMER 結構基本長度</td><td>—</td></tr>
+  <tr><td><span class="lvl78">WS-POLICY-LEN</span></td><td>72</td><td>DB2-POLICY（含 CA-POLICY-COMMON）基本長度</td><td>—</td></tr>
+  <tr><td><span class="lvl78">WS-ENDOW-LEN</span></td><td>52</td><td>DB2-ENDOWMENT 固定欄位（不含 PADDINGDATA）</td><td>—</td></tr>
+  <tr><td><span class="lvl78">WS-HOUSE-LEN</span></td><td>58</td><td>DB2-HOUSE 結構長度</td><td>—</td></tr>
+  <tr><td><span class="lvl78">WS-MOTOR-LEN</span></td><td>65</td><td>DB2-MOTOR 結構長度</td><td>—</td></tr>
+  <tr><td><span class="lvl78">WS-COMM-LEN</span></td><td>1102</td><td>DB2-COMMERCIAL 結構長度</td><td>—</td></tr>
+  <tr><td><span class="lvl78">WS-CLAIM-LEN</span></td><td>546</td><td>DB2-CLAIM 結構長度</td><td>—</td></tr>
+  <tr><td><span class="lvl78">WS-FULL-ENDOW-LEN</span></td><td>124</td><td>含 WS-POLICY-LEN 的 ENDOWMENT 完整長度</td><td>72+52=124 ✓</td></tr>
+  <tr><td><span class="lvl78">WS-FULL-HOUSE-LEN</span></td><td>130</td><td>含 WS-POLICY-LEN 的 HOUSE 完整長度</td><td>72+58=130 ✓</td></tr>
+  <tr><td><span class="lvl78">WS-FULL-MOTOR-LEN</span></td><td>137</td><td>含 WS-POLICY-LEN 的 MOTOR 完整長度</td><td>72+65=137 ✓</td></tr>
+  <tr><td><span class="lvl78">WS-FULL-COMM-LEN</span></td><td>1174</td><td>含 WS-POLICY-LEN 的 COMMERCIAL 完整長度</td><td>72+1102=1174 ✓</td></tr>
+  <tr><td><span class="lvl78">WS-FULL-CLAIM-LEN</span></td><td>618</td><td>含 WS-POLICY-LEN 的 CLAIM 完整長度</td><td>72+546=618 ✓</td></tr>
+  <tr><td><span class="lvl78">WS-SUMRY-ENDOW-LEN</span></td><td>25</td><td>ENDOWMENT 摘要列長度</td><td><span class="tbd">TBD</span></td></tr>
+</table></div>
+
+<h3 id="db2-customer">DB2-CUSTOMER 宿主變數</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>欄位</th><th>Level</th><th>PIC</th><th>Bytes</th><th>對應 CA 欄位</th></tr>
+  <tr><td><code>DB2-FIRSTNAME</code></td><td>03</td><td>X(10)</td><td>10</td><td>CA-FIRST-NAME</td></tr>
+  <tr><td><code>DB2-LASTNAME</code></td><td>03</td><td>X(20)</td><td>20</td><td>CA-LAST-NAME</td></tr>
+  <tr><td><code>DB2-DATEOFBIRTH</code></td><td>03</td><td>X(10)</td><td>10</td><td>CA-DOB</td></tr>
+  <tr><td><code>DB2-HOUSENAME</code></td><td>03</td><td>X(20)</td><td>20</td><td>CA-HOUSE-NAME</td></tr>
+  <tr><td><code>DB2-HOUSENUMBER</code></td><td>03</td><td>X(4)</td><td>4</td><td>CA-HOUSE-NUM</td></tr>
+  <tr><td><code>DB2-POSTCODE</code></td><td>03</td><td>X(8)</td><td>8</td><td>CA-POSTCODE</td></tr>
+  <tr><td><code>DB2-PHONE-MOBILE</code></td><td>03</td><td>X(20)</td><td>20</td><td>CA-PHONE-MOBILE</td></tr>
+  <tr><td><code>DB2-PHONE-HOME</code></td><td>03</td><td>X(20)</td><td>20</td><td>CA-PHONE-HOME</td></tr>
+  <tr><td><code>DB2-EMAIL-ADDRESS</code></td><td>03</td><td>X(100)</td><td>100</td><td>CA-EMAIL-ADDRESS</td></tr>
+</table></div>
+
+<h3 id="db2-policy">DB2-POLICY 宿主變數（含 DB2-POLICY-COMMON）</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>欄位</th><th>Level</th><th>PIC</th><th>Bytes</th><th>說明</th></tr>
+  <tr><td><code>DB2-POLICYTYPE</code></td><td>03</td><td>X</td><td>1</td><td>保單類型代碼</td></tr>
+  <tr><td><code>DB2-POLICYNUMBER</code></td><td>03</td><td>9(10)</td><td>10</td><td>保單號碼</td></tr>
+  <tr><td><code>DB2-ISSUEDATE</code></td><td>05</td><td>X(10)</td><td>10</td><td>生效日期</td></tr>
+  <tr><td><code>DB2-EXPIRYDATE</code></td><td>05</td><td>X(10)</td><td>10</td><td>到期日期</td></tr>
+  <tr><td><code>DB2-LASTCHANGED</code></td><td>05</td><td>X(26)</td><td>26</td><td>最後異動時間戳記</td></tr>
+  <tr><td><code>DB2-BROKERID</code></td><td>05</td><td>9(10)</td><td>10</td><td>仲介編號</td></tr>
+  <tr><td><code>DB2-BROKERSREF</code></td><td>05</td><td>X(10)</td><td>10</td><td>仲介參照號碼</td></tr>
+  <tr><td><code>DB2-PAYMENT</code></td><td>05</td><td>9(6)</td><td>6</td><td>保費金額</td></tr>
+</table></div>
+
+<h3 id="db2-endowment">DB2-ENDOWMENT 宿主變數</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>欄位</th><th>PIC</th><th>Bytes</th><th>說明</th></tr>
+  <tr><td><code>DB2-E-WITHPROFITS</code></td><td>X</td><td>1</td><td>收益分享旗標（Y/N）</td></tr>
+  <tr><td><code>DB2-E-EQUITIES</code></td><td>X</td><td>1</td><td>股票旗標</td></tr>
+  <tr><td><code>DB2-E-MANAGEDFUND</code></td><td>X</td><td>1</td><td>管理基金旗標</td></tr>
+  <tr><td><code>DB2-E-FUNDNAME</code></td><td>X(10)</td><td>10</td><td>基金名稱</td></tr>
+  <tr><td><code>DB2-E-TERM</code></td><td>9(2)</td><td>2</td><td>保險期限（年）</td></tr>
+  <tr><td><code>DB2-E-SUMASSURED</code></td><td>9(6)</td><td>6</td><td>保險金額</td></tr>
+  <tr><td><code>DB2-E-LIFEASSURED</code></td><td>X(31)</td><td>31</td><td>被保人姓名</td></tr>
+  <tr><td><code>DB2-E-PADDINGDATA</code></td><td>X(32611)</td><td>32611</td><td>VARCHAR 填充資料（可變長度，由 DFHCOMMAREA 長度計算）</td></tr>
+</table></div>
+
+<h3 id="db2-others">其他 DB2 宿主變數結構（摘要）</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>結構名稱</th><th>關鍵欄位</th></tr>
+  <tr><td><code>DB2-HOUSE</code></td><td>PROPERTYTYPE X(15), BEDROOMS 9(3), VALUE 9(8), HOUSENAME X(20), HOUSENUMBER X(4), POSTCODE X(8)</td></tr>
+  <tr><td><code>DB2-MOTOR</code></td><td>MAKE X(15), MODEL X(15), VALUE 9(6), REGNUMBER X(7), COLOUR X(8), CC 9(4), MANUFACTURED X(10), PREMIUM 9(6), ACCIDENTS 9(6)</td></tr>
+  <tr><td><code>DB2-COMMERCIAL</code></td><td>Address X(255), Postcode X(8), Lat/Long X(11), 四類 Peril 9(4) + Premium 9(8), Status 9(4), RejectReason X(255)</td></tr>
+  <tr><td><code>DB2-CLAIM</code></td><td>Num 9(10), Date X(10), Paid 9(8), Value 9(8), Cause X(255), Observations X(255)</td></tr>
+</table></div>
+
+<!-- ===== MAPPING ===== -->
+<h2 id="mapping">第四章：CA-COMMAREA 與 DB2 宿主變數對應表</h2>
+<div class="tbl-wrap"><table>
+  <tr><th>COMMAREA 欄位（CA-）</th><th>DB2 宿主變數（DB2-）</th><th>使用程式</th></tr>
+  <tr><td>CA-FIRST-NAME</td><td>DB2-FIRSTNAME</td><td>LGACDB01, LGICDB01, LGUCDB01</td></tr>
+  <tr><td>CA-LAST-NAME</td><td>DB2-LASTNAME</td><td>同上</td></tr>
+  <tr><td>CA-DOB</td><td>DB2-DATEOFBIRTH</td><td>同上（⚠ CA-DOB(1:1) 被 LGICDB01 覆寫）</td></tr>
+  <tr><td>CA-POSTCODE</td><td>DB2-POSTCODE</td><td>同上</td></tr>
+  <tr><td>CA-PHONE-MOBILE</td><td>DB2-PHONE-MOBILE</td><td>同上</td></tr>
+  <tr><td>CA-PHONE-HOME</td><td>DB2-PHONE-HOME</td><td>同上</td></tr>
+  <tr><td>CA-EMAIL-ADDRESS</td><td>DB2-EMAIL-ADDRESS</td><td>同上</td></tr>
+  <tr><td>CA-POLICY-NUM</td><td>DB2-POLICYNUMBER</td><td>LGAPDB01, LGIPDB01, LGDPDB01, LGUPDB01</td></tr>
+  <tr><td>CA-ISSUE-DATE</td><td>DB2-ISSUEDATE</td><td>同上</td></tr>
+  <tr><td>CA-EXPIRY-DATE</td><td>DB2-EXPIRYDATE</td><td>同上</td></tr>
+  <tr><td>CA-LASTCHANGED</td><td>DB2-LASTCHANGED</td><td>同上</td></tr>
+  <tr><td>CA-BROKERID</td><td>DB2-BROKERID</td><td>同上</td></tr>
+  <tr><td>CA-PAYMENT</td><td>DB2-PAYMENT</td><td>同上</td></tr>
+  <tr><td>CA-E-TERM</td><td>DB2-E-TERM</td><td>LGAPDB01（養老保險）</td></tr>
+  <tr><td>CA-E-SUM-ASSURED</td><td>DB2-E-SUMASSURED</td><td>LGAPDB01（養老保險）</td></tr>
+  <tr><td>CA-H-VALUE</td><td>DB2-H-VALUE</td><td>LGAPDB01（房屋保險）</td></tr>
+  <tr><td>CA-M-MAKE</td><td>DB2-M-MAKE</td><td>LGAPDB01（汽車保險）</td></tr>
+  <tr><td>CA-B-Address</td><td>DB2-B-Address</td><td>LGAPDB01（商業保險）</td></tr>
+  <tr><td>CA-C-Num</td><td>DB2-C-Num</td><td>LGAPDB01（理賠）</td></tr>
+</table></div>
+
+<!-- ===== DIAGRAMS ===== -->
+<h2 id="diagrams">圖表</h2>
+
+<div class="mermaid-wrap">
+  <h4>圖 4-1：COMMAREA REDEFINES 記憶體重疊圖</h4>
+  <div class="mermaid">
+classDiagram
+  class DFHCOMMAREA {
+    string CA_REQUEST_ID
+    string CA_RETURN_CODE
+    string CA_CUSTOMER_NUM
+    string CA_REQUEST_SPECIFIC
+  }
+  class CA_CUSTOMER_REQUEST {
+    string CA_FIRST_NAME
+    string CA_LAST_NAME
+    string CA_DOB
+    string CA_POSTCODE
+    string CA_PHONE_MOBILE
+    string CA_EMAIL_ADDRESS
+    string CA_POLICY_DATA
+  }
+  class CA_CUSTSECR_REQUEST {
+    string CA_CUSTSECR_PASS
+    string CA_CUSTSECR_COUNT
+    string CA_CUSTSECR_STATE
+    string CA_CUSTSECR_DATA
+  }
+  class CA_POLICY_REQUEST {
+    string CA_POLICY_NUM
+    string CA_POLICY_COMMON
+    string CA_POLICY_SPECIFIC
+  }
+  DFHCOMMAREA --> CA_CUSTOMER_REQUEST : REDEFINES
+  DFHCOMMAREA --> CA_CUSTSECR_REQUEST : REDEFINES
+  DFHCOMMAREA --> CA_POLICY_REQUEST : REDEFINES
+  </div>
+</div>
+
+<div class="mermaid-wrap">
+  <h4>圖 4-2：CA-POLICY-REQUEST 保單類型分支</h4>
+  <div class="mermaid">
+classDiagram
+  class CA_POLICY_REQUEST {
+    string CA_POLICY_NUM
+    string CA_POLICY_COMMON
+    string CA_POLICY_SPECIFIC
+  }
+  class CA_ENDOWMENT {
+    string WITH_PROFITS
+    string EQUITIES
+    string FUND_NAME
+    string TERM
+    string SUM_ASSURED
+    string LIFE_ASSURED
+    string PADDING_DATA
+  }
+  class CA_HOUSE {
+    string PROPERTY_TYPE
+    string BEDROOMS
+    string VALUE
+    string POSTCODE
+  }
+  class CA_MOTOR {
+    string MAKE
+    string MODEL
+    string VALUE
+    string REGNUMBER
+    string CC
+    string PREMIUM
+  }
+  class CA_COMMERCIAL {
+    string Address
+    string FirePeril
+    string FirePremium
+    string FloodPeril
+    string WeatherPeril
+    string Status
+  }
+  class CA_CLAIM {
+    string Num
+    string Date
+    string Paid
+    string Value
+    string Cause
+  }
+  CA_POLICY_REQUEST --> CA_ENDOWMENT : REDEFINES
+  CA_POLICY_REQUEST --> CA_HOUSE : REDEFINES
+  CA_POLICY_REQUEST --> CA_MOTOR : REDEFINES
+  CA_POLICY_REQUEST --> CA_COMMERCIAL : REDEFINES
+  CA_POLICY_REQUEST --> CA_CLAIM : REDEFINES
+  </div>
+</div>
+
+<div class="mermaid-wrap">
+  <h4>圖 4-3：DB2 宿主變數與資料表對應（ER 圖）</h4>
+  <div class="mermaid">
+erDiagram
+  CUSTOMER {
+    string FIRSTNAME
+    string LASTNAME
+    string DATEOFBIRTH
+    string HOUSENAME
+    string HOUSENUMBER
+    string POSTCODE
+    string PHONE_MOBILE
+    string PHONE_HOME
+    string EMAIL_ADDRESS
+  }
+  POLICY {
+    string POLICYTYPE
+    string POLICYNUMBER
+    string ISSUEDATE
+    string EXPIRYDATE
+    string LASTCHANGED
+    string BROKERID
+    string PAYMENT
+  }
+  ENDOWMENT {
+    string WITHPROFITS
+    string FUNDNAME
+    string TERM
+    string SUMASSURED
+    string LIFEASSURED
+    string PADDINGDATA
+  }
+  HOUSE {
+    string PROPERTYTYPE
+    string BEDROOMS
+    string VALUE
+    string POSTCODE
+  }
+  MOTOR {
+    string MAKE
+    string REGNUMBER
+    string PREMIUM
+    string ACCIDENTS
+  }
+  COMMERCIAL {
+    string ADDRESS
+    string FIREPERIL
+    string FIREPREMIUM
+    string STATUS
+  }
+  CLAIM {
+    string NUM
+    string DATE
+    string PAID
+    string CAUSE
+  }
+  CUSTOMER ||--o{ POLICY : "owns"
+  POLICY ||--o| ENDOWMENT : "endowment"
+  POLICY ||--o| HOUSE : "house"
+  POLICY ||--o| MOTOR : "motor"
+  POLICY ||--o| COMMERCIAL : "commercial"
+  POLICY ||--o| CLAIM : "claim"
+  </div>
+</div>
+
+<footer>Made with IBM Bob</footer>
+</main>
+</div>
+<script>mermaid.initialize({startOnLoad:true,theme:'default',securityLevel:'loose'});</script>
+</body>
+</html>
