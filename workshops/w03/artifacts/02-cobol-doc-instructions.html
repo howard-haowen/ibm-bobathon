@@ -271,7 +271,7 @@
     <div class="hero">
       <p class="hero-eyebrow">工作坊教材 · COBOL 傳承</p>
       <h1>用 IBM Bob 解讀、文件化與傳承 COBOL 程式</h1>
-      <p>本單元以 IBM cics-genapp 保險核心交易系統的 COBOL 原始碼為素材，帶你依序體驗 Ask、Plan、Agent 三種模式：從認識陌生專案，到產出技術文件，最後在隔離的 Git worktree 中新增水災險功能。全程在本機進行，不需要 Mainframe 環境。</p>
+      <p>本單元以 IBM cics-genapp 保險核心交易系統的 COBOL 原始碼為素材，帶你依序體驗 Ask、Plan、Agent 三種模式：從認識陌生專案，到產出技術文件，最後在隔離的 Git worktree 中新增旅遊險功能。全程在本機進行，不需要 Mainframe 環境。</p>
     </div>
 
     <div class="callout" style="margin-bottom: 40px;">
@@ -394,7 +394,7 @@ output/         ← 任務二產出的 HTML</code></pre>
     </div>
 
     <!-- Task 3 -->
-    <h2 class="section-title" style="font-size: 20px; font-weight: 600;">任務三：Feature Development — 使用 Worktree 新增水災險</h2>
+    <h2 class="section-title" style="font-size: 20px; font-weight: 600;">任務三：Feature Development — 使用 Worktree 新增旅遊險</h2>
     <p class="section-desc">同樣分成 <strong>Plan → Agent</strong> 兩階段。Bob 會先分析既有險種的實作方式、擬定計畫，再於獨立的 Git worktree 中執行，確保目前工作目錄不受影響。</p>
 
     <div class="callout">
@@ -403,13 +403,13 @@ output/         ← 任務二產出的 HTML</code></pre>
 
     <div class="prompt-showcase">
       <div class="prompt-header-row">
-        <div class="prompt-header">Prompt 3-A（Plan Mode）：規劃水災險</div>
+        <div class="prompt-header">Prompt 3-A（Plan Mode）：規劃旅遊險</div>
         <button class="copy-btn" data-target="p3a">複製</button>
       </div>
-      <div class="prompt-text" id="p3a">我想新增「水災險」險種。請先不要修改程式碼，分析現有險種的完整實作（資料結構、保單 CRUD、資料存取），找出影響範圍，並建立實作計畫。計畫需涵蓋資料定義、程式變更、測試方式與驗收標準，以及完整的執行步驟：建立獨立的 Git worktree 與功能分支、所有變更只在 worktree 中進行、完成後執行驗收項目並整理摘要。計畫存到 plans/。</div>
+      <div class="prompt-text" id="p3a">我想新增「旅遊險」險種。請先不要修改程式碼，分析現有險種的完整實作（資料結構、保單 CRUD、資料存取），找出影響範圍，並建立實作計畫。計畫需涵蓋資料定義、程式變更、測試方式與驗收標準，以及完整的執行步驟：建立獨立的 Git worktree 與功能分支、所有變更只在 worktree 中進行、完成後執行驗收項目並整理摘要。計畫存到 plans/。</div>
       <div class="response-header">預期 Bob 的回應方向</div>
       <div class="response-content">
-        Bob 會追蹤現有險種在 Copybook、業務程式、資料存取程式之間的關聯，列出水災險的完整影響範圍，並把 worktree 建立、實作、測試與驗收的完整步驟納入計畫。
+        Bob 會追蹤現有險種在 Copybook、業務程式、資料存取程式之間的關聯，列出旅遊險的完整影響範圍，並把 worktree 建立、實作、測試與驗收的完整步驟納入計畫。
       </div>
     </div>
 
@@ -418,10 +418,10 @@ output/         ← 任務二產出的 HTML</code></pre>
         <div class="prompt-header">Prompt 3-B（Agent Mode）：在 Worktree 中實作</div>
         <button class="copy-btn" data-target="p3b">複製</button>
       </div>
-      <div class="prompt-text" id="p3b">請讀取剛才的水災險實作計畫並依計畫執行。</div>
+      <div class="prompt-text" id="p3b">請讀取剛才的旅遊險實作計畫並依計畫執行。</div>
       <div class="response-header">預期 Bob 的回應方向</div>
       <div class="response-content">
-        Bob 依計畫逐步完成：建立隔離的 worktree 與功能分支，在其中實作水災險的資料結構與 CRUD 功能，執行驗收項目，整理摘要。原工作目錄維持不變。
+        Bob 依計畫逐步完成：建立隔離的 worktree 與功能分支，在其中實作旅遊險的資料結構與 CRUD 功能，執行驗收項目，整理摘要。原工作目錄維持不變。
       </div>
     </div>
 
