@@ -290,41 +290,41 @@ plans/          ← Planning 階段產出的計畫存放位置
 docs/           ← 任務二產出的五份 .md 文件
 output/         ← 任務二產出的 HTML</code></pre>
 
-    <p class="section-desc">任務二會將整個專案整理為以下五份模組文件：</p>
+    <p class="section-desc">任務二會將整個專案整理為以下五份技術文件：</p>
 
     <table class="carbon-table">
       <thead>
         <tr>
-          <th style="width: 30%;">技術文件</th>
-          <th style="width: 25%;">模組</th>
-          <th style="width: 45%;">涵蓋內容</th>
+          <th style="width: 5%;">#</th>
+          <th style="width: 30%;">文件主題</th>
+          <th style="width: 65%;">涵蓋內容</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>doc-customer.md</strong></td>
-          <td>客戶管理</td>
-          <td>客戶新增、查詢、更新相關程式與資料流</td>
+          <td>1</td>
+          <td><strong>GENAPP 系統總覽與架構</strong></td>
+          <td>系統背景、程式清單、目錄組織、業務模組分組與整體資料流說明</td>
         </tr>
         <tr>
-          <td><strong>doc-policy-add-inq.md</strong></td>
-          <td>保單新增與查詢</td>
-          <td>保單建立、查詢與相關資料存取</td>
+          <td>2</td>
+          <td><strong>保單 CRUD 業務層技術文件</strong></td>
+          <td>保單新增、查詢、刪除、更新的業務邏輯、DB2 存取與 VSAM 存取程式說明</td>
         </tr>
         <tr>
-          <td><strong>doc-policy-upd-del.md</strong></td>
-          <td>保單更新與刪除</td>
-          <td>DB2、VSAM 更新及刪除流程</td>
+          <td>3</td>
+          <td><strong>客戶 CRUD 業務層技術文件</strong></td>
+          <td>客戶新增、查詢、更新與批次匯入的業務程式、驗證邏輯與條件編譯說明</td>
         </tr>
         <tr>
-          <td><strong>doc-infra-tools.md</strong></td>
-          <td>基礎設施與工具</td>
-          <td>系統支援、資料庫與共用工具程式</td>
+          <td>4</td>
+          <td><strong>資料結構與 Copybook 技術文件</strong></td>
+          <td>共用 COMMAREA、保單欄位定義、REDEFINES 對應與 DB2 Host Variable 說明</td>
         </tr>
         <tr>
-          <td><strong>doc-copybooks.md</strong></td>
-          <td>共用 Copybook</td>
-          <td>共用通訊區與保單資料結構</td>
+          <td>5</td>
+          <td><strong>基礎設施與監控技術文件</strong></td>
+          <td>系統初始化、交易統計、背景監控與錯誤記錄程式的架構與實作說明</td>
         </tr>
       </tbody>
     </table>
@@ -374,7 +374,14 @@ output/         ← 任務二產出的 HTML</code></pre>
         <div class="prompt-header">Prompt 2-A（Plan Mode）：建立文件計畫</div>
         <button class="copy-btn" data-target="p2a">複製</button>
       </div>
-      <div class="prompt-text" id="p2a">請閱讀 DOC-SPEC.md 並分析 COBOL/ 與 COPY/，替這個專案規劃五份繁體中文技術文件的產出計畫。計畫需涵蓋各文件的程式範圍、章節結構、Mermaid 圖表需求與驗收標準，以及完整的執行步驟：依 DOC-SPEC.md 產出五份繁體中文Markdown技術文件存到docs/、依 DESIGN.md 整合成 HTML存到output/、完成後驗證所有 Mermaid 圖表語法並自動修正錯誤。計畫儲存到 plans/。</div>
+      <div class="prompt-text" id="p2a">請閱讀 DOC-SPEC.md 並分析 COBOL/ 與 COPY/，替這個專案規劃以下五份繁體中文技術文件的產出計畫：<br>
+一：系統總覽與架構<br>
+二：保單 CRUD 業務層技術文件<br>
+三：客戶 CRUD 業務層技術文件<br>
+四：資料結構與 Copybook 技術文件<br>
+五：基礎設施與監控技術文件<br>
+<br>
+計畫需涵蓋各文件的程式範圍、章節結構、Mermaid 圖表需求與驗收標準，以及完整的執行步驟：依 DOC-SPEC.md 產出五份繁體中文 Markdown 技術文件存到 docs/、依 DESIGN.md 整合成 HTML 存到 output/、完成後驗證所有 Mermaid 圖表語法並自動修正錯誤。計畫儲存到 plans/。</div>
       <div class="response-header">預期 Bob 的回應方向</div>
       <div class="response-content">
         Bob 會盤點所有程式與 Copybook，決定五份文件的邊界，規劃從原始碼分析、Markdown 產出、HTML 整合到圖表驗證的完整步驟，存成計畫檔案。
