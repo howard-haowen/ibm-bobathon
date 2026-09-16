@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IBM Bob 入門操作指南</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      color: #161616;
+      background: #ffffff;
+    }
+
+    .utility-bar {
+      background: #f4f4f4;
+      color: #525252;
+      font-size: 12px;
+      letter-spacing: 0.32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .top-nav {
+      background: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+    }
+    .top-nav .logo { font-size: 18px; font-weight: 600; color: #161616; text-decoration: none; }
+    .top-nav .logo span { color: #0f62fe; }
+    .top-nav .back-link { font-size: 14px; color: #0f62fe; text-decoration: none; }
+    .top-nav .back-link:hover { text-decoration: underline; }
+
+    .page-content {
+      max-width: 1056px;
+      margin: 0 auto;
+      padding: 64px 32px 96px;
+    }
+
+    /* Hero */
+    .hero {
+      margin-bottom: 48px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .hero-eyebrow { font-size: 14px; color: #525252; margin-bottom: 12px; }
+    .hero h1 { font-size: 42px; font-weight: 300; line-height: 1.20; color: #161616; margin-bottom: 16px; }
+    .hero p { font-size: 18px; color: #525252; max-width: 760px; }
+    .hero .scenario-tag {
+      display: inline-block;
+      background: #fff1f1;
+      color: #a2191f;
+      border: 1px solid #ffd7d9;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      padding: 3px 10px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+
+    /* SAST Report Panel */
+    .sast-panel {
+      border: 2px solid #ffd7d9;
+      background: #fff1f1;
+      margin-bottom: 48px;
+    }
+    .sast-panel-header {
+      background: #a2191f;
+      color: #ffffff;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .sast-panel-header .tool-name {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      text-transform: uppercase;
+    }
+    .sast-panel-header .scan-meta {
+      font-size: 11px;
+      opacity: 0.85;
+      letter-spacing: 0.16px;
+    }
+    .sast-finding {
+      padding: 20px 24px;
+    }
+    .sast-finding-row {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 6px 16px;
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+    .sast-finding-row .label {
+      color: #6f6f6f;
+      font-weight: 600;
+      letter-spacing: 0.16px;
+    }
+    .sast-finding-row .value { color: #161616; }
+    .sast-finding-row .value code {
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      background: #f4f4f4;
+      padding: 0 4px;
+      font-size: 12px;
+      color: #161616;
+    }
+    .severity-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.32px;
+      padding: 2px 10px;
+      text-transform: uppercase;
+    }
+    .severity-critical { background: #a2191f; color: #ffffff; }
+
+    .sast-code-snippet {
+      margin: 16px 0 0;
+      background: #161616;
+      border-top: 1px solid #393939;
+    }
+    .sast-code-header {
+      padding: 6px 16px;
+      background: #262626;
+      font-size: 11px;
+      color: #8d8d8d;
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      letter-spacing: 0.16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sast-code-header .finding-marker {
+      background: #a2191f;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 8px;
+      letter-spacing: 0.32px;
+    }
+    .sast-code-snippet pre {
+      margin: 0;
+      padding: 14px 16px;
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      font-size: 12px;
+      color: #f4f4f4;
+      line-height: 1.7;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    .sast-code-snippet .line-ok { color: #6f6f6f; }
+    .sast-code-snippet .line-issue { color: #ffb3b8; background: #520408; display: block; margin: 0 -16px; padding: 0 16px; }
+    .sast-code-snippet .line-missing { color: #ff8389; background: #520408; display: block; margin: 0 -16px; padding: 0 16px; font-style: italic; }
+
+    /* Section */
+    .section-title {
+      font-size: 24px;
+      font-weight: 400;
+      color: #161616;
+      margin: 48px 0 8px;
+    }
+    .section-desc { font-size: 16px; color: #525252; margin-bottom: 28px; max-width: 760px; }
+
+    /* Mode cards */
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: #e0e0e0;
+      border: 1px solid #e0e0e0;
+      margin-bottom: 48px;
+    }
+    @media (max-width: 800px) { .mode-grid { grid-template-columns: 1fr; } }
+
+    .mode-card {
+      background: #fff;
+      padding: 28px 24px 24px;
+      border-top: 4px solid #e0e0e0;
+    }
+    .mode-card.ask  { border-top-color: #0f62fe; }
+    .mode-card.plan { border-top-color: #8a3ffc; }
+    .mode-card.agent{ border-top-color: #198038; }
+
+    .mode-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      margin-bottom: 12px;
+    }
+    .mode-card.ask  .mode-badge { background: #d0e2ff; color: #0043ce; }
+    .mode-card.plan .mode-badge { background: #e8daff; color: #6929c4; }
+    .mode-card.agent .mode-badge { background: #defbe6; color: #0e6027; }
+
+    .mode-card h3 { font-size: 20px; font-weight: 400; color: #161616; margin-bottom: 10px; }
+    .mode-card .desc { font-size: 14px; color: #525252; line-height: 1.5; margin-bottom: 16px; }
+    .mode-card .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+    .tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      background: #f4f4f4;
+      color: #525252;
+      border: 1px solid #e0e0e0;
+      white-space: nowrap;
+    }
+    .mode-card .permission {
+      font-size: 12px;
+      color: #525252;
+      border-top: 1px solid #e0e0e0;
+      padding-top: 12px;
+      line-height: 1.4;
+    }
+    .mode-card .permission strong { color: #161616; }
+
+    /* Workflow steps */
+    .workflow-steps {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+    .workflow-step {
+      flex: 1;
+      min-width: 180px;
+      padding: 16px 20px;
+      background: #f4f4f4;
+      border: 1px solid #e0e0e0;
+      position: relative;
+    }
+    .workflow-step + .workflow-step {
+      border-left: none;
+    }
+    .workflow-step .step-num {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      text-transform: uppercase;
+      color: #8d8d8d;
+      margin-bottom: 4px;
+    }
+    .workflow-step .step-mode {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .workflow-step.ask .step-mode { color: #0043ce; }
+    .workflow-step.plan .step-mode { color: #6929c4; }
+    .workflow-step.agent .step-mode { color: #0e6027; }
+    .workflow-step .step-desc { font-size: 12px; color: #525252; line-height: 1.4; }
+    .workflow-arrow {
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      font-size: 18px;
+      color: #8d8d8d;
+      align-self: center;
+    }
+    @media (max-width: 672px) { .workflow-arrow { display: none; } }
+
+    /* Demo sections */
+    .demo-section {
+      border-left: 4px solid #e0e0e0;
+      padding: 0 0 0 20px;
+      margin-bottom: 40px;
+    }
+    .demo-section.ask  { border-left-color: #0f62fe; }
+    .demo-section.plan { border-left-color: #8a3ffc; }
+    .demo-section.agent{ border-left-color: #198038; }
+
+    .demo-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .demo-section.ask  .demo-label { color: #0043ce; }
+    .demo-section.plan .demo-label { color: #6929c4; }
+    .demo-section.agent .demo-label { color: #0e6027; }
+
+    .demo-section h3 { font-size: 18px; font-weight: 400; color: #161616; margin-bottom: 6px; }
+    .demo-section p { font-size: 14px; color: #525252; margin-bottom: 10px; }
+
+    /* Prompt block */
+    .prompt-block {
+      background: #f4f4f4;
+      margin: 10px 0 4px;
+      position: relative;
+    }
+    .prompt-block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 12px 0;
+    }
+    .prompt-block-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #525252;
+      text-transform: uppercase;
+    }
+    .copy-btn {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #0f62fe;
+      background: #ffffff;
+      border: 1px solid #0f62fe;
+      padding: 3px 10px;
+      cursor: pointer;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+    .copy-btn:hover { background: #0f62fe; color: #ffffff; }
+    .copy-btn.copied { background: #198038; border-color: #198038; color: #ffffff; }
+    .prompt-block pre {
+      margin: 0;
+      background: transparent;
+      padding: 10px 20px 14px;
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      font-size: 13px;
+      color: #161616;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* Expected output */
+    .expected {
+      background: #f4f4f4;
+      border-left: 2px solid #8d8d8d;
+      padding: 10px 16px;
+      font-size: 13px;
+      color: #525252;
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      line-height: 1.6;
+      margin-top: 4px;
+    }
+    .expected-label { font-size: 11px; color: #8d8d8d; font-weight: 600; letter-spacing: 0.32px; margin-bottom: 2px; }
+
+    /* Before / After code diff */
+    .diff-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: #e0e0e0;
+      border: 1px solid #e0e0e0;
+      margin: 12px 0 4px;
+    }
+    @media (max-width: 672px) { .diff-block { grid-template-columns: 1fr; } }
+    .diff-side { background: #161616; }
+    .diff-side-header {
+      padding: 6px 14px;
+      font-size: 11px;
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      letter-spacing: 0.16px;
+      background: #262626;
+    }
+    .diff-side-header.before { color: #ffb3b8; }
+    .diff-side-header.after  { color: #a7f0ba; }
+    .diff-side pre {
+      margin: 0;
+      padding: 12px 14px;
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      font-size: 12px;
+      color: #f4f4f4;
+      line-height: 1.7;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    .diff-del { color: #ffb3b8; background: #520408; display: block; margin: 0 -14px; padding: 0 14px; }
+    .diff-add { color: #a7f0ba; background: #071908; display: block; margin: 0 -14px; padding: 0 14px; }
+    .diff-ctx { color: #6f6f6f; }
+
+    /* Quick reference table */
+    .carbon-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 32px;
+    }
+    .carbon-table th {
+      background: #f4f4f4;
+      color: #161616;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 12px 16px;
+      border-bottom: 2px solid #e0e0e0;
+      text-align: left;
+    }
+    .carbon-table td {
+      color: #525252;
+      font-size: 14px;
+      padding: 14px 16px;
+      border-bottom: 1px solid #e0e0e0;
+      line-height: 1.5;
+    }
+    .carbon-table tr:last-child td { border-bottom: none; }
+    .carbon-table tr:hover td { background: #f4f4f4; }
+
+    .pill {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+    }
+    .pill-ask   { background: #d0e2ff; color: #0043ce; }
+    .pill-plan  { background: #e8daff; color: #6929c4; }
+    .pill-agent { background: #defbe6; color: #0e6027; }
+
+    /* CTA */
+    .cta-banner {
+      background: #0f62fe;
+      color: #ffffff;
+      padding: 40px 48px;
+      margin-top: 48px;
+    }
+    .cta-banner h3 { font-size: 22px; font-weight: 300; margin-bottom: 10px; }
+    .cta-banner p { font-size: 15px; opacity: 0.9; max-width: 600px; }
+    .cta-link { color: #fff; font-weight: 600; text-decoration: underline; }
+
+    footer {
+      background: #161616;
+      color: #8c8c8c;
+      font-size: 12px;
+      padding: 48px 32px;
+      text-align: center;
+      margin-top: 64px;
+      border-top: 1px solid #393939;
+    }
+
+    @media (max-width: 672px) {
+      .utility-bar { display: none; }
+      .page-content { padding: 40px 16px 64px; }
+      .hero h1 { font-size: 30px; }
+      .cta-banner { padding: 32px 24px; }
+      .sast-finding-row { grid-template-columns: 100px 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="utility-bar">IBM Bob · 工作坊教學材料 · SAST 弱點修補實戰</div>
+
+  <nav class="top-nav">
+    <a class="logo" href="index.html">IBM <span>Bob</span></a>
+    <a class="back-link" href="index.html">← 回索引</a>
+  </nav>
+
+  <main class="page-content">
+
+    <div class="hero">
+      <p class="hero-eyebrow">工作坊教材 · 單元一</p>
+      <span class="scenario-tag">情境：SAST 弱點修補</span>
+      <h1>IBM Bob 入門操作指南</h1>
+      <p>Ask、Plan、Agent — 三種模式對應三種工作場景。以一份真實的 <strong>Checkmarx SAST 掃描報告</strong>為起點，帶你走完從「看懂弱點」到「修復上線」的完整工作流程。</p>
+    </div>
+
+    <!-- SAST Report Panel -->
+    <h2 class="section-title">情境：SAST 工具偵測到 Critical 弱點</h2>
+    <p class="section-desc">資安團隊對銀行核心 COBOL 系統執行靜態掃描，Checkmarx 回報一份 Critical 等級的發現。你現在拿到這份報告，但從未看過 Enterprise COBOL 程式碼。</p>
+
+    <div class="sast-panel">
+      <div class="sast-panel-header">
+        <span class="tool-name">Checkmarx SAST — Scan Results</span>
+        <span class="scan-meta">Project: IBMBankingCore &nbsp;|&nbsp; Branch: main &nbsp;|&nbsp; Scanned: 2025-07-10 09:42 CST</span>
+      </div>
+      <div class="sast-finding">
+        <div class="sast-finding-row">
+          <span class="label">Finding ID</span>
+          <span class="value">CX-2025-0714-001</span>
+        </div>
+        <div class="sast-finding-row">
+          <span class="label">Category</span>
+          <span class="value">Incomplete Transaction (CWE-841)</span>
+        </div>
+        <div class="sast-finding-row">
+          <span class="label">Severity</span>
+          <span class="value"><span class="severity-badge severity-critical">Critical</span></span>
+        </div>
+        <div class="sast-finding-row">
+          <span class="label">File</span>
+          <span class="value"><code>cobol/BKTRXN.cbl</code></span>
+        </div>
+        <div class="sast-finding-row">
+          <span class="label">Location</span>
+          <span class="value">Paragraph <code>1000-PROCESS-TRANSFER</code>, lines 81–108</span>
+        </div>
+        <div class="sast-finding-row">
+          <span class="label">Description</span>
+          <span class="value">Transfer operation deducts funds from source account but does not update target account balance. Transaction is left in a partial state: funds are debited but never credited. <strong>Financial data loss risk.</strong></span>
+        </div>
+        <div class="sast-finding-row">
+          <span class="label">Reference</span>
+          <span class="value">CWE-841: Improper Enforcement of Behavioral Workflow &nbsp;|&nbsp; OWASP A04:2021 – Insecure Design</span>
+        </div>
+
+        <div class="sast-code-snippet">
+          <div class="sast-code-header">
+            <span>cobol/BKTRXN.cbl &nbsp;— 1000-PROCESS-TRANSFER (lines 81–108)</span>
+            <span class="finding-marker">FINDING</span>
+          </div>
+          <pre
+> 1000-PROCESS-TRANSFER.
+<span class="line-ok">     MOVE LK-ACCOUNT-NO TO DB2-ACCOUNT-NO</span>
+<span class="line-ok">     MOVE 'SELA'        TO DB2-OPERATION</span>
+<span class="line-ok">     PERFORM 9100-CALL-BKDB2       *&gt; query source account</span>
+<span class="line-ok">     ...</span>
+<span class="line-ok">     COMPUTE WS-NEW-SOURCE-BAL =</span>
+<span class="line-ok">         WS-SOURCE-BALANCE - LK-AMOUNT</span>
+<span class="line-ok"></span>
+<span class="line-ok">     PERFORM 3100-UPDATE-SOURCE-BAL  *&gt; ✓ debit source account</span>
+<span class="line-ok"></span>
+<span class="line-issue">*    ← target account balance should be queried and 3200-UPDATE-TARGET-BAL called here</span>
+<span class="line-missing">*    PERFORM 3200-UPDATE-TARGET-BAL  ← paragraph exists but is never called!</span>
+<span class="line-ok"></span>
+<span class="line-ok">     MOVE '00' TO LK-RETURN-CODE</span>
+<span class="line-ok">     MOVE 'TRANSFER COMPLETED' TO LK-RETURN-MSG.</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mode Overview Cards -->
+    <h2 class="section-title">三種模式一覽</h2>
+    <p class="section-desc">拿到 SAST 報告後，正確的工作流程是依序切換三個模式，每個模式做它最擅長的事。</p>
+
+    <div class="mode-grid">
+      <div class="mode-card ask">
+        <span class="mode-badge">Ask</span>
+        <h3>知識模式</h3>
+        <p class="desc">閱讀代碼、理解報告、解釋概念。<strong>不會修改任何檔案</strong>，適合搞懂陌生程式庫或確認弱點根因。</p>
+        <div class="tag-row">
+          <span class="tag">讀懂代碼</span>
+          <span class="tag">解釋弱點</span>
+          <span class="tag">確認根因</span>
+          <span class="tag">查詢文件</span>
+        </div>
+        <p class="permission"><strong>權限：</strong>唯讀。不寫入本地檔案，不執行命令。</p>
+      </div>
+      <div class="mode-card plan">
+        <span class="mode-badge">Plan</span>
+        <h3>規劃模式</h3>
+        <p class="desc">分析修補方案、評估影響範圍、列出步驟。聚焦「<strong>做什麼</strong>」，在動手前確認方向正確。</p>
+        <div class="tag-row">
+          <span class="tag">修補方案設計</span>
+          <span class="tag">影響分析</span>
+          <span class="tag">任務拆解</span>
+          <span class="tag">風險評估</span>
+        </div>
+        <p class="permission"><strong>權限：</strong>可讀取檔案，僅輸出計畫文字，不直接執行修改。</p>
+      </div>
+      <div class="mode-card agent">
+        <span class="mode-badge">Agent</span>
+        <h3>執行模式</h3>
+        <p class="desc">撰寫代碼、修改檔案、執行命令。在規劃確認後切換，讓 Bob 自動<strong>完成修補</strong>。</p>
+        <div class="tag-row">
+          <span class="tag">修改代碼</span>
+          <span class="tag">建立檔案</span>
+          <span class="tag">執行命令</span>
+          <span class="tag">產出 Diff</span>
+        </div>
+        <p class="permission"><strong>權限：</strong>完整讀寫，可呼叫工具、執行 Shell 命令。</p>
+      </div>
+    </div>
+
+    <!-- Workflow -->
+    <h2 class="section-title">完整工作流程</h2>
+    <p class="section-desc">從 SAST 報告到修補完成，依序走三個步驟。</p>
+
+    <div class="workflow-steps">
+      <div class="workflow-step ask">
+        <div class="step-num">Step 1</div>
+        <div class="step-mode">Ask 模式</div>
+        <div class="step-desc">搞懂弱點報告<br>與程式碼的關聯</div>
+      </div>
+      <div class="workflow-arrow">→</div>
+      <div class="workflow-step plan">
+        <div class="step-num">Step 2</div>
+        <div class="step-mode">Plan 模式</div>
+        <div class="step-desc">規劃弱點修補<br>與問題修正方案</div>
+      </div>
+      <div class="workflow-arrow">→</div>
+      <div class="workflow-step agent">
+        <div class="step-num">Step 3</div>
+        <div class="step-mode">Agent 模式</div>
+        <div class="step-desc">執行弱點修補<br>與問題修正</div>
+      </div>
+      <div class="workflow-arrow">→</div>
+      <div class="workflow-step ask">
+        <div class="step-num">Step 4</div>
+        <div class="step-mode">Ask 模式</div>
+        <div class="step-desc">比較分支差異<br>確認修補結果</div>
+      </div>
+    </div>
+
+    <!-- Demos -->
+    <h2 class="section-title">實際演練</h2>
+    <p class="section-desc">以上方 Checkmarx 報告為起點，依序示範三個模式的正確用法。</p>
+
+    <!-- Ask Demo -->
+    <div class="demo-section ask">
+      <p class="demo-label">Step 1 — Ask 模式</p>
+      <h3>搞懂弱點報告在做什麼，以及與程式碼的關聯</h3>
+      <p>拿到 SAST 報告，第一步不是馬上動手修。先用 Ask 模式，直接把報告檔案 <code>CX-2025-0714-001.md</code> 丟給 Bob，讓它讀懂弱點內容、確認問題屬實、理解財務衝擊。</p>
+
+      <div class="prompt-block">
+        <div class="prompt-block-header">
+          <span class="prompt-block-label">Prompt — Ask 模式</span>
+          <button class="copy-btn" data-target="prompt-ask">複製</button>
+        </div>
+        <pre id="prompt-ask">@CX-2025-0714-001.md 這是資安剛送來的 SAST 報告，幫我確認問題是否屬實，以及實際的財務衝擊是什麼。</pre>
+      </div>
+      <div class="expected-label">Bob 會回答的內容方向</div>
+      <div class="expected">✓ 讀取 BKTRXN.cbl → 逐步追蹤轉帳流程 → 確認 3200-UPDATE-TARGET-BAL 段落存在但缺少 PERFORM 呼叫
+✓ 說明：每次轉帳，來源帳戶金額減少，目標帳戶金額不變，資金「消失」在系統中
+✓ 說明財務衝擊：若轉帳金額為 $100,000，客戶帳戶損失 $100,000，對方帳戶未收到
+✓ 不修改任何檔案</div>
+    </div>
+
+    <!-- Plan Demo -->
+    <div class="demo-section plan">
+      <p class="demo-label">Step 2 — Plan 模式</p>
+      <h3>規劃弱點修補與問題修正方案</h3>
+      <p>Ask 模式已確認弱點屬實，也理解了財務衝擊。現在切換 Plan 模式，在動手修改程式碼之前，先讓 Bob 評估完整的修補範圍、邊界條件，以及可能影響到的其他模組。</p>
+
+      <div class="prompt-block">
+        <div class="prompt-block-header">
+          <span class="prompt-block-label">Prompt — Plan 模式</span>
+          <button class="copy-btn" data-target="prompt-plan">複製</button>
+        </div>
+        <pre id="prompt-plan">好，問題確認了。請規劃修補方案，包含修改步驟、邊界條件處理、以及失敗時如何回滾。</pre>
+      </div>
+      <div class="expected-label">Bob 會回答的內容方向</div>
+      <div class="expected">✓ 讀取 BKTRXN.cbl + BKDB2.cbl → 對照可用的 DB2 操作碼（SELA / UPDB）
+✓ 列出修補步驟：① 查詢目標帳戶（SELA）→ ② 驗證帳戶存在且狀態正常 → ③ 計算新餘額 → ④ 呼叫 3200-UPDATE-TARGET-BAL
+✓ 說明回滾策略：目標帳戶更新失敗時，需還原來源帳戶餘額
+✓ 不修改任何檔案</div>
+    </div>
+
+    <!-- Agent Demo -->
+    <div class="demo-section agent">
+      <p class="demo-label">Step 3 — Agent 模式</p>
+      <h3>執行弱點修補與問題修正</h3>
+      <p>修補方案已在 Plan 模式確認。切換至 Agent 模式，Bob 會先透過 <code>using-git-worktrees</code> Skill 建立隔離分支，再修改 <code>BKTRXN.cbl</code>，補齊目標帳戶更新邏輯，並說明每一處變動與對應的 CWE-841 修補要求。</p>
+
+      <table class="carbon-table" style="margin-bottom: 24px;">
+        <thead>
+          <tr>
+            <th style="width: 30%;">使用 Git Worktree 的好處</th>
+            <th style="width: 70%;">說明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>保護主線分支</strong></td>
+            <td>所有修改在獨立分支上進行，<code>main</code> / <code>workshop/w04</code> 不受影響，隨時可放棄該分支並重來。</td>
+          </tr>
+          <tr>
+            <td><strong>乾淨的基線驗證</strong></td>
+            <td>建立 worktree 後立即執行測試，確認起點是乾淨的。若修補後測試失敗，立刻能判斷是本次變更造成，而非既有問題。</td>
+          </tr>
+          <tr>
+            <td><strong>多工並行</strong></td>
+            <td>可同時在多個 worktree 中作業（例如一個修 CWE-841、另一個查看 main），共用同一份 Git 物件儲存區，無需重複 clone。</td>
+          </tr>
+          <tr>
+            <td><strong>易於 Code Review</strong></td>
+            <td>修補完成後直接從隔離分支開 PR，Diff 精準只含本次修補，不夾雜其他未提交變更，方便資安團隊審查。</td>
+          </tr>
+          <tr>
+            <td><strong>降低誤操作風險</strong></td>
+            <td>AI Agent 直接在隔離目錄寫入，即使操作出錯也不會污染工作區其他檔案；刪除 worktree 即完全還原。</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="prompt-block">
+        <div class="prompt-block-header">
+          <span class="prompt-block-label">Prompt — Agent 模式</span>
+          <button class="copy-btn" data-target="prompt-agent">複製</button>
+        </div>
+        <pre id="prompt-agent">計畫沒問題，請執行。先用 using-git-worktrees 建好隔離分支再改。</pre>
+      </div>
+      <div class="expected-label">Bob 會做的動作</div>
+      <div class="expected">✓ 啟用 using-git-worktrees Skill → 偵測是否已在 linked worktree → 建立隔離分支（如 fix/cwe-841）
+✓ 讀取 BKTRXN.cbl + BKDB2.cbl → 定位 1000-PROCESS-TRANSFER
+✓ 新增：查詢目標帳戶（SELA）→ 驗證帳戶狀態 → 計算新餘額 → 呼叫 3200-UPDATE-TARGET-BAL
+✓ 新增：若目標帳戶更新失敗，呼叫 3100-UPDATE-SOURCE-BAL 還原來源帳戶
+✓ 在隔離分支上修改 BKTRXN.cbl 並輸出 Before / After Diff</div>
+</div>
+
+    <!-- Step 4: Ask — compare branches -->
+    <div class="demo-section ask">
+      <p class="demo-label">Step 4 — Ask 模式</p>
+      <h3>比較目前分支與 fix 分支（bktrxn-transfer-fix）的差異</h3>
+      <p>Agent 模式在隔離的 <code>fix/bktrxn-transfer-fix</code> 分支完成修補後，切回 Ask 模式，用 <code>@</code> 語法直接指定兩個目錄，讓 Bob 分析差異並說明修補內容是否符合 SAST 報告的要求。</p>
+
+      <div class="prompt-block">
+        <div class="prompt-block-header">
+          <span class="prompt-block-label">Prompt — Ask 模式</span>
+          <button class="copy-btn" data-target="prompt-ask-diff">複製</button>
+        </div>
+        <pre id="prompt-ask-diff">比較目前分支 @cobol/ 跟 fix 分支（bktrxn-transfer-fix）的 COBOL 差異</pre>
+      </div>
+      <div class="expected-label">Bob 會回答的內容方向</div>
+      <div class="expected">✓ 掃描兩個目錄下的所有 COBOL 檔案，列出有差異的檔案清單
+✓ 說明 BKTRXN.cbl 是唯一被修改的檔案
+✓ 詳細比對三處關鍵變更：
+  ① 新增 PERFORM 1100-ROLLBACK-TRANSFER 的錯誤路徑呼叫
+  ② 補齊目標帳戶查詢（SELA）→ 狀態驗證（ACCT-STATUS = 'A'）→ 計算新餘額 → 呼叫 3200-UPDATE-TARGET-BAL 的完整邏輯
+  ③ 新增 1100-ROLLBACK-TRANSFER 段落（EXEC CICS SYNCPOINT ROLLBACK END-EXEC）
+✓ 確認修補後符合 CWE-841 要求：轉帳流程完整，來源與目標帳戶同步更新
+✓ 不修改任何檔案</div>
+
+      <!-- Diff Preview -->
+      <div style="margin-top: 12px;">
+        <div class="expected-label">兩分支實際 Diff — <code>cobol/BKTRXN.cbl</code>（僅顯示變更部分）</div>
+        <div class="diff-block">
+          <div class="diff-side">
+            <div class="diff-side-header before">workshop/w04（目前分支，有弱點）</div>
+            <pre
+><span class="diff-ctx">           PERFORM 3100-UPDATE-SOURCE-BAL</span>
+<span class="diff-ctx">           IF LK-RETURN-CODE NOT = '00'</span>
+<span class="diff-ctx">               GOBACK</span>
+<span class="diff-ctx">           END-IF</span>
+<span class="diff-del">      *    ← 目標帳戶邏輯完全缺失</span>
+<span class="diff-ctx">           MOVE '00' TO LK-RETURN-CODE</span>
+<span class="diff-ctx">           MOVE 'TRANSFER COMPLETED' TO LK-RETURN-MSG.</span>
+<span class="diff-del">      *    ← 1100-ROLLBACK-TRANSFER 段落不存在</span></pre>
+          </div>
+          <div class="diff-side">
+            <div class="diff-side-header after">fix/bktrxn-transfer-fix（修補後）</div>
+            <pre
+><span class="diff-ctx">           PERFORM 3100-UPDATE-SOURCE-BAL</span>
+<span class="diff-ctx">           IF LK-RETURN-CODE NOT = '00'</span>
+<span class="diff-add">               PERFORM 1100-ROLLBACK-TRANSFER</span>
+<span class="diff-ctx">               GOBACK</span>
+<span class="diff-ctx">           END-IF</span>
+<span class="diff-add">      *--- 查詢目標帳戶（SUB-TASK 1）---*</span>
+<span class="diff-add">           MOVE LK-TARGET-ACCT-NO TO DB2-ACCOUNT-NO</span>
+<span class="diff-add">           MOVE 'SELA'            TO DB2-OPERATION</span>
+<span class="diff-add">           PERFORM 9100-CALL-BKDB2</span>
+<span class="diff-add">           IF DB2-RETURN-CODE NOT = '00'</span>
+<span class="diff-add">               PERFORM 1100-ROLLBACK-TRANSFER</span>
+<span class="diff-add">               GOBACK</span>
+<span class="diff-add">           END-IF</span>
+<span class="diff-add">      *--- 驗證帳戶狀態（SUB-TASK 2）---*</span>
+<span class="diff-add">           IF DB2-ACCT-STATUS NOT = 'A'</span>
+<span class="diff-add">               MOVE '04' TO LK-RETURN-CODE</span>
+<span class="diff-add">               PERFORM 1100-ROLLBACK-TRANSFER</span>
+<span class="diff-add">               GOBACK</span>
+<span class="diff-add">           END-IF</span>
+<span class="diff-add">      *--- 計算餘額並更新目標（SUB-TASK 3/4）---*</span>
+<span class="diff-add">           COMPUTE WS-NEW-TARGET-BAL =</span>
+<span class="diff-add">               WS-TARGET-BALANCE + LK-AMOUNT</span>
+<span class="diff-add">           PERFORM 3200-UPDATE-TARGET-BAL</span>
+<span class="diff-ctx">           MOVE '00' TO LK-RETURN-CODE</span>
+<span class="diff-ctx">           MOVE 'TRANSFER COMPLETED' TO LK-RETURN-MSG.</span>
+<span class="diff-add"> 1100-ROLLBACK-TRANSFER.</span>
+<span class="diff-add">     EXEC CICS SYNCPOINT ROLLBACK END-EXEC.</span></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Reference Table -->
+    <h2 class="section-title">快速對照表</h2>
+
+    <table class="carbon-table">
+      <thead>
+        <tr>
+          <th>模式</th>
+          <th>SAST 情境下的用途</th>
+          <th>典型 Prompt 關鍵字</th>
+          <th>會修改檔案？</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="pill pill-ask">Ask</span></td>
+          <td>確認報告描述是否屬實、理解弱點根因與財務衝擊</td>
+          <td>「確認」「解釋」「追蹤流程」「為什麼」「不要修改」</td>
+          <td>否</td>
+        </tr>
+        <tr>
+          <td><span class="pill pill-plan">Plan</span></td>
+          <td>設計修補步驟、評估邊界條件與影響範圍</td>
+          <td>「規劃」「計畫」「影響哪些」「修補方案」「不要改代碼」</td>
+          <td>否</td>
+        </tr>
+        <tr>
+          <td><span class="pill pill-agent">Agent</span></td>
+          <td>依計畫直接修改程式碼、產出 Diff、關閉 Finding</td>
+          <td>「修復」「實作」「幫我修」「依照計畫執行」</td>
+          <td>是</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- CTA -->
+    <div class="cta-banner">
+      <h3>掌握三種模式後，下一步是進階功能</h3>
+      <p>學習 Slash Commands、Skills、MCP、Bob Rules 與 .bobignore，讓 AI 輔助開發更上一層樓。</p>
+      <p style="margin-top:14px"><a href="02-bob-advanced-usage.html" class="cta-link">進入單元二：IBM Bob 進階功能 →</a></p>
+    </div>
+
+  </main>
+
+  <footer>
+    <span>Made with IBM Bob</span>
+  </footer>
+
+<script>
+  document.querySelectorAll('.copy-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var targetId = btn.getAttribute('data-target');
+      var text = document.getElementById(targetId).innerText;
+      navigator.clipboard.writeText(text).then(function() {
+        btn.textContent = '已複製 ✓';
+        btn.classList.add('copied');
+        setTimeout(function() {
+          btn.textContent = '複製';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    });
+  });
+</script>
+</body>
+</html>
