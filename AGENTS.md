@@ -53,7 +53,7 @@ gh workflow run create-workshop-branch.yml --field slug=w03
 
 The workflow:
 - Creates an **orphan** branch `workshop/w03` (no shared history with `main`).
-- Seeds it with: `.bob/mcp.json`, `.bob/skills/find-skills/`, `DESIGN.md`, `skills-lock.json`.
+- Seeds it with: `.bob/mcp.json`, `.bob/skills/find-skills/`, `DESIGN.md`, `skills-lock.json`, `.gitignore`.
 - Pushes the branch to `origin`.
 
 Confirm the branch is live before continuing:
@@ -99,14 +99,15 @@ bash scripts/update-artifacts.sh workshop/w03
 ```
 
 What this does in one shot:
-1. Checks out **`main`**.
-2. Exports `artifacts/` from the `workshop/w03` branch (via `git checkout workshop/w03 -- artifacts/`).
-3. Places the files at **`workshops/w03/artifacts/`** on `main`.
-4. Regenerates `workshops/w03/artifacts/index.html` via `update-index.mjs`.
-5. Commits and pushes `main` — this triggers `deploy-gh-pages.yml` automatically.
-6. **Returns** to whichever branch was checked out before the script ran (typically `main`).
+1. Validates that `workshop/w03` exists as a local branch.
+2. Checks out **`main`** (requires a clean working tree).
+3. Exports `artifacts/` from `workshop/w03` (via `git checkout`) into the root-level **`artifacts/`** (gitignored, force-added).
+4. Copies that same content into **`workshops/w03/artifacts/`** via `rsync`.
+5. Regenerates `index.html` in **both** destinations via `update-index.mjs`.
+6. Commits and pushes `main` — this triggers `deploy-gh-pages.yml` automatically.
+7. **Returns** to whichever branch was checked out before the script ran.
 
-> **Note:** The script reads from the workshop branch directly — it does **not** read the local gitignored `artifacts/` directory and does **not** push to the workshop branch itself.
+> **Note:** The script reads from the workshop branch directly — it does **not** read from the local `artifacts/` directory already on disk. If the workshop branch does not exist locally, the script aborts with an error and tells you to run `git checkout --track origin/<branch>`.
 
 ### Step 7 — Verify deployment
 
@@ -297,6 +298,8 @@ All artifacts follow the **Carbon Design System** spec defined in `DESIGN.md`. N
 
 ## Deployment
 
-- Triggered automatically on push to `main` when `workshops/**/artifacts/**` changes.
+- Triggered automatically on push to `main` when `workshops/**/artifacts/**` changes **or** when `.github/workflows/deploy-gh-pages.yml` itself is modified.
+- Can also be triggered manually via `workflow_dispatch` (no inputs required).
 - Every deploy does a **full overwrite** of `gh-pages` (`keep_files: false`) — all workshops regenerated each time.
+- The deploy job assembles a `_site/` directory: copies each `workshops/*/artifacts/` into `_site/workshops/<slug>/`, then generates a root `_site/index.html` listing all workshops as cards.
 - Published URL pattern: `https://howard-haowen.github.io/ibm-bobathon/workshops/<slug>/`
