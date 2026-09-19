@@ -5,3 +5,4 @@ docs/
 /artifacts/
 /_site/
 .bob/artifacts/
+bin/
