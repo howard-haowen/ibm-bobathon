@@ -2,6 +2,8 @@
 plans/
 docs/
 .worktrees/
-/artifacts/
 /_site/
 .bob/artifacts/
+.worktrees/
+bin/
+.worktrees/
