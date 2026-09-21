@@ -3,6 +3,13 @@
     "netnewswire": {
       "command": "npx",
       "args": ["@jellllly/netnewswire-mcp"]
+    },
+    "rss-reader": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "rss-reader-mcp"
+      ]
     }
   }
 }
