@@ -1,8 +1,8 @@
 {
-    "mcpServers": {
-        "apple-books-mcp": {
-            "command": "uvx",
-            "args": [ "apple-books-mcp@latest" ]
-        }
+  "mcpServers": {
+    "netnewswire": {
+      "command": "npx",
+      "args": ["@jellllly/netnewswire-mcp"]
     }
+  }
 }
