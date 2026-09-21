@@ -22,7 +22,7 @@
 
 ```mermaid
 flowchart LR
-    A["Step 1\n語料獲取\nNetNewsWire MCP\n+ defuddle fallback"]
+    A["Step 1\n語料獲取\nNetNewsWire MCP / rss-reader-mcp\n+ defuddle fallback"]
     B["Step 2\n語料分析\nlanguage-learning Skill\n（詞彙 / 文法 / 文化 / 閃卡）"]
     C["Step 3\n知識庫寫入\nobsidian-cli\n（全文 + 分析）"]
     D["Step 4\n網頁發佈\nmarkdown-to-html Skill\n（Cheatsheet 格式）"]
@@ -40,21 +40,58 @@ flowchart LR
 
 **工具**：
 - 主要：`netnewswire` MCP Server（`mcp__netnewswire__get_articles`、`mcp__netnewswire__read_article`）
+- 替代（無 NetNewsWire 時）：`rss-reader-mcp`（透過 `rss_get_feed` 傳入 Feed URL 取得清單，或 `rss_get_article` 取得單篇內容）
 - 備用：`defuddle` Skill（`.bob/skills/defuddle/SKILL.md`）
 
 **執行邏輯**：
 
-1. 呼叫 `mcp__netnewswire__get_articles` 列出未讀外語新聞，呈現給使用者選擇。
-2. 使用者選定文章後，呼叫 `mcp__netnewswire__read_article` 嘗試取得全文。
-3. **若全文缺失或不完整**（例如 RSS 僅提供摘要），則啟用 `defuddle` Skill，透過文章的原始 URL 抓取完整網頁內容並萃取正文。
-4. 確認取得完整全文後，記錄以下欄位以供後續步驟使用：
+> **環境判定**：
+> - 若系統已安裝 NetNewsWire 並設定 MCP → 使用 `mcp__netnewswire__*` 工具取得訂閱來源文章。
+> - 若未安裝 NetNewsWire → 使用 `rss-reader-mcp` 工具，並從 [`language-learning-feeds.opml`](language-learning-feeds.opml) 或指定 Feed URL 讀取文章。
+
+1. **取得文章列表**：
+   - 使用 NetNewsWire：呼叫 `mcp__netnewswire__get_articles` 列出未讀新聞，呈現給使用者選擇。
+   - 使用 rss-reader-mcp：呼叫 `rss_get_feed` 傳入目標 Feed URL，取得最新文章列表供使用者挑選。
+2. **取得文章內容**：
+   - 使用 NetNewsWire：呼叫 `mcp__netnewswire__read_article` 嘗試取得全文。
+   - 使用 rss-reader-mcp：呼叫 `rss_get_article` 傳入選定文章項目取得內容。
+3. **若全文缺失或不完整**（例如 RSS 僅提供摘要）：啟用 `defuddle` Skill，透過文章的原始 URL 抓取完整網頁內容並萃取正文。
+4. **語言偵測與目標語言確認**：
+   - 偵測 `article_full_text` 的語言。
+   - **若文章原文為非中文**：直接將偵測到的語言設為 `article_language`，並設 `article_is_chinese_source = false`。
+   - **若文章原文為中文**（繁體或簡體）：詢問使用者「這篇文章的原文是中文，請問您希望翻譯成哪個外語進行學習？（例如：English、Japanese、French、German⋯）」，等待使用者回應後，將使用者選擇的外語設為 `article_language`，並設 `article_is_chinese_source = true`。
+5. 確認取得完整全文後，記錄以下欄位以供後續步驟使用：
    - `article_title`：文章標題
    - `article_url`：原始連結
    - `article_date`：發布日期
-   - `article_language`：目標語言
-   - `article_full_text`：完整外語原文（**Step 2 的直接輸入**）
+   - `article_language`：目標學習外語（使用者選擇或自動偵測）
+   - `article_is_chinese_source`：布林值，文章原文是否為中文
+   - `article_full_text`：完整原始文章全文（中文或外語，**Step 2 的直接輸入**）
+   - `article_slug`：由 `article_title` 衍生的安全檔名，規則依 `article_is_chinese_source` 而異：
+     - **`article_is_chinese_source = true`（原文為中文）**：
+       1. 直接保留中文字元，**不得轉換為漢語拼音或任何羅馬化形式**
+       2. 將空格、標點符號（如「：」「，」「！」`:``,``!`）及特殊字元替換為連字號（`-`）
+       3. 去除連續重複的連字號，並去除首尾連字號
+       4. 範例：`"黃仁勳：AI巨頭喊放慢腳步"` → `黃仁勳-AI巨頭喊放慢腳步`
+     - **`article_is_chinese_source = false`（原文為外語）**：
+       1. 轉為小寫（英文字母）
+       2. 將空格、標點符號及特殊字元替換為連字號（`-`）
+       3. 去除連續重複的連字號，並去除首尾連字號
+       4. 範例：`"AI Reshapes the Economy"` → `ai-reshapes-the-economy`
+       5. 若標題含非 ASCII 字元（如日文、韓文），保留原字元，空格改為連字號即可
 
-> ⚠️ **銜接提示**：未取得 `article_full_text` 前，不得進入 Step 2。
+> 💡 **無 NetNewsWire 時的 MCP 設定方式**（於 `.bob/mcp.json` 或設定介面中加入）：
+> ```json
+> {
+>   "rss-reader": {
+>     "command": "npx",
+>     "args": ["-y", "@kwp-lab/rss-reader-mcp"]
+>   }
+> }
+> ```
+> 搭配專案根目錄的 [`language-learning-feeds.opml`](language-learning-feeds.opml) 可快速取得各語言的精選學習 Feeds。
+
+> ⚠️ **銜接提示**：未取得 `article_full_text` 且未確認 `article_language` 前，不得進入 Step 2。若 `article_is_chinese_source = true`，需確保使用者已選定目標外語。
 
 ---
 
@@ -64,7 +101,25 @@ flowchart LR
 
 **工具**：`language-learning` Skill（`.bob/skills/language-learning/SKILL.md`）
 
-**輸入**：Step 1 的 `article_full_text`（完整外語原文）與 `article_language`（目標語言）
+**輸入**：Step 1 的 `article_full_text`、`article_language`（目標外語）與 `article_is_chinese_source`
+
+---
+
+#### 2-0 前置翻譯（中文來源文章適用）
+
+> **觸發條件**：`article_is_chinese_source = true`
+
+若文章原文為中文，在進行任何詞彙或文法分析前，必須先執行以下翻譯步驟：
+
+1. 將 `article_full_text`（中文原文）翻譯為 `article_language` 指定的目標外語，產生 `article_translated_text`。
+2. 翻譯品質要求：
+   - 保留原文段落結構與標題層次
+   - 專有名詞、地名、人名維持原語或加附目標語言常用譯名
+   - 語氣與文體風格需與原文一致（新聞報導 / 評論 / 學術等）
+   - 若有重要的翻譯選擇或歧義處理，於翻譯版末尾加「譯者備注 (Translator's Note)」說明
+3. 翻譯完成後，將 `article_translated_text` 作為後續 2-A 至 2-F 所有分析步驟的**唯一分析對象**。
+
+> **跳過條件**：若 `article_is_chinese_source = false`，則 `article_translated_text = article_full_text`（直接等於原文，不另做翻譯處理）。
 
 ---
 
@@ -148,27 +203,36 @@ flowchart LR
 
 **輸出彙整**：以上 2-A 至 2-F 六個子區塊合為完整的「Step 2 語言分析報告」，整包傳遞給 Step 3。
 
-> ⚠️ **銜接提示**：分析對象**必須**是 Step 1 取得的原文，不得自行假設或替換語料。所有例句必須可在原文中找到出處或明確標注為「延伸造句」。
+> ⚠️ **銜接提示**：分析對象**必須**是 `article_translated_text`（若原文為中文則為翻譯版；若原文已為外語則與 `article_full_text` 相同）。不得自行假設或替換語料。所有例句必須可在 `article_translated_text` 中找到出處或明確標注為「延伸造句」。
 
 ---
 
 ### Step 3 — 知識庫寫入與關聯 (Knowledge Base Archiving)
 
-**目標**：將本次學習成果整合為一份完整筆記，寫入 Obsidian 知識庫。
+**目標**：將本次學習成果整合為一份完整筆記，分別以兩個目的地儲存：
+- **本機專案**：寫入 `output/<article_slug>.md`（資料夾不存在時自動建立）
+- **Obsidian Vault**：寫入 `language-notes/<article_slug>.md`（Vault 內子資料夾不存在時自動建立）
 
 **工具**：`obsidian-cli` Skill & CLI（`.bob/skills/obsidian-cli/SKILL.md`）；目標 Vault 名稱為 `llm-wiki`。
 
 **輸入**：Step 1 的文章資訊 + Step 2 的分析結果
 
+**輸出檔案**：
+- 本機：`output/<article_slug>.md`（`article_slug` 來自 Step 1）
+- Obsidian：Vault `llm-wiki` 內的 `language-notes/<article_slug>.md`
+
 **筆記完整結構（三個區塊，缺一不可）**：
 
-1. **原始文章全文**：完整貼入 Step 1 取得的 `article_full_text`，不得刪減或摘要。
+1. **原始文章全文**：
+   - 若 `article_is_chinese_source = false`：完整貼入 `article_full_text`（外語原文），不得刪減或摘要。
+   - 若 `article_is_chinese_source = true`：**同時收錄兩個全文區塊**：先貼入 `article_full_text`（中文原文），再貼入 `article_translated_text`（目標外語翻譯版），各自以獨立標題標示。
 2. **語言分析結果**：完整貼入 Step 2 產出的生詞卡列表與文法剖析段落。
 3. **Frontmatter 與雙向連結**：
-   - 包含 `title`、`date`、`language`、`cefr_level`、`source_url`、`tags` 等欄位。
+   - 包含 `title`、`date`、`language`、`source_language`、`cefr_level`、`source_url`、`tags` 等欄位。
+   - `language`：目標學習外語；`source_language`：文章原始語言（若非中文來源則與 `language` 相同）。
    - 加入適當的 Wikilinks（`[[...]]`）連結相關詞彙筆記或主題頁面。
 
-> ⚠️ **銜接提示**：寫入前確認所有三個區塊皆已就緒；寫入後將筆記路徑傳遞給 Step 4。
+> ⚠️ **銜接提示**：寫入前確認所有三個區塊皆已就緒；寫入後將 `output/<article_slug>.md` 路徑傳遞給 Step 4。
 
 ---
 
@@ -178,7 +242,9 @@ flowchart LR
 
 **工具**：`markdown-to-html` Skill（`.bob/skills/markdown-to-html/SKILL.md`）
 
-**輸入**：Step 3 寫入的完整筆記內容
+**輸入**：Step 3 寫入的完整筆記內容（`output/<article_slug>.md`）
+
+**輸出檔案**：`output/<article_slug>.html`（與 Step 3 產出的 `.md` 檔同名、同資料夾）
 
 **Cheatsheet 格式要求**：
 
@@ -188,7 +254,7 @@ flowchart LR
 - **原文區**：保留完整原文，置於頁面下方，供需要時參照。
 - 整體樣式清晰易讀，適合列印（A4）、行動裝置瀏覽或作為數位複習講義分享。
 
-> ⚠️ **內容完整性**：HTML 輸出須涵蓋 Step 3 的全部區塊，僅調整呈現格式，不得遺漏任何內容。
+> ⚠️ **內容完整性**：HTML 輸出須涵蓋 Step 3 的全部區塊，僅調整呈現格式，不得遺漏任何內容。最終兩個輸出檔案（`.md` 與 `.html`）均位於 `output/` 資料夾，且檔名相同（僅副檔名不同）。
 
 ---
 
@@ -200,20 +266,30 @@ flowchart LR
 ---
 title: "文章標題或學習主題"
 date: YYYY-MM-DD
-language: "目標語言 (e.g., French, Japanese, German)"
+language: "目標學習外語 (e.g., English, Japanese, French, German)"
+source_language: "文章原始語言 (e.g., Chinese, English；若原文非中文則與 language 相同)"
 cefr_level: "B2"
 source_url: "https://..."
 tags:
   - language-learning
   - vocabulary
   - grammar
-  - [目標語言小寫，如 french / japanese]
+  - [目標語言小寫，如 english / japanese]
 ---
 
 # [文章標題] 學習筆記
 
 ## 📰 原始文章全文 (Full Article Text)
+
+<!-- 若文章原文為外語（非中文），保留此區塊 -->
 > [完整外語原文，逐段保留，不得刪減]
+
+<!-- 若文章原文為中文，改用以下兩個子區塊 -->
+<!-- ### 🇹🇼 中文原文 (Original Chinese Text) -->
+<!-- > [完整中文原文，逐段保留，不得刪減] -->
+
+<!-- ### 🌐 [目標語言] 翻譯版 (Translated Text) -->
+<!-- > [Step 2-0 產出的完整外語翻譯版，逐段保留；如有譯者備注附於末尾] -->
 
 ---
 
@@ -292,6 +368,7 @@ tags:
 | 類型 | 名稱 | 路徑 / 識別碼 | 用途說明 |
 | :--- | :--- | :--- | :--- |
 | **MCP** | `netnewswire` | `mcp__netnewswire__*` | 讀取 RSS/Atom 訂閱源與外語新聞文章 |
+| **MCP** | `rss-reader-mcp` | `@kwp-lab/rss-reader-mcp` | 無 NetNewsWire 時的替代方案，透過 Feed URL 取得 RSS 文章 |
 | **Skill** | `defuddle` | `.bob/skills/defuddle/` | Step 1 備用：透過 URL 抓取並萃取網頁完整正文 |
 | **Skill** | `language-learning` | `.bob/skills/language-learning/` | Step 2：多語言學習、生詞提取、文法拆解 |
 | **Skill/CLI** | `obsidian-cli` | `.bob/skills/obsidian-cli/` | Step 3：管理與寫入本地 Obsidian 筆記庫（`llm-wiki`） |
