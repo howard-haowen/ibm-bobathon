@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IBM Bob 進階功能設定</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&display=swap">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: 0.16px;
+      color: #161616;
+      background: #ffffff;
+    }
+
+    .utility-bar {
+      background: #f4f4f4;
+      color: #525252;
+      font-size: 12px;
+      letter-spacing: 0.32px;
+      line-height: 1.33;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .top-nav {
+      background: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+    }
+    .top-nav .logo {
+      font-size: 18px;
+      font-weight: 600;
+      color: #161616;
+      text-decoration: none;
+    }
+    .top-nav .logo span { color: #0f62fe; }
+    .top-nav .back-link {
+      font-size: 14px;
+      color: #0f62fe;
+      text-decoration: none;
+      letter-spacing: 0.16px;
+    }
+    .top-nav .back-link:hover { text-decoration: underline; }
+
+    .page-content {
+      max-width: 1056px;
+      margin: 0 auto;
+      padding: 64px 32px 96px;
+    }
+
+    .hero {
+      margin-bottom: 48px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .hero-eyebrow {
+      font-size: 14px;
+      color: #525252;
+      letter-spacing: 0.16px;
+      line-height: 1.29;
+      margin-bottom: 12px;
+    }
+    .hero h1 {
+      font-size: 42px;
+      font-weight: 300;
+      line-height: 1.20;
+      color: #161616;
+      margin-bottom: 16px;
+    }
+    .hero p {
+      font-size: 18px;
+      color: #525252;
+      line-height: 1.5;
+      max-width: 760px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.33;
+      color: #161616;
+      margin-top: 48px;
+      margin-bottom: 24px;
+    }
+
+    .section-desc {
+      font-size: 16px;
+      color: #525252;
+      line-height: 1.5;
+      margin-bottom: 24px;
+      max-width: 760px;
+    }
+
+    .carbon-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 32px;
+      text-align: left;
+    }
+    .carbon-table th {
+      background: #f4f4f4;
+      color: #161616;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 12px 16px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .carbon-table td {
+      color: #525252;
+      font-size: 14px;
+      padding: 16px;
+      border-bottom: 1px solid #e0e0e0;
+      line-height: 1.5;
+    }
+    .carbon-table tr:hover td {
+      background: #f4f4f4;
+    }
+
+    pre {
+      background: #f4f4f4;
+      padding: 16px 20px;
+      border-left: 4px solid #0f62fe;
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      font-size: 13.5px;
+      color: #161616;
+      line-height: 1.6;
+      overflow-x: auto;
+      margin: 16px 0 24px;
+    }
+    code {
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      font-size: 13px;
+    }
+
+    .prompt-showcase {
+      border: 1px solid #e0e0e0;
+      background: #f4f4f4;
+      padding: 24px;
+      margin: 24px 0;
+    }
+    .prompt-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .prompt-header {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #0f62fe;
+      text-transform: uppercase;
+      margin-bottom: 0;
+    }
+    .copy-btn {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #0f62fe;
+      background: #ffffff;
+      border: 1px solid #0f62fe;
+      padding: 3px 10px;
+      cursor: pointer;
+      font-family: inherit;
+      white-space: nowrap;
+      transition: background 0.15s, color 0.15s;
+    }
+    .copy-btn:hover { background: #0f62fe; color: #ffffff; }
+    .copy-btn.copied { background: #198038; border-color: #198038; color: #ffffff; }
+    .prompt-text {
+      font-style: italic;
+      color: #161616;
+      font-size: 15px;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    .response-header {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #198038;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .response-content {
+      font-size: 14px;
+      color: #525252;
+      line-height: 1.6;
+    }
+
+    .callout {
+      background: #f4f4f4;
+      padding: 16px;
+      border-left: 4px solid #0f62fe;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: #525252;
+      max-width: 760px;
+    }
+
+    .tip-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: #defbe6;
+      border-left: 4px solid #24a148;
+      padding: 16px 20px;
+      margin: 0 0 24px;
+    }
+    .tip-box .tip-icon { font-size: 18px; line-height: 1; }
+    .tip-box p { font-size: 14px; color: #161616; margin: 0; }
+    .tip-box p + p { margin-top: 4px; }
+    .tip-box strong { font-weight: 600; }
+
+    footer {
+      background: #161616;
+      color: #c6c6c6;
+      font-size: 14px;
+      letter-spacing: 0.16px;
+      line-height: 1.29;
+      padding: 64px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    footer span { font-size: 12px; color: #8c8c8c; }
+
+    .cta-banner {
+      background: #0f62fe;
+      color: #ffffff;
+      padding: 48px;
+      margin-top: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .cta-banner h3 {
+      font-size: 24px;
+      font-weight: 300;
+      line-height: 1.25;
+    }
+    .cta-banner p {
+      font-size: 16px;
+      line-height: 1.5;
+      max-width: 600px;
+      opacity: 0.9;
+    }
+    .cta-link {
+      display: inline-block;
+      margin-top: 8px;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.16px;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.5);
+      padding-bottom: 2px;
+    }
+    .cta-link:hover { border-bottom-color: #ffffff; }
+
+    @media (max-width: 672px) {
+      .utility-bar { display: none; }
+      .page-content { padding: 40px 16px 64px; }
+      .hero h1 { font-size: 32px; }
+      .cta-banner { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="utility-bar">IBM Bob · 工作坊教學材料</div>
+
+  <nav class="top-nav">
+    <a class="logo" href="index.html">IBM <span>Bob</span></a>
+    <a class="back-link" href="index.html">← 回索引</a>
+  </nav>
+
+  <main class="page-content">
+
+    <div class="hero">
+      <p class="hero-eyebrow">工作坊教材 · IBM Bob 進階</p>
+      <h1>IBM Bob 進階功能設定</h1>
+      <p>掌握三大模式後，本教材帶您深入 IBM Bob 的進階工具：內建 Slash Commands、Skills 技能擴充、MCP Server 連接、Bob Rules 行為規範，以及 .bobignore 檔案存取控管。</p>
+    </div>
+
+    <!-- Section 2: Slash Commands -->
+    <h2 class="section-title">內建 Slash Commands</h2>
+    <p class="section-desc">在 Bob 的對話輸入框輸入 <code>/</code>，即會彈出命令選單。</p>
+
+    <table class="carbon-table">
+      <thead>
+        <tr>
+          <th style="width: 20%;">指令</th>
+          <th style="width: 80%;">說明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>/init</code></td>
+          <td>掃描整個專案，自動產出 <code>AGENTS.md</code> 與各模式專屬的上下文檔案。LLM 是無狀態的，<code>/init</code> 讓 Bob 在每次對話開始時都能立即理解專案結構，無需重複說明。</td>
+        </tr>
+        <tr>
+          <td><code>/review</code></td>
+          <td>審查程式碼變更。支援多種用法：<code>/review</code>（審查本地未提交的變更）、<code>/review &lt;branch&gt;</code>（比對指定分支）、<code>/review #&lt;issue&gt; --issue-coverage</code>（驗證變更是否符合 GitHub Issue 要求）。會執行 Bug 偵測、安全性檢查、效能分析與風格一致性審查。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Section 3: Skills -->
+    <h2 class="section-title">Skills 的使用</h2>
+    <p class="section-desc">Skill 是一份可重複使用的工作流指引，告訴 Bob 在特定場景下應遵循哪些步驟與最佳實踐。在 Bob 的對話輸入框輸入 <code>/</code>，彈出的選單除了顯示內建命令（如 <code>/init</code>、<code>/review</code>）之外，也會列出所有已安裝的 Skills，可直接選取啟用。本專案已安裝下列兩個專案級 Skill：</p>
+
+    <table class="carbon-table">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Skill 名稱</th>
+          <th style="width: 75%;">用途說明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>find-skills</code></td>
+          <td>協助探索並安裝 Agent Skill。當您詢問「有沒有可以做 X 的技能？」或「是否有 Skill 能幫我…」時，Bob 會透過此 Skill 搜尋技能生態系（<a href="https://skills.sh/" target="_blank">skills.sh</a>），評估安裝數與來源可信度後，提供安裝指令與說明。</td>
+        </tr>
+        <tr>
+          <td><code>using-git-worktrees</code></td>
+          <td>在開始功能開發或執行實作計劃前，確保工作在隔離的環境（isolated workspace）中進行。Skill 會優先偵測是否已在 linked worktree 中、其次使用平台原生工具，最後才 fallback 至手動 <code>git worktree add</code>，並自動處理目錄忽略與基線測試。來源：<code>obra/superpowers</code>。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="tip-box">
+      <span class="tip-icon">💡</span>
+      <div>
+        <p><strong>小技巧</strong></p>
+        <p>在對話框輸入 <code style="background: #b7efca; padding: 2px 6px;">/</code> 再輸入 Skill 名稱即可直接啟用，例如輸入 <code style="background: #b7efca; padding: 2px 6px;">/using-git-worktrees</code>。</p>
+      </div>
+    </div>
+
+    <!-- Section 4: MCP -->
+    <h2 class="section-title">MCP Server 設定</h2>
+    <p class="section-desc">MCP（Model Context Protocol）讓 Bob 連接外部工具與服務，擴展其原生能力。MCP Server 設定存放於 <code>.bob/mcp.json</code>，Bob 啟動時會自動載入。</p>
+
+    <div class="callout">
+      <strong>本專案目前的 MCP 設定（<code>.bob/mcp.json</code>）</strong>：已連接 <strong>docs-mcp-server</strong>，使用 SSE 傳輸協定連接 <code>http://localhost:6280/sse</code>，讓 Bob 能透過本地文件伺服器存取專案相關技術文件。
+    </div>
+
+    <pre style="background: #f4f4f4; border-left: 4px solid #0f62fe; padding: 16px; font-size: 13px; line-height: 1.6; white-space: pre-wrap; word-break: break-all;">{
+    "mcpServers": {
+        "docs-mcp-server": {
+            "type": "sse",
+            "url": "http://localhost:6280/sse"
+        }
+    }
+}</pre>
+
+    <p class="section-desc">若您需要新增其他 MCP Server，只需將設定描述給 Bob，它便能協助您完成 <code>.bob/mcp.json</code> 的修改並驗證是否生效。</p>
+
+    <div class="prompt-showcase">
+      <div class="prompt-header-row">
+        <div class="prompt-header">情境範例：請 Bob 新增 MCP Server（Agent 模式）</div>
+        <button class="copy-btn" data-target="p-mcp">複製</button>
+      </div>
+      <div class="prompt-text" id="p-mcp">請幫我在 .bob/mcp.json 中新增一個名為 docs-mcp-server 的 MCP Server，使用 SSE 傳輸協定，連接 http://localhost:6280/sse。</div>
+      <div class="response-header">預期 Bob 的回應方向</div>
+      <div class="response-content">
+        Bob 直接修改 <code>.bob/mcp.json</code>，加入新的 Server 設定，並說明如何驗證連線是否正常。
+      </div>
+    </div>
+
+    <div class="prompt-showcase">
+      <div class="prompt-header-row">
+        <div class="prompt-header">情境範例：透過 docs-mcp-server 查詢技術文件（Agent 模式）</div>
+        <button class="copy-btn" data-target="p-mcp-query">複製</button>
+      </div>
+      <div class="prompt-text" id="p-mcp-query">使用 docs mcp server 查詢 spring boot 文件庫，提供設定多語系的 yaml 設定範例。</div>
+      <div class="response-header">預期 Bob 的回應方向</div>
+      <div class="response-content">
+        Bob 透過 <code>docs-mcp-server</code> 搜尋 Spring Boot 文件庫，找到多語系（i18n）相關章節後，直接回傳 <code>application.yml</code> 中 <code>spring.messages</code> 的設定範例，例如指定 basename、encoding 與 fallback 策略，無需離開 IDE 或手動查閱官方文件。
+      </div>
+    </div>
+
+    <!-- Section 5: Bob Rules -->
+    <h2 class="section-title">Bob Rules（行為規範）</h2>
+    <p class="section-desc">Bob Rules 是存放於 <code>.bob/rules/</code> 資料夾中的 Markdown 檔案，Bob 會在每次對話開始時自動注入這些規則，無需在 Prompt 中重複說明。規則可以是：編碼風格、溝通語言、技術限制，或任何需要一致執行的工作守則。</p>
+
+    <table class="carbon-table">
+      <thead>
+        <tr>
+          <th style="width: 30%;">規則範圍</th>
+          <th style="width: 70%;">說明與路徑</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>專案級（版本控管）</strong></td>
+          <td><code>.bob/rules/</code> — 適用於本專案，隨 Git 版控，團隊成員 clone 後即生效。</td>
+        </tr>
+        <tr>
+          <td><strong>模式專屬</strong></td>
+          <td><code>.bob/rules-agent/</code> 僅在 Agent 模式下注入，<code>.bob/rules-ask/</code> 僅在 Ask 模式下注入，以此類推，可細粒度控制。</td>
+        </tr>
+        <tr>
+          <td><strong>全域（個人設定）</strong></td>
+          <td><code>~/.bob/rules/</code>（macOS/Linux）— 適用於該使用者在所有專案中的 Bob 對話，不進入版控。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-size: 18px; font-weight: 600; margin: 32px 0 16px;">範例：本專案的 MCP Server 啟動規則</h3>
+
+    <p class="section-desc" style="margin-bottom: 12px;">本專案的 <code>.bob/rules/docs-mcp-server.md</code> 就是一個實際的 Bob Rule 範例——它告訴 Bob：若 <code>docs-mcp-server</code> 連線失敗，應先執行啟動指令再繼續操作。</p>
+
+    <pre># .bob/rules/docs-mcp-server.md
+
+# docs-mcp-server 啟動規則
+
+若 `docs-mcp-server` MCP 伺服器尚未執行或連線失敗，請在繼續操作前執行以下指令啟動它：
+
+```
+npx @arabold/docs-mcp-server@latest
+```
+
+在終端機中執行此指令，並等待伺服器就緒後，再重試任何依賴它的工具呼叫。</pre>
+
+    <div class="tip-box">
+      <span class="tip-icon">💡</span>
+      <div>
+        <p><strong>小技巧</strong></p>
+        <p>也可以直接告訴 Bob：「請幫我在 .bob/rules/ 建立一個規則檔，要求你一律回應繁體中文並遵循這個專案的 COBOL 版本限制。」Bob 會自動建立內容正確的規則檔。</p>
+      </div>
+    </div>
+
+    <!-- Section 6: .bobignore -->
+    <h2 class="section-title">.bobignore 檔案存取控管</h2>
+    <p class="section-desc"><code>.bobignore</code> 讓您指定 Bob 不應存取或修改的檔案與目錄，語法與 <code>.gitignore</code> 相同。這是保護敏感資訊、防止誤改已產出檔案的重要機制。Bob 會即時監看此檔案，任何變更立即生效。</p>
+
+    <table class="carbon-table">
+      <thead>
+        <tr>
+          <th style="width: 40%;">使用場景</th>
+          <th style="width: 60%;">.bobignore 範例內容</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>保護環境變數與密鑰</td>
+          <td><code>.env</code><br><code>secrets/</code><br><code>*.key</code><br><code>config/credentials.json</code></td>
+        </tr>
+        <tr>
+          <td>排除大型二進位或已產出檔案</td>
+          <td><code>output/</code><br><code>*.class</code><br><code>build/</code><br><code>dist/</code></td>
+        </tr>
+        <tr>
+          <td>限制 Bob 只操作特定目錄</td>
+          <td>（搭配 AGENTS.md 說明哪些目錄是主要工作範圍）</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <pre># 建立 .bobignore 範例（專案根目錄）
+cat &gt; .bobignore &lt;&lt;'EOF'
+# 敏感設定
+.env
+secrets/
+*.key
+config/credentials.json
+
+# 已產出的檔案（不需要 Bob 修改）
+output/
+docs/
+
+# 編譯產物
+*.class
+build/
+EOF</pre>
+
+    <div class="callout">
+      <strong>注意事項：</strong><code>.bobignore</code> 僅對 Bob 透過工具存取檔案的行為有效，不構成系統層級的沙箱隔離。敏感資料仍應搭配 Git 的 <code>.gitignore</code> 與適當的存取控管機制一起保護。
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-banner">
+      <h3>完成！您已掌握 IBM Bob 的進階功能</h3>
+      <p>Slash Commands、Skills、MCP、Bob Rules 與 .bobignore——這五項工具讓您的 AI 輔助開發更有規範、更安全、更高效。</p>
+      <a href="index.html" class="cta-link">← 回到教材索引</a>
+    </div>
+
+  </main>
+
+  <footer>
+    <span>Made with IBM Bob</span>
+  </footer>
+
+<script>
+  document.querySelectorAll('.copy-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var targetId = btn.getAttribute('data-target');
+      var text = document.getElementById(targetId).innerText;
+      navigator.clipboard.writeText(text).then(function() {
+        btn.textContent = '已複製 ✓';
+        btn.classList.add('copied');
+        setTimeout(function() {
+          btn.textContent = '複製';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    });
+  });
+</script>
+</body>
+</html>

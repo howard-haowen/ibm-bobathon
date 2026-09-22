@@ -6,6 +6,26 @@
         "hooks": [
           {
             "type": "command",
+            "command": "bash .bob/hooks/install-node.sh",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".bob\\hooks\\install-node.bat",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
             "command": "node .bob/hooks/check-deps.mjs",
             "timeout": 10
           }
