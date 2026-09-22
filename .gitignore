@@ -2,7 +2,6 @@
 plans/
 docs/
 .worktrees/
-/artifacts/
 /_site/
 .bob/artifacts/
 bin/
