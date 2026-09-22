@@ -3,14 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IBM Bob 入門操作指南</title>
+  <title>IBM Bob 入門操作指南 — AI Agents 工作流工作坊</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&display=swap">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
       font-size: 16px;
+      font-weight: 400;
       line-height: 1.5;
+      letter-spacing: 0.16px;
       color: #161616;
       background: #ffffff;
     }
@@ -20,6 +24,7 @@
       color: #525252;
       font-size: 12px;
       letter-spacing: 0.32px;
+      line-height: 1.33;
       height: 32px;
       display: flex;
       align-items: center;
@@ -58,9 +63,9 @@
     .hero p { font-size: 18px; color: #525252; max-width: 760px; }
     .hero .scenario-tag {
       display: inline-block;
-      background: #fff1f1;
-      color: #a2191f;
-      border: 1px solid #ffd7d9;
+      background: #edf4ff;
+      color: #0043ce;
+      border: 1px solid #d0e2ff;
       font-size: 12px;
       font-weight: 600;
       letter-spacing: 0.32px;
@@ -69,14 +74,14 @@
       text-transform: uppercase;
     }
 
-    /* SAST Report Panel */
-    .sast-panel {
-      border: 2px solid #ffd7d9;
-      background: #fff1f1;
+    /* Article Preview Panel */
+    .article-panel {
+      border: 2px solid #d0e2ff;
+      background: #edf4ff;
       margin-bottom: 48px;
     }
-    .sast-panel-header {
-      background: #a2191f;
+    .article-panel-header {
+      background: #0043ce;
       color: #ffffff;
       padding: 12px 20px;
       display: flex;
@@ -85,87 +90,78 @@
       flex-wrap: wrap;
       gap: 8px;
     }
-    .sast-panel-header .tool-name {
+    .article-panel-header .source-name {
       font-size: 13px;
       font-weight: 600;
       letter-spacing: 0.32px;
       text-transform: uppercase;
     }
-    .sast-panel-header .scan-meta {
+    .article-panel-header .article-meta {
       font-size: 11px;
       opacity: 0.85;
       letter-spacing: 0.16px;
     }
-    .sast-finding {
+    .article-body {
       padding: 20px 24px;
     }
-    .sast-finding-row {
+    .article-row {
       display: grid;
-      grid-template-columns: 140px 1fr;
+      grid-template-columns: 120px 1fr;
       gap: 6px 16px;
       margin-bottom: 6px;
       font-size: 13px;
     }
-    .sast-finding-row .label {
+    .article-row .label {
       color: #6f6f6f;
       font-weight: 600;
       letter-spacing: 0.16px;
     }
-    .sast-finding-row .value { color: #161616; }
-    .sast-finding-row .value code {
-      font-family: 'IBM Plex Mono', 'Courier New', monospace;
-      background: #f4f4f4;
-      padding: 0 4px;
-      font-size: 12px;
-      color: #161616;
-    }
-    .severity-badge {
+    .article-row .value { color: #161616; }
+    .lang-badge {
       display: inline-block;
       font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.32px;
       padding: 2px 10px;
       text-transform: uppercase;
+      background: #0f62fe;
+      color: #ffffff;
     }
-    .severity-critical { background: #a2191f; color: #ffffff; }
-
-    .sast-code-snippet {
+    .article-excerpt {
       margin: 16px 0 0;
-      background: #161616;
-      border-top: 1px solid #393939;
+      background: #f4f4f4;
+      border-top: 1px solid #e0e0e0;
     }
-    .sast-code-header {
+    .excerpt-header {
       padding: 6px 16px;
-      background: #262626;
+      background: #e8e8e8;
       font-size: 11px;
-      color: #8d8d8d;
+      color: #525252;
       font-family: 'IBM Plex Mono', 'Courier New', monospace;
       letter-spacing: 0.16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .sast-code-header .finding-marker {
-      background: #a2191f;
+    .excerpt-header .tag {
+      background: #0043ce;
       color: #fff;
       font-size: 10px;
       font-weight: 700;
       padding: 1px 8px;
       letter-spacing: 0.32px;
     }
-    .sast-code-snippet pre {
+    .article-excerpt pre {
       margin: 0;
       padding: 14px 16px;
       font-family: 'IBM Plex Mono', 'Courier New', monospace;
       font-size: 12px;
-      color: #f4f4f4;
+      color: #161616;
       line-height: 1.7;
       overflow-x: auto;
-      white-space: pre;
+      white-space: pre-wrap;
     }
-    .sast-code-snippet .line-ok { color: #6f6f6f; }
-    .sast-code-snippet .line-issue { color: #ffb3b8; background: #520408; display: block; margin: 0 -16px; padding: 0 16px; }
-    .sast-code-snippet .line-missing { color: #ff8389; background: #520408; display: block; margin: 0 -16px; padding: 0 16px; font-style: italic; }
+    .excerpt-highlight { color: #0043ce; background: #d0e2ff; display: block; margin: 0 -16px; padding: 0 16px; }
 
     /* Section */
     .section-title {
@@ -239,15 +235,12 @@
     }
     .workflow-step {
       flex: 1;
-      min-width: 180px;
+      min-width: 160px;
       padding: 16px 20px;
       background: #f4f4f4;
       border: 1px solid #e0e0e0;
-      position: relative;
     }
-    .workflow-step + .workflow-step {
-      border-left: none;
-    }
+    .workflow-step + .workflow-step { border-left: none; }
     .workflow-step .step-num {
       font-size: 11px;
       font-weight: 600;
@@ -274,6 +267,41 @@
       align-self: center;
     }
     @media (max-width: 672px) { .workflow-arrow { display: none; } }
+
+    /* Callout & Tip box */
+    .callout-tip {
+      background: #edf4ff;
+      border-left: 4px solid #0f62fe;
+      padding: 14px 18px;
+      margin: 20px 0 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .callout-tip .tip-badge {
+      background: #0f62fe;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.32px;
+      padding: 2px 8px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      margin-top: 1px;
+    }
+    .callout-tip .tip-content {
+      font-size: 14px;
+      color: #161616;
+      line-height: 1.5;
+    }
+    .callout-tip code {
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      background: #d0e2ff;
+      color: #0043ce;
+      padding: 2px 6px;
+      font-size: 13px;
+      font-weight: 600;
+    }
 
     /* Demo sections */
     .demo-section {
@@ -303,7 +331,6 @@
     .prompt-block {
       background: #f4f4f4;
       margin: 10px 0 4px;
-      position: relative;
     }
     .prompt-block-header {
       display: flex;
@@ -355,42 +382,24 @@
       font-family: 'IBM Plex Mono', 'Courier New', monospace;
       line-height: 1.6;
       margin-top: 4px;
+      white-space: pre-wrap;
     }
     .expected-label { font-size: 11px; color: #8d8d8d; font-weight: 600; letter-spacing: 0.32px; margin-bottom: 2px; }
 
-    /* Before / After code diff */
-    .diff-block {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1px;
-      background: #e0e0e0;
+    /* Sample output block */
+    .output-block {
+      background: #f4f4f4;
       border: 1px solid #e0e0e0;
+      padding: 16px 20px;
+      font-size: 13px;
+      color: #161616;
+      line-height: 1.7;
       margin: 12px 0 4px;
     }
-    @media (max-width: 672px) { .diff-block { grid-template-columns: 1fr; } }
-    .diff-side { background: #161616; }
-    .diff-side-header {
-      padding: 6px 14px;
-      font-size: 11px;
-      font-family: 'IBM Plex Mono', 'Courier New', monospace;
-      letter-spacing: 0.16px;
-      background: #262626;
-    }
-    .diff-side-header.before { color: #ffb3b8; }
-    .diff-side-header.after  { color: #a7f0ba; }
-    .diff-side pre {
-      margin: 0;
-      padding: 12px 14px;
-      font-family: 'IBM Plex Mono', 'Courier New', monospace;
-      font-size: 12px;
-      color: #f4f4f4;
-      line-height: 1.7;
-      overflow-x: auto;
-      white-space: pre;
-    }
-    .diff-del { color: #ffb3b8; background: #520408; display: block; margin: 0 -14px; padding: 0 14px; }
-    .diff-add { color: #a7f0ba; background: #071908; display: block; margin: 0 -14px; padding: 0 14px; }
-    .diff-ctx { color: #6f6f6f; }
+    .output-block .word { font-weight: 600; color: #0043ce; }
+    .output-block .ipa { color: #6f6f6f; font-family: 'IBM Plex Mono', 'Courier New', monospace; }
+    .output-block .meaning { color: #161616; }
+    .output-block .example { color: #525252; font-style: italic; margin-top: 4px; padding-left: 12px; border-left: 2px solid #e0e0e0; }
 
     /* Quick reference table */
     .carbon-table {
@@ -436,30 +445,44 @@
     }
     .cta-banner h3 { font-size: 22px; font-weight: 300; margin-bottom: 10px; }
     .cta-banner p { font-size: 15px; opacity: 0.9; max-width: 600px; }
-    .cta-link { color: #fff; font-weight: 600; text-decoration: underline; }
+    .cta-link {
+      display: inline-block;
+      margin-top: 8px;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.16px;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.5);
+      padding-bottom: 2px;
+    }
+    .cta-link:hover { border-bottom-color: #ffffff; }
 
     footer {
-      background: #161616;
-      color: #8c8c8c;
-      font-size: 12px;
-      padding: 48px 32px;
+      background: #f4f4f4;
+      color: #525252;
+      font-size: 14px;
+      letter-spacing: 0.16px;
+      line-height: 1.29;
+      padding: 64px 32px;
       text-align: center;
       margin-top: 64px;
-      border-top: 1px solid #393939;
+      border-top: 1px solid #e0e0e0;
     }
+    footer span { font-size: 12px; color: #8d8d8d; }
 
     @media (max-width: 672px) {
       .utility-bar { display: none; }
       .page-content { padding: 40px 16px 64px; }
-      .hero h1 { font-size: 30px; }
+      .hero h1 { font-size: 32px; }
       .cta-banner { padding: 32px 24px; }
-      .sast-finding-row { grid-template-columns: 100px 1fr; }
+      .article-row { grid-template-columns: 90px 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <div class="utility-bar">IBM Bob · 工作坊教學材料 · SAST 弱點修補實戰</div>
+  <div class="utility-bar">IBM Bob · 多語言學習助手工作坊 · 從外語新聞學單字</div>
 
   <nav class="top-nav">
     <a class="logo" href="index.html">IBM <span>Bob</span></a>
@@ -469,300 +492,203 @@
   <main class="page-content">
 
     <div class="hero">
-      <p class="hero-eyebrow">工作坊教材 · 單元一</p>
-      <span class="scenario-tag">情境：SAST 弱點修補</span>
+      <p class="hero-eyebrow">工作坊教材 · IBM Bob 入門</p>
+      <span class="scenario-tag">情境：從外語新聞學單字</span>
       <h1>IBM Bob 入門操作指南</h1>
-      <p>Ask、Plan、Agent — 三種模式對應三種工作場景。以一份真實的 <strong>Checkmarx SAST 掃描報告</strong>為起點，帶你走完從「看懂弱點」到「修復上線」的完整工作流程。</p>
+      <p>Ask、Plan、Agent — 三種模式對應三種工作場景。以一篇真實的<strong>英語新聞文章</strong>為起點，帶你走完從「讀懂文章」到「生成個人化生詞卡」的完整學習流程。不需要任何程式知識。</p>
     </div>
 
-    <!-- SAST Report Panel -->
-    <h2 class="section-title">情境：SAST 工具偵測到 Critical 弱點</h2>
-    <p class="section-desc">資安團隊對銀行核心 Java 系統執行靜態掃描，Checkmarx 回報一份 Critical 等級的發現。你現在拿到這份報告，準備透過 IBM Bob 快速分析並修補弱點。</p>
+    <!-- Article Preview Panel -->
+    <h2 class="section-title">情境：讀到一篇有趣的英語新聞，想用它來練英文</h2>
+    <p class="section-desc">你在手機上看到一篇關於 AI 改變教育的英語新聞，覺得生詞很多、句子很長，想把它變成一份自己的學習材料。這正是 IBM Bob 多語言學習助手的用武之地。</p>
 
-    <div class="sast-panel">
-      <div class="sast-panel-header">
-        <span class="tool-name">Checkmarx SAST — Scan Results</span>
-        <span class="scan-meta">Project: IBMBankingCore (Java) &nbsp;|&nbsp; Branch: main &nbsp;|&nbsp; Scanned: 2025-07-10 09:42 CST</span>
+    <div class="article-panel">
+      <div class="article-panel-header">
+        <span class="source-name">QS Insights — 外語文章來源</span>
+        <span class="article-meta">語言：English &nbsp;|&nbsp; CEFR 難度：B2–C1 &nbsp;|&nbsp; 建立日期：2026-09-22</span>
       </div>
-      <div class="sast-finding">
-        <div class="sast-finding-row">
-          <span class="label">Finding ID</span>
-          <span class="value">CX-2025-0714-001</span>
+      <div class="article-body">
+        <div class="article-row">
+          <span class="label">文章標題</span>
+          <span class="value">A practical guide to agentic AI in higher education</span>
         </div>
-        <div class="sast-finding-row">
-          <span class="label">Category</span>
-          <span class="value">Incomplete Transaction (CWE-841)</span>
+        <div class="article-row">
+          <span class="label">來源媒體 / 作者</span>
+          <span class="value">QS Insights (Louie Brand)</span>
         </div>
-        <div class="sast-finding-row">
-          <span class="label">Severity</span>
-          <span class="value"><span class="severity-badge severity-critical">Critical</span></span>
+        <div class="article-row">
+          <span class="label">目標語言</span>
+          <span class="value"><span class="lang-badge">English</span></span>
         </div>
-        <div class="sast-finding-row">
-          <span class="label">File</span>
-          <span class="value"><code>src/main/java/com/ibm/banking/service/TransactionService.java</code></span>
-        </div>
-        <div class="sast-finding-row">
-          <span class="label">Location</span>
-          <span class="value">Method <code>transfer(String, String, BigDecimal)</code>, lines 25–68</span>
-        </div>
-        <div class="sast-finding-row">
-          <span class="label">Description</span>
-          <span class="value">Transfer operation deducts funds from source account but does not update target account balance. Transaction is left in a partial state: funds are debited but never credited. <strong>Financial data loss risk.</strong></span>
-        </div>
-        <div class="sast-finding-row">
-          <span class="label">Reference</span>
-          <span class="value">CWE-841: Improper Enforcement of Behavioral Workflow &nbsp;|&nbsp; OWASP A04:2021 – Insecure Design</span>
+        <div class="article-row">
+          <span class="label">學習目標</span>
+          <span class="value">提取高頻生詞、解析長難句句型、產出閃卡複習清單</span>
         </div>
 
-        <div class="sast-code-snippet">
-          <div class="sast-code-header">
-            <span>TransactionService.java &nbsp;— transfer() (lines 45–68)</span>
-            <span class="finding-marker">FINDING</span>
+        <div class="article-excerpt">
+          <div class="excerpt-header">
+            <span>文章節錄（原文）</span>
+            <span class="tag">LEARNING MATERIAL</span>
           </div>
-          <pre
-><span class="line-ok">    // 2. Deduct funds from source account</span>
-<span class="line-ok">    BigDecimal newSourceBal = sourceAccount.getBalance().subtract(amount);</span>
-<span class="line-ok">    sourceAccount.setBalance(newSourceBal);</span>
-<span class="line-ok">    accountRepository.save(sourceAccount);  // ✓ debit source account</span>
-<span class="line-ok"></span>
-<span class="line-issue">    // ← Target account balance is never queried or credited!</span>
-<span class="line-missing">    // [MISSING] targetAccount.setBalance(...) &amp; error rollback missing!</span>
-<span class="line-ok"></span>
-<span class="line-ok">    accountRepository.logTransaction(new TransactionRecord(...));</span>
-<span class="line-ok">    return TransactionResult.success("TRANSFER COMPLETED");</span></pre>
+          <pre>For the past few years, much of the conversation around artificial intelligence in higher education has focused on Generative AI: tools that can answer questions, summarise information, create content and support research.
+
+Use is already widespread. QS research found that 67% of academics and 62% of students use Generative AI at least weekly, suggesting that AI is becoming an increasingly familiar part of university life.
+
+Agentic AI takes this a step further. Instead of simply responding to a prompt, an AI agent can work towards a defined goal, drawing on different systems, making decisions between steps and carrying out routine actions where appropriate.</pre>
         </div>
       </div>
     </div>
 
     <!-- Mode Overview Cards -->
     <h2 class="section-title">三種模式一覽</h2>
-    <p class="section-desc">拿到 SAST 報告後，正確的工作流程是依序切換三個模式，每個模式做它最擅長的事。</p>
+    <p class="section-desc">拿到這篇文章後，正確的學習流程是依序切換三個模式，每個模式做它最擅長的事。</p>
 
     <div class="mode-grid">
       <div class="mode-card ask">
         <span class="mode-badge">Ask</span>
         <h3>知識模式</h3>
-        <p class="desc">閱讀代碼、理解報告、解釋概念。<strong>不會修改任何檔案</strong>，適合搞懂陌生程式庫或確認弱點根因。</p>
+        <p class="desc">閱讀文章、解釋生詞、分析句型、說明文化背景。<strong>不會修改任何檔案</strong>，適合搞懂文章內容與語言知識。</p>
         <div class="tag-row">
-          <span class="tag">讀懂代碼</span>
-          <span class="tag">解釋弱點</span>
-          <span class="tag">確認根因</span>
-          <span class="tag">查詢文件</span>
+          <span class="tag">讀懂文章</span>
+          <span class="tag">解釋生詞</span>
+          <span class="tag">分析句型</span>
+          <span class="tag">文化說明</span>
         </div>
         <p class="permission"><strong>權限：</strong>唯讀。不寫入本地檔案，不執行命令。</p>
       </div>
       <div class="mode-card plan">
         <span class="mode-badge">Plan</span>
         <h3>規劃模式</h3>
-        <p class="desc">分析修補方案、評估影響範圍、列出步驟。聚焦「<strong>做什麼</strong>」，在動手前確認方向正確。</p>
+        <p class="desc">規劃筆記結構、決定要提取哪些生詞、設計閃卡格式。聚焦「<strong>學什麼、怎麼記</strong>」，在動手前確認方向。</p>
         <div class="tag-row">
-          <span class="tag">修補方案設計</span>
-          <span class="tag">影響分析</span>
-          <span class="tag">任務拆解</span>
-          <span class="tag">風險評估</span>
+          <span class="tag">生詞篩選策略</span>
+          <span class="tag">筆記架構設計</span>
+          <span class="tag">CEFR 層級定位</span>
+          <span class="tag">記憶方法規劃</span>
         </div>
         <p class="permission"><strong>權限：</strong>可讀取檔案，僅輸出計畫文字，不直接執行修改。</p>
       </div>
       <div class="mode-card agent">
         <span class="mode-badge">Agent</span>
         <h3>執行模式</h3>
-        <p class="desc">撰寫代碼、修改檔案、執行命令。在規劃確認後切換，讓 Bob 自動<strong>完成修補</strong>。</p>
+        <p class="desc">根據規劃，自動產出生詞卡、文法剖析、閃卡清單，並直接生成 Cheatsheet 風格的 HTML 學習複習頁面。</p>
         <div class="tag-row">
-          <span class="tag">修改代碼</span>
-          <span class="tag">建立檔案</span>
-          <span class="tag">執行命令</span>
-          <span class="tag">產出 Diff</span>
+          <span class="tag">生成生詞卡</span>
+          <span class="tag">剖析長難句</span>
+          <span class="tag">產出 HTML</span>
+          <span class="tag">建立閃卡</span>
         </div>
         <p class="permission"><strong>權限：</strong>完整讀寫，可呼叫工具、執行 Shell 命令。</p>
       </div>
     </div>
 
     <!-- Workflow -->
-    <h2 class="section-title">完整工作流程</h2>
-    <p class="section-desc">從 SAST 報告到修補完成，依序走三個步驟。</p>
+    <h2 class="section-title">完整學習工作流程</h2>
+    <p class="section-desc">從拿到文章到完成學習筆記，依序走四個步驟。</p>
 
     <div class="workflow-steps">
       <div class="workflow-step ask">
         <div class="step-num">Step 1</div>
         <div class="step-mode">Ask 模式</div>
-        <div class="step-desc">搞懂弱點報告<br>與程式碼的關聯</div>
+        <div class="step-desc">讀懂文章內容<br>確認語言難度</div>
       </div>
       <div class="workflow-arrow">→</div>
       <div class="workflow-step plan">
         <div class="step-num">Step 2</div>
         <div class="step-mode">Plan 模式</div>
-        <div class="step-desc">規劃弱點修補<br>與問題修正方案</div>
+        <div class="step-desc">規劃生詞清單<br>與筆記架構</div>
       </div>
       <div class="workflow-arrow">→</div>
       <div class="workflow-step agent">
         <div class="step-num">Step 3</div>
         <div class="step-mode">Agent 模式</div>
-        <div class="step-desc">執行弱點修補<br>與問題修正</div>
-      </div>
-      <div class="workflow-arrow">→</div>
-      <div class="workflow-step ask">
-        <div class="step-num">Step 4</div>
-        <div class="step-mode">Ask 模式</div>
-        <div class="step-desc">比較分支差異<br>確認修補結果</div>
+        <div class="step-desc">執行學習計畫<br>生成 HTML 網頁</div>
       </div>
     </div>
 
     <!-- Demos -->
     <h2 class="section-title">實際演練</h2>
-    <p class="section-desc">以上方 Checkmarx 報告為起點，依序示範三個模式的正確用法。</p>
+    <p class="section-desc">以上方英語新聞文章為起點，依序示範三個模式的正確用法。</p>
+
+    <!-- Tip Callout -->
+    <div class="callout-tip">
+      <span class="tip-badge">TIP</span>
+      <div class="tip-content">
+        在對話中輸入 <code>@</code> 符號（例如 <code>@檔案名稱</code> 或 <code>@資料夾名稱</code>），即可快速將專案中的特定檔案或整個資料夾加入對話上下文，讓 Bob 直接讀取與分析目標內容。
+      </div>
+    </div>
 
     <!-- Ask Demo -->
     <div class="demo-section ask">
       <p class="demo-label">Step 1 — Ask 模式</p>
-      <h3>搞懂弱點報告在做什麼，以及與程式碼的關聯</h3>
-      <p>拿到 SAST 報告，第一步不是馬上動手修。先用 Ask 模式，直接把報告檔案 <code>CX-2025-0714-001.md</code> 丟給 Bob，讓它讀懂弱點內容、確認問題屬實、理解財務衝擊。</p>
+      <h3>讀懂文章，確認學習起點</h3>
+      <p>拿到文章，第一步不是馬上整理筆記。先用 Ask 模式，在對話中直接引用本機檔案 <code>@A practical guide to agentic AI in higher education.md</code>，讓 Bob 讀取全文、判斷 CEFR 難度、說明哪些詞彙對你最有學習價值、解釋讓你困惑的長難句。</p>
 
       <div class="prompt-block">
         <div class="prompt-block-header">
           <span class="prompt-block-label">Prompt — Ask 模式</span>
           <button class="copy-btn" data-target="prompt-ask">複製</button>
         </div>
-        <pre id="prompt-ask">@CX-2025-0714-001.md 這是資安剛送來的 SAST 報告，幫我確認問題是否屬實，以及實際的財務衝擊是什麼。</pre>
+        <pre id="prompt-ask">我想用 @A practical guide to agentic AI in higher education.md 這篇文章學英文，請判斷它的 CEFR 難度，並告訴我這篇文章對英語學習者最有價值的 3 個生詞是什麼，以及第一段裡最複雜的句子結構是怎麼運作的。</pre>
       </div>
       <div class="expected-label">Bob 會回答的內容方向</div>
-      <div class="expected">✓ 讀取 TransactionService.java → 逐步追蹤 transfer() 流程 → 確認來源帳戶扣款後未存入目標帳戶
-✓ 說明：每次轉帳，來源帳戶金額減少，目標帳戶金額不變，資金「消失」在系統中
-✓ 說明財務衝擊：若轉帳金額為 $100,000，客戶帳戶損失 $100,000，對方帳戶未收到
+      <div class="expected">✓ 判定文章 CEFR 難度：B2–C1（教育科技評論體，詞彙密度中等偏高）
+✓ 推薦 3 個高價值生詞：agentic（具代理能力的/自主能動的）、autonomy（自主性/自主權）、governance（治理/監管機制）
+✓ 解析長難句：「Instead of simply responding to a prompt, an AI agent can work towards a defined goal, drawing on different systems, making decisions between steps and carrying out routine actions where appropriate.」
+  → 介系詞片語前置對比 + 主句（S+V+O）+ 連續現在分詞片語（drawing, making, carrying out）做伴隨修飾
 ✓ 不修改任何檔案</div>
     </div>
 
     <!-- Plan Demo -->
     <div class="demo-section plan">
       <p class="demo-label">Step 2 — Plan 模式</p>
-      <h3>規劃弱點修補與問題修正方案</h3>
-      <p>Ask 模式已確認弱點屬實，也理解了財務衝擊。現在切換 Plan 模式，在動手修改程式碼之前，先讓 Bob 評估完整的修補範圍、邊界條件，以及可能影響到的其他模組。</p>
+      <h3>規劃生詞筆記的架構與學習策略</h3>
+      <p>Ask 模式已幫你掌握文章難度與核心詞彙。現在切換 Plan 模式，在動手產出網頁之前，讓 Bob 規劃完整的學習目標與內容結構（包含生詞卡、句型剖析與 Cheatsheet HTML 學習網頁）。<strong>執行此步驟後，Bob 會在工作區產生一份結構化的規劃文件（如 <code>.plan.md</code> 或 <code>plan-xxx.md</code>）</strong>，供你在進入 Agent 模式前檢視確認。</p>
 
       <div class="prompt-block">
         <div class="prompt-block-header">
           <span class="prompt-block-label">Prompt — Plan 模式</span>
           <button class="copy-btn" data-target="prompt-plan">複製</button>
         </div>
-        <pre id="prompt-plan">好，問題確認了。請規劃修補方案，包含修改步驟、邊界條件處理、以及失敗時如何回滾。</pre>
+        <pre id="prompt-plan">請幫我規劃上面這篇文章的學習計畫，目標包含生詞提取、句型剖析、閃卡設計，以及最終產出 .html 學習複習網頁。請產出一份完整的規劃文件。</pre>
       </div>
       <div class="expected-label">Bob 會回答的內容方向</div>
-      <div class="expected">✓ 讀取 TransactionService.java + AccountRepository.java → 分析帳戶查詢與更新介面
-✓ 列出修補步驟：① 查詢目標帳戶 → ② 驗證帳戶存在且狀態為 ACTIVE → ③ 更新目標帳戶餘額 → ④ 記錄完整交易日誌
-✓ 說明回滾策略：若目標帳戶驗證或存入失敗，需還原來源帳戶扣款或於事務中回滾
-✓ 不修改任何檔案</div>
+      <div class="expected">✓ 產生一份結構化規劃文件（.md 檔）
+✓ 列出 8～10 個待提取生詞（含 CEFR 等級與選取理由，如 agentic, autonomy, governance, tenure, sprawl 等）
+✓ 建議剖析句型：① Instead of... 對比句型結合伴隨分詞構句 ② Rather than... 倒裝與條件句
+✓ 規劃閃卡格式與間隔複習節奏（當日 → 隔日 → 一週後）
+✓ 規劃輸出目標：生成獨立的 Cheatsheet HTML 學習複習網頁（.html）
+✓ 僅產生/輸出計畫文件，不執行實際的網頁生成或修改</div>
     </div>
 
     <!-- Agent Demo -->
     <div class="demo-section agent">
       <p class="demo-label">Step 3 — Agent 模式</p>
-      <h3>執行弱點修補與問題修正</h3>
-      <p>修補方案已在 Plan 模式確認。切換至 Agent 模式，Bob 會先透過 <code>using-git-worktrees</code> Skill 建立隔離分支，再修改 <code>TransactionService.java</code>，補齊目標帳戶查詢、狀態驗證與存入邏輯，並說明每一處變動與對應的 CWE-841 修補要求。</p>
-
-      <table class="carbon-table" style="margin-bottom: 24px;">
-        <thead>
-          <tr>
-            <th style="width: 30%;">使用 Git Worktree 的好處</th>
-            <th style="width: 70%;">說明</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>保護主線分支</strong></td>
-            <td>所有修改在獨立分支上進行，<code>main</code> / <code>workshop/w04</code> 不受影響，隨時可放棄該分支並重來。</td>
-          </tr>
-          <tr>
-            <td><strong>乾淨的基線驗證</strong></td>
-            <td>建立 worktree 後立即執行測試，確認起點是乾淨的。若修補後測試失敗，立刻能判斷是本次變更造成，而非既有問題。</td>
-          </tr>
-          <tr>
-            <td><strong>多工並行</strong></td>
-            <td>可同時在多個 worktree 中作業（例如一個修 CWE-841、另一個查看 main），共用同一份 Git 物件儲存區，無需重複 clone。</td>
-          </tr>
-          <tr>
-            <td><strong>易於 Code Review</strong></td>
-            <td>修補完成後直接從隔離分支開 PR，Diff 精準只含本次修補，不夾雜其他未提交變更，方便資安團隊審查。</td>
-          </tr>
-          <tr>
-            <td><strong>降低誤操作風險</strong></td>
-            <td>AI Agent 直接在隔離目錄寫入，即使操作出錯也不會污染工作區其他檔案；刪除 worktree 即完全還原。</td>
-          </tr>
-        </tbody>
-      </table>
+      <h3>自動產出學習材料，生成 HTML 學習網頁</h3>
+      <p>學習規劃已在 Plan 模式確認。切換至 Agent 模式，Bob 會自動執行：讀取文章全文 → 生成生詞卡與文法剖析 → 直接產出 Cheatsheet 風格的 HTML 學習複習網頁。</p>
 
       <div class="prompt-block">
         <div class="prompt-block-header">
           <span class="prompt-block-label">Prompt — Agent 模式</span>
           <button class="copy-btn" data-target="prompt-agent">複製</button>
         </div>
-        <pre id="prompt-agent">計畫沒問題，請執行。先用 using-git-worktrees 建好隔離分支再改。</pre>
+        <pre id="prompt-agent">請執行上面的計畫。</pre>
       </div>
       <div class="expected-label">Bob 會做的動作</div>
-      <div class="expected">✓ 啟用 using-git-worktrees Skill → 偵測是否已在 linked worktree → 建立隔離分支（如 fix 分支）
-✓ 讀取 TransactionService.java → 定位 transfer() 方法
-✓ 新增：查詢目標帳戶 → 驗證目標帳戶狀態 (ACTIVE) → 計算並更新目標帳戶餘額
-✓ 新增：若目標帳戶無效，在扣款前終止或在失敗時還原來源帳戶
-✓ 在隔離分支上修改 TransactionService.java 並輸出 Before / After Diff</div>
-    </div>
+      <div class="expected">✓ Step 1：讀取 @A practical guide to agentic AI in higher education.md 文章全文，確認語言為 English
+✓ Step 2：執行 language-learning Skill → 產出 CEFR 判定 + 生詞卡 + 文法剖析 + 閃卡
+✓ Step 3：生成 Cheatsheet 風格 HTML 學習複習網頁，輸出至 output/a-practical-guide-to-agentic-ai-in-higher-education.html
+✓ 全程自動，完成後回報生成的 HTML 檔案路徑與瀏覽方式</div>
 
-    <!-- Step 4: Ask — compare branches -->
-    <div class="demo-section ask">
-      <p class="demo-label">Step 4 — Ask 模式</p>
-      <h3>比較目前分支與 fix 分支的差異</h3>
-      <p>Agent 模式在隔離的 <code>fix</code> 分支完成修補後，切回 Ask 模式，用 <code>@</code> 語法直接指定檔案，讓 Bob 分析差異並說明修補內容是否符合 SAST 報告的要求。</p>
-
-      <div class="prompt-block">
-        <div class="prompt-block-header">
-          <span class="prompt-block-label">Prompt — Ask 模式</span>
-          <button class="copy-btn" data-target="prompt-ask-diff">複製</button>
-        </div>
-        <pre id="prompt-ask-diff">比較目前分支 @src/ 跟 fix 分支的 Java 差異</pre>
-      </div>
-      <div class="expected-label">Bob 會回答的內容方向</div>
-      <div class="expected">✓ 掃描專案下的 Java 原始碼檔案，列出有差異的檔案清單
-✓ 說明 TransactionService.java 是唯一被修改的檔案
-✓ 詳細比對四處關鍵變更：
-  ① 轉帳前同時驗證來源帳戶與目標帳戶的存在性與有效性
-  ② 驗證目標帳戶狀態為 ACTIVE（非 FROZEN / CLOSED）
-  ③ 補齊目標帳戶餘額加總與持久化（targetAccount.setBalance(...)）
-  ④ 確保交易原子性，避免資金單邊扣減未入帳
-✓ 確認修補後符合 CWE-841 要求：轉帳流程完整，來源與目標帳戶同步更新
-✓ 不修改任何檔案</div>
-
-      <!-- Diff Preview -->
+      <!-- Sample Output Preview -->
       <div style="margin-top: 12px;">
-        <div class="expected-label">兩分支實際 Diff — <code>src/main/java/com/ibm/banking/service/TransactionService.java</code></div>
-        <div class="diff-block">
-          <div class="diff-side">
-            <div class="diff-side-header before">workshop/w04（目前分支，有弱點）</div>
-            <pre
-><span class="diff-ctx">        // 2. Deduct funds from source account</span>
-<span class="diff-ctx">        BigDecimal newSourceBal = sourceAccount.getBalance().subtract(amount);</span>
-<span class="diff-ctx">        sourceAccount.setBalance(newSourceBal);</span>
-<span class="diff-ctx">        accountRepository.save(sourceAccount);</span>
-<span class="diff-del">        // [VULNERABILITY] Target account never verified or credited!</span>
-<span class="diff-ctx"></span>
-<span class="diff-ctx">        accountRepository.logTransaction(...);</span>
-<span class="diff-ctx">        return TransactionResult.success("TRANSFER COMPLETED");</span></pre>
-          </div>
-          <div class="diff-side">
-            <div class="diff-side-header after">fix 分支（修補後）</div>
-            <pre
-><span class="diff-add">        // 2. Query and validate target account</span>
-<span class="diff-add">        Optional&lt;Account&gt; targetOpt = accountRepository.findByAccountNumber(targetAccountNo);</span>
-<span class="diff-add">        if (targetOpt.isEmpty()) {</span>
-<span class="diff-add">            return TransactionResult.failure("01", "TARGET ACCOUNT NOT FOUND");</span>
-<span class="diff-add">        }</span>
-<span class="diff-add">        Account targetAccount = targetOpt.get();</span>
-<span class="diff-add">        if (targetAccount.getStatus() != AccountStatus.ACTIVE) {</span>
-<span class="diff-add">            return TransactionResult.failure("04", "TARGET ACCOUNT INACTIVE");</span>
-<span class="diff-add">        }</span>
-<span class="diff-ctx">        // 3. Atomically update both accounts</span>
-<span class="diff-ctx">        sourceAccount.setBalance(sourceAccount.getBalance().subtract(amount));</span>
-<span class="diff-add">        targetAccount.setBalance(targetAccount.getBalance().add(amount));</span>
-<span class="diff-ctx">        accountRepository.save(sourceAccount);</span>
-<span class="diff-add">        accountRepository.save(targetAccount);</span>
-<span class="diff-ctx">        accountRepository.logTransaction(...);</span>
-<span class="diff-ctx">        return TransactionResult.success("TRANSFER COMPLETED");</span></pre>
-          </div>
+        <div class="expected-label">生詞卡產出範例（部分）</div>
+        <div class="output-block">
+          <p><span class="word">autonomy</span> <span class="ipa">/ɔːˈtɒn.ə.mi/</span> &nbsp;·&nbsp; n. &nbsp;·&nbsp; CEFR C1</p>
+          <p class="meaning">【繁中釋義】自主性；自治權（語域：學術 / 正式書面體）</p>
+          <p class="example">文章例句：Agentic AI refers to AI systems that can plan and complete multi-step tasks with a degree of <strong>autonomy</strong>.<br>→「代理型 AI 是指能夠以一定程度的自主性規劃並完成多步驟任務的 AI 系統。」</p>
+          <p class="example" style="margin-top:8px">延伸造句（職場場景）：Senior researchers are given substantial autonomy in designing and conducting their experiments.<br>→「資深研究人員在設計與進行實驗方面享有相當大的自主權。」</p>
+          <p style="margin-top:8px; font-size:12px; color:#8d8d8d;">記憶鉤：auto（自己）+ nomos（法律/規則）→ 自己制定規則管理自己 →「自主性、自治」</p>
         </div>
       </div>
     </div>
@@ -774,7 +700,7 @@
       <thead>
         <tr>
           <th>模式</th>
-          <th>SAST 情境下的用途</th>
+          <th>語言學習情境下的用途</th>
           <th>典型 Prompt 關鍵字</th>
           <th>會修改檔案？</th>
         </tr>
@@ -782,20 +708,20 @@
       <tbody>
         <tr>
           <td><span class="pill pill-ask">Ask</span></td>
-          <td>確認報告描述是否屬實、理解弱點根因與財務衝擊</td>
-          <td>「確認」「解釋」「追蹤流程」「為什麼」「不要修改」</td>
+          <td>讀懂文章、解釋生詞、分析句型</td>
+          <td>「解釋」「翻譯」「這個詞是什麼意思」「不要改任何東西」</td>
           <td>否</td>
         </tr>
         <tr>
           <td><span class="pill pill-plan">Plan</span></td>
-          <td>設計修補步驟、評估邊界條件與影響範圍</td>
-          <td>「規劃」「計畫」「影響哪些」「修補方案」「不要改代碼」</td>
+          <td>規劃生詞清單、設計筆記架構、制定學習策略</td>
+          <td>「規劃」「建議」「我要學哪些詞」「怎麼設計筆記」「不要改代碼」</td>
           <td>否</td>
         </tr>
         <tr>
           <td><span class="pill pill-agent">Agent</span></td>
-          <td>依計畫直接修改程式碼、產出 Diff、關閉 Finding</td>
-          <td>「修復」「實作」「幫我修」「依照計畫執行」</td>
+          <td>自動產出生詞卡、剖析長難句、輸出 HTML 學習網頁</td>
+          <td>「執行」「幫我產出」「生成 HTML」「依照計畫做」</td>
           <td>是</td>
         </tr>
       </tbody>
@@ -804,7 +730,7 @@
     <!-- CTA -->
     <div class="cta-banner">
       <h3>掌握三種模式後，下一步是進階功能</h3>
-      <p>學習 Slash Commands、Skills、MCP、Bob Rules 與 .bobignore，讓 AI 輔助開發更上一層樓。</p>
+      <p>設定Skills、MCP Servers 以及 Bob Rules 行為規範，讓 AI 助手更強大、更個人化。</p>
       <p style="margin-top:14px"><a href="02-bob-advanced-usage.html" class="cta-link">進入單元二：IBM Bob 進階功能 →</a></p>
     </div>
 

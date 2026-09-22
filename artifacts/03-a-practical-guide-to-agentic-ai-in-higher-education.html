@@ -13,8 +13,33 @@
     line-height: 1.7;
     color: #1f2328;
     background: #ffffff;
-    padding: 2rem 1rem 4rem;
+    padding: 0 1rem 4rem;
   }
+
+  /* ── Top nav ── */
+  .top-nav {
+    background: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    margin: 0 -1rem 2rem;
+  }
+  .top-nav .logo {
+    font-size: 18px;
+    font-weight: 600;
+    color: #161616;
+    text-decoration: none;
+  }
+  .top-nav .logo span { color: #0f62fe; }
+  .top-nav .back-link {
+    font-size: 14px;
+    color: #0f62fe;
+    text-decoration: none;
+  }
+  .top-nav .back-link:hover { text-decoration: underline; }
 
   .container {
     max-width: 800px;
@@ -409,6 +434,11 @@
 </style>
 </head>
 <body>
+
+  <nav class="top-nav">
+    <a class="logo" href="index.html">IBM <span>Bob</span></a>
+    <a class="back-link" href="index.html">← 回索引</a>
+  </nav>
 <div class="container">
 
   <!-- ── Header ── -->
