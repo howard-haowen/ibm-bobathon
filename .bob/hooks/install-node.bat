@@ -4,7 +4,8 @@ rem
 rem SessionStart hook — Windows 專用
 rem 檢查 node 是否已安裝。
 rem - 若已安裝：靜默結束（exit 0），讓後續 check-deps.mjs 繼續執行。
-rem - 若未安裝：輸出給 Bob 的安裝 instruction 並以 exit 2 阻止任務繼續。
+rem - 若未安裝：由 hook 自身直接安裝 Chocolatey + Node.js 24，安裝成功後 exit 0。
+rem             安裝失敗則以 exit 2 通知 Bob。
 
 where node >nul 2>&1
 if %ERRORLEVEL% == 0 (
@@ -12,26 +13,37 @@ if %ERRORLEVEL% == 0 (
     exit /b 0
 )
 
-rem ── node 未安裝，輸出 instructions 給 Bob 並以 exit 2 阻止任務繼續 ──────────────────────────
-echo ⚠️ 【必要工具未安裝：Node.js】 1>&2
-echo. 1>&2
-echo 環境中尚未安裝 Node.js。請 Bob 直接執行以下指令安裝 Chocolatey 及 Node.js 24： 1>&2
-echo. 1>&2
-echo ```powershell 1>&2
-echo ## windows 1>&2
-echo # Download and install Chocolatey: 1>&2
-echo powershell -c "irm https://community.chocolatey.org/install.ps1|iex" 1>&2
-echo. 1>&2
-echo # Download and install Node.js: 1>&2
-echo choco install nodejs --version="24.21.0" 1>&2
-echo. 1>&2
-echo # Verify the Node.js version: 1>&2
-echo node -v # Should print "v24.21.0". 1>&2
-echo. 1>&2
-echo # Verify npm version: 1>&2
-echo npm -v # Should print "11.19.0". 1>&2
-echo ``` 1>&2
-echo. 1>&2
-echo 請在執行完成並確認 node 與 npm 就緒後告知使用者。 1>&2
+rem ── node 未安裝，由 hook 直接執行安裝 ──────────────────────────────────────
+echo 🔧 Node.js 未安裝，正在自動安裝 Chocolatey + Node.js 24...
 
-exit /b 2
+rem 1. 安裝 Chocolatey（若尚未安裝）
+where choco >nul 2>&1
+if not %ERRORLEVEL% == 0 (
+    echo 正在安裝 Chocolatey...
+    powershell -ExecutionPolicy ByPass -c "irm https://community.chocolatey.org/install.ps1 | iex"
+    if %ERRORLEVEL% neq 0 (
+        echo ❌ Chocolatey 安裝失敗，請檢查網路連線或執行權限。 1>&2
+        exit /b 2
+    )
+)
+
+rem 2. 安裝 Node.js 24
+echo 正在安裝 Node.js 24...
+choco install nodejs --version="24.21.0" -y
+if %ERRORLEVEL% neq 0 (
+    echo ❌ Node.js 安裝失敗，請確認 Chocolatey 權限是否足夠。 1>&2
+    exit /b 2
+)
+
+rem 3. 重新整理環境變數（讓 node 可在當前 session 使用）
+call refreshenv >nul 2>&1
+
+rem 4. 確認安裝成功
+where node >nul 2>&1
+if %ERRORLEVEL% == 0 (
+    for /f "tokens=*" %%v in ('node -v') do echo ✅ Node.js 安裝成功：%%v
+    exit /b 0
+) else (
+    echo ❌ Node.js 安裝後仍無法偵測，請重新開啟終端機後再試。 1>&2
+    exit /b 2
+)
