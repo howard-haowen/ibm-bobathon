@@ -6,7 +6,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .bob/hooks/check-dependencies.mjs",
+            "command": "bash .bob/hooks/check-dependencies.sh",
+            "timeout": 15
+          },
+          {
+            "type": "command",
+            "command": "cmd /c .bob\\hooks\\check-dependencies.bat",
             "timeout": 15
           }
         ]
