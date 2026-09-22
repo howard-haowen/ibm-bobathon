@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A practical guide to agentic AI in higher education — 學習筆記</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #1f2328;
+    background: #ffffff;
+    padding: 0 1rem 4rem;
+  }
+
+  /* ── Top nav ── */
+  .top-nav {
+    background: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    margin: 0 -1rem 2rem;
+  }
+  .top-nav .logo {
+    font-size: 18px;
+    font-weight: 600;
+    color: #161616;
+    text-decoration: none;
+  }
+  .top-nav .logo span { color: #0f62fe; }
+  .top-nav .back-link {
+    font-size: 14px;
+    color: #0f62fe;
+    text-decoration: none;
+  }
+  .top-nav .back-link:hover { text-decoration: underline; }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  /* ── Header ── */
+  .doc-header {
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  .doc-header h1 {
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #1f2328;
+    line-height: 1.35;
+    margin-bottom: 0.5rem;
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+  .badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .badge-cefr   { background: #dbeafe; color: #1d4ed8; }
+  .badge-lang   { background: #dcfce7; color: #15803d; }
+  .badge-source { background: #f3f4f6; color: #57606a; }
+
+  /* ── Section ── */
+  .section {
+    margin-bottom: 2.5rem;
+  }
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1f2328;
+    border-left: 4px solid #3b82d4;
+    padding-left: 0.7rem;
+    margin-bottom: 1.2rem;
+  }
+
+  /* ── Article text ── */
+  .article-body {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    font-size: 14px;
+    line-height: 1.85;
+    color: #374151;
+  }
+  .article-body p { margin-bottom: 0.9rem; }
+  .article-body p:last-child { margin-bottom: 0; }
+  .article-body strong { color: #1f2328; }
+  .article-body em { font-style: italic; color: #4b5563; }
+
+  /* ── Discourse Summary ── */
+  .summary-box {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+  }
+  .summary-box dl { display: grid; grid-template-columns: 7rem 1fr; gap: 0.4rem 0.75rem; }
+  .summary-box dt { font-weight: 600; color: #57606a; font-size: 13px; padding-top: 0.1rem; }
+  .summary-box dd { color: #1f2328; font-size: 14px; }
+
+  /* ── Vocab Cards ── */
+  .vocab-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+  }
+  .vocab-card-header {
+    background: #3b82d4;
+    color: #ffffff;
+    padding: 0.65rem 1rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .vocab-word {
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+  .vocab-ipa {
+    font-size: 13px;
+    opacity: 0.85;
+    font-family: serif;
+  }
+  .vocab-cefr-badge {
+    margin-left: auto;
+    background: rgba(255,255,255,0.22);
+    color: #fff;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .vocab-card-body {
+    padding: 0.9rem 1rem 1rem;
+  }
+  .vocab-row {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    gap: 0.3rem 0.75rem;
+    margin-bottom: 0.7rem;
+    font-size: 14px;
+  }
+  .vocab-label {
+    font-weight: 600;
+    color: #57606a;
+    font-size: 13px;
+    padding-top: 0.1rem;
+  }
+  .vocab-value { color: #1f2328; }
+  .vocab-value em { font-style: normal; color: #57606a; font-size: 13px; }
+  .example-block {
+    background: #f0f6ff;
+    border-left: 3px solid #3b82d4;
+    border-radius: 0 4px 4px 0;
+    padding: 0.5rem 0.75rem;
+    margin: 0.2rem 0 0.5rem;
+    font-size: 14px;
+  }
+  .example-block .orig { color: #1f2328; font-style: italic; margin-bottom: 0.2rem; }
+  .example-block .trans { color: #57606a; font-size: 13px; }
+  .colloc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .colloc-list li {
+    font-size: 14px;
+    padding: 0.15rem 0;
+  }
+  .colloc-list li::before {
+    content: "• ";
+    color: #3b82d4;
+  }
+  .colloc-term { font-weight: 600; color: #1f2328; }
+  .confuse-box {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    border-radius: 4px;
+    padding: 0.45rem 0.75rem;
+    font-size: 13px;
+    color: #92400e;
+    margin-top: 0.3rem;
+  }
+
+  /* ── Grammar Cards ── */
+  .grammar-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+  }
+  .grammar-card-header {
+    background: #7c5cd8;
+    color: #fff;
+    padding: 0.65rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+  .grammar-card-body {
+    padding: 0.9rem 1rem 1rem;
+    font-size: 14px;
+  }
+  .grammar-quote {
+    background: #faf5ff;
+    border-left: 3px solid #7c5cd8;
+    border-radius: 0 4px 4px 0;
+    padding: 0.55rem 0.8rem;
+    font-style: italic;
+    color: #1f2328;
+    margin-bottom: 0.75rem;
+  }
+  .grammar-section-label {
+    font-weight: 700;
+    color: #57606a;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0.7rem 0 0.3rem;
+  }
+  .grammar-rule {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    padding: 0.5rem 0.75rem;
+    font-size: 14px;
+    margin-bottom: 0.6rem;
+  }
+  .analogy-block {
+    background: #f0fdf4;
+    border-left: 3px solid #16a34a;
+    border-radius: 0 4px 4px 0;
+    padding: 0.5rem 0.75rem;
+    font-size: 14px;
+    margin-bottom: 0.4rem;
+  }
+  .analogy-block .orig { font-style: italic; color: #1f2328; margin-bottom: 0.2rem; }
+  .analogy-block .trans { color: #57606a; font-size: 13px; }
+  .register-note {
+    background: #fefce8;
+    border: 1px solid #fde68a;
+    border-radius: 4px;
+    padding: 0.4rem 0.7rem;
+    font-size: 13px;
+    color: #713f12;
+  }
+
+  /* ── Structure tag pills ── */
+  .struct-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0.3rem 0 0.6rem;
+  }
+  .struct-list li {
+    background: #f3f0ff;
+    border: 1px solid #c4b5fd;
+    border-radius: 12px;
+    padding: 0.15rem 0.6rem;
+    font-size: 12px;
+    color: #5b21b6;
+  }
+
+  /* ── Cultural Context ── */
+  .culture-item {
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.75rem;
+    font-size: 14px;
+  }
+  .culture-item-title {
+    font-weight: 700;
+    color: #1f2328;
+    margin-bottom: 0.35rem;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #3b82d4;
+  }
+
+  /* ── Flashcard Table ── */
+  .fc-section-title {
+    font-weight: 700;
+    color: #57606a;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 1rem 0 0.5rem;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-bottom: 1.25rem;
+  }
+  th {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    font-weight: 600;
+    color: #57606a;
+    font-size: 13px;
+  }
+  td {
+    border: 1px solid #e5e7eb;
+    padding: 0.5rem 0.75rem;
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: #f7f8fa; }
+  .fc-word { font-weight: 600; color: #1d4ed8; }
+  .fc-ipa { font-size: 12px; color: #57606a; font-family: serif; }
+
+  /* ── Review tip ── */
+  .review-tip {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 6px;
+    padding: 0.65rem 1rem;
+    font-size: 13px;
+    color: #15803d;
+    margin-bottom: 1rem;
+  }
+
+  /* ── TOC ── */
+  .toc {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 2rem;
+  }
+  .toc-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #57606a;
+    margin-bottom: 0.6rem;
+  }
+  .toc ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: toc-counter;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.75rem;
+  }
+  .toc ol li {
+    counter-increment: toc-counter;
+  }
+  .toc ol li a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.65rem;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    font-size: 13px;
+    color: #3b82d4;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .toc ol li a:hover {
+    background: #eff6ff;
+    border-color: #3b82d4;
+    color: #1d4ed8;
+  }
+  .toc ol li a .toc-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: #57606a;
+    background: #e5e7eb;
+    border-radius: 10px;
+    padding: 0 0.4rem;
+    line-height: 1.6;
+  }
+
+  /* ── Back to top ── */
+  .back-to-top {
+    display: inline-block;
+    font-size: 12px;
+    color: #57606a;
+    text-decoration: none;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    padding: 0.15rem 0.5rem;
+    float: right;
+    margin-top: -0.15rem;
+  }
+  .back-to-top:hover { color: #3b82d4; border-color: #3b82d4; }
+
+  /* ── Footer ── */
+  footer {
+    border-top: 1px solid #e5e7eb;
+    margin-top: 3rem;
+    padding-top: 1rem;
+    text-align: center;
+    font-size: 12px;
+    color: #57606a;
+  }
+
+  @media (max-width: 600px) {
+    .vocab-row, .summary-box dl { grid-template-columns: 1fr; }
+    .vocab-label, .summary-box dt { font-weight: 700; color: #1f2328; }
+    .vocab-cefr-badge { margin-left: 0; }
+    .toc ol { flex-direction: column; gap: 0.3rem; }
+  }
+</style>
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a class="logo" href="index.html">IBM <span>Bob</span></a>
+    <a class="back-link" href="index.html">← 回索引</a>
+  </nav>
+<div class="container">
+
+  <!-- ── Header ── -->
+  <div id="top" class="doc-header">
+    <h1>A practical guide to agentic AI in higher education</h1>
+    <div class="meta-row">
+      <span class="badge badge-cefr">CEFR C1</span>
+      <span class="badge badge-lang">English</span>
+      <span class="badge badge-source">QS Insights · 2026-09-22</span>
+    </div>
+  </div>
+
+  <!-- ── TOC ── -->
+  <nav class="toc" aria-label="目錄">
+    <div class="toc-title">目錄 Table of Contents</div>
+    <ol>
+      <li><a href="#sec-summary"><span class="toc-num">1</span>🗂️ 篇章概覽</a></li>
+      <li><a href="#sec-vocab"><span class="toc-num">2</span>📚 重點生詞卡</a></li>
+      <li><a href="#sec-grammar"><span class="toc-num">3</span>🔍 文法剖析</a></li>
+      <li><a href="#sec-culture"><span class="toc-num">4</span>🌏 文化語境</a></li>
+      <li><a href="#sec-flashcard"><span class="toc-num">5</span>🔁 間隔複習閃卡</a></li>
+      <li><a href="#sec-article"><span class="toc-num">6</span>📰 原始文章全文</a></li>
+    </ol>
+  </nav>
+
+  <!-- ── Discourse Summary ── -->
+  <div id="sec-summary" class="section">
+    <div class="section-title">🗂️ 篇章概覽 Discourse Summary<a class="back-to-top" href="#top">↑ 回頂部</a></div>
+    <div class="summary-box">
+      <dl>
+        <dt>文體</dt>
+        <dd>學術新聞報導（journalistic-academic report）</dd>
+        <dt>CEFR</dt>
+        <dd>C1</dd>
+        <dt>核心摘要</dt>
+        <dd>本文探討 Agentic AI（代理式 AI）如何在高等教育中取代 Generative AI 的被動模式，自主規劃並執行多步驟任務。文章涵蓋行政自動化、學生支援、學習體驗優化、研究助手四大應用場域，並強調治理架構與人工監督的重要性，警告「agent sprawl」的機構風險。</dd>
+        <dt>文化背景</dt>
+        <dd>① RPA（機器人流程自動化）vs. AI Agent 的工具選擇邏輯；② 美國大學 Tenure（終身職）申請流程的複雜性</dd>
+      </dl>
+    </div>
+  </div>
+
+  <!-- ── Vocabulary ── -->
+  <div id="sec-vocab" class="section">
+    <div class="section-title">📚 重點生詞卡 Vocabulary Flashcards<a class="back-to-top" href="#top">↑ 回頂部</a></div>
+
+    <!-- Card 1: autonomy -->
+    <div class="vocab-card">
+      <div class="vocab-card-header">
+        <span class="vocab-word">autonomy</span>
+        <span class="vocab-ipa">/ɔːˈtɒn.ə.mi/</span>
+        <span class="vocab-cefr-badge">C1</span>
+      </div>
+      <div class="vocab-card-body">
+        <div class="vocab-row">
+          <span class="vocab-label">詞性</span>
+          <span class="vocab-value">不可數名詞 (n.) <em>語域：學術、正式</em></span>
+        </div>
+        <div class="vocab-row">
+          <span class="vocab-label">中文釋義</span>
+          <span class="vocab-value">自主性、自主運作能力</span>
+        </div>
+        <div class="vocab-label" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#57606a;margin-bottom:0.3rem;">文章例句</div>
+        <div class="example-block">
+          <div class="orig">AI systems that can plan and complete multi-step tasks with a degree of <strong>autonomy</strong>.</div>
+          <div class="trans">能以一定程度的自主性來規劃並完成多步驟任務的 AI 系統。</div>
+        </div>
+        <div class="vocab-label" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#57606a;margin-bottom:0.3rem;">延伸造句 <em style="text-transform:none;letter-spacing:0;">(場景：職場)</em></div>
+        <div class="example-block">
+          <div class="orig">Remote employees often perform better when given greater <strong>autonomy</strong> over how they structure their workday.</div>
+          <div class="trans">遠距工作者在獲得更大的工作時間自主安排空間時，往往有更好的表現。</div>
+        </div>
+        <div class="vocab-row" style="margin-top:.5rem;">
+          <span class="vocab-label">記憶鉤</span>
+          <span class="vocab-value"><em>auto-</em>（自己）＋ <em>-nomy</em>（法則，如 astronomy、economy）→「自己訂定自己的法則」</span>
+        </div>
+        <div class="vocab-row">
+          <span class="vocab-label">Collocations</span>
+          <span class="vocab-value">
+            <ul class="colloc-list">
+              <li><span class="colloc-term">a degree of autonomy</span>：一定程度的自主性</li>
+              <li><span class="colloc-term">operational autonomy</span>：運作自主權</li>
+              <li><span class="colloc-term">grant autonomy to sb</span>：賦予某人自主權</li>
+            </ul>
+          </span>
+        </div>
+        <div class="vocab-row">
+          <span class="vocab-label">易混淆</span>
+          <span class="vocab-value"><div class="confuse-box"><strong>autonomy</strong>（自我主導）vs. <strong>authority</strong>（他人賦予的權力）— 前者強調內在主動，後者強調外在授權。</div></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: governance -->
+    <div class="vocab-card">
+      <div class="vocab-card-header">
+        <span class="vocab-word">governance</span>
+        <span class="vocab-ipa">/ˈɡʌv.ən.əns/</span>
+        <span class="vocab-cefr-badge">C1</span>
+      </div>
+      <div class="vocab-card-body">
+        <div class="vocab-row">
+          <span class="vocab-label">詞性</span>
+          <span class="vocab-value">不可數名詞 (n.) <em>語域：正式、政策、學術</em></span>
+        </div>
+        <div class="vocab-row">
+          <span class="vocab-label">中文釋義</span>
+          <span class="vocab-value">治理、監管架構</span>
+        </div>
+        <div class="vocab-label" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#57606a;margin-bottom:0.3rem;">文章例句</div>
+        <div class="example-block">
+          <div class="orig">As AI systems become capable of taking actions across university systems, <strong>governance</strong> becomes more important.</div>
+          <div class="trans">隨著 AI 系統逐漸能夠在大學各系統中採取行動，治理架構的重要性也日益提升。</div>
+        </div>
+        <div class="vocab-label" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#57606a;margin-bottom:0.3rem;">延伸造句 <em style="text-transform:none;letter-spacing:0;">(場景：職場)</em></div>
+        <div class="example-block">
+          <div class="orig">Effective data <strong>governance</strong> ensures that sensitive information is only accessed by authorised personnel.</div>
+          <div class="trans">有效的資料治理確保敏感資訊只能由授權人員存取。</div>
+        </div>
+        <div class="vocab-row" style="margin-top:.5rem;">
+          <span class="vocab-label">記憶鉤</span>
+          <span class="vocab-value"><em>govern</em>（管理）＋ <em>-ance</em>（名詞字尾）。比 <em>government</em>（政府機構）更抽象，指「治理的方式與架構」。</span>
+        </div>
+        <div class="vocab-row">
+          <span class="vocab-label">Collocations</span>
+          <span class="vocab-value">
+            <ul class="colloc-list">
+              <li><span class="colloc-term">AI governance</span>：AI 治理</li>
+              <li><span class="colloc-term">governance framework</span>：治理框架</li>
+              <li><span class="colloc-term">corporate governance</span>：公司治理</li>
+            </ul>
+          </span>
+        </div>
+        <div class="vocab-row">
+          <span class="vocab-label">易混淆</span>
+          <span class="vocab-value"><div class="confuse-box"><strong>governance</strong>（治理架構、制度設計）vs. <strong>management</strong>（日常執行）— 「governance 是在管 management 怎麼進行」。</div></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: interoperability -->
+    <div class="vocab-card">
+      <div class="vocab-card-header" style="background:#1d4ed8;">
+        <span class="vocab-word">interoperability</span>
+        <span class="vocab-ipa">/ˌɪntərˌɒp.ər.əˈbɪl.ɪ.ti/</span>
+        <span class="vocab-cefr-badge">C2</span>
+      </div>
+      <div class="vocab-card-body">
+        <div class="vocab-row">
+          <span class="vocab-label">詞性</span>
+          <span class="vocab-value">不可數名詞 (n.) <em>語域：技術、學術</em></span>
+        </div>
+        <div class="vocab-row">
+          <span class="vocab-label">中文釋義</span>
+          <span class="vocab-value">系統互通性、相互操作能力</span>
+        </div>
+        <div class="vocab-label" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#57606a;margin-bottom:0.3rem;">文章例句</div>
+        <div class="example-block">
+          <div class="orig">Identity management, permissions, data architecture, security and <strong>interoperability</strong> all become more important as agents begin working across university systems.</div>
+          <div class="trans">當 AI 代理開始在大學各系統間運作，身分管理、權限、資料架構、安全性與系統互通性都變得更加重要。</div>
+        </div>
+        <div class="vocab-label" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#57606a;margin-bottom:0.3rem;">延伸造句 <em style="text-transform:none;letter-spacing:0;">(場景：職場 IT)</em></div>
+        <div class="example-block">
+          <div class="orig">The new hospital software was built with <strong>interoperability</strong> in mind, allowing it to exchange patient records with legacy systems seamlessly.</div>
+          <div class="trans">這套新的醫院軟體在設計之初就考量到系統互通性，能與舊有系統無縫交換病患資料。</div>
+        </div>
+        <div class="vocab-row" style="margin-top:.5rem;">
+          <span class="vocab-label">記憶鉤</span>
+          <span class="vocab-value"><em>inter-</em>（之間）＋ <em>operable</em>（可操作的）＋ <em>-ity</em>（名詞字尾）→「不同系統之間可互相操作的能力」</span>
+        </div>
+        <div class="vocab-row">
+          <span class="vocab-label">Collocations</span>
+          <span class="vocab-value">
+            <ul class="colloc-list">
+              <li><span class="colloc-term">system interoperability</span>：系統互通性</li>
+              <li><span class="colloc-term">ensure / achieve interoperability</span>：確保/實現互通性</li>
+              <li><span class="colloc-term">interoperability standards</span>：互通性標準</li>
+            </ul>
+          </span>
+        </div>
+        <div class="vocab-row">
+          <span class="vocab-label">易混淆</span>
+          <span class="vocab-value"><div class="confuse-box"><strong>interoperability</strong>（雙向溝通與協作能力）vs. <strong>compatibility</strong>（單向相容，能否「接受」另一系統的格式）— interoperability 範圍更廣。</div></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4: pedagogy -->
+    <div class="vocab-card">
+      <div class="vocab-card-header" style="background:#0f766e;">
+        <span class="vocab-word">pedagogy</span>
+        <span class="vocab-ipa">/ˈped.ə.ɡɒdʒ.i/</span>
+        <span class="vocab-cefr-badge">C1</span>
+      </div>
+      <div class="vocab-card-body">
+        <div class="vocab-row">
+          <span class="vocab-label">詞性</span>
+          <span class="vocab-value">名詞 (n.)，通常不可數 <em>語域：學術、教育政策；正式書面語</em></span>
+        </div>
+        <div class="vocab-row">
+          <span class="vocab-label">中文釋義</span>
+          <span class="vocab-value">教育學、教學法</span>
+        </div>
+        <div class="vocab-label" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#57606a;margin-bottom:0.3rem;">文章例句</div>
+        <div class="example-block">
+          <div class="orig"><strong>Pedagogy</strong>, assessment and critical thinking therefore need to be considered as part of the design of an agent, rather than after it has been introduced.</div>
+          <div class="trans">因此，教學法、評量方式與批判性思考，都應在設計 AI 代理時一併納入考量，而非在引入後才事後補救。</div>
+        </div>
+        <div class="vocab-label" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#57606a;margin-bottom:0.3rem;">延伸造句 <em style="text-transform:none;letter-spacing:0;">(場景：學術)</em></div>
+        <div class="example-block">
+          <div class="orig">The professor's innovative <strong>pedagogy</strong> combined project-based learning with real-world case studies.</div>
+          <div class="trans">這位教授創新的教學法結合了專題導向學習與真實世界案例研究。</div>
+        </div>
+        <div class="vocab-row" style="margin-top:.5rem;">
+          <span class="vocab-label">記憶鉤</span>
+          <span class="vocab-value">希臘文 <em>paidagōgos</em>（<em>paid-</em>＝兒童 + <em>agōgos</em>＝引導者）→ 古希臘帶領兒童上學的奴隸，後引申為「教育的方法與藝術」。</span>
+        </div>
+        <div class="vocab-row">
+          <span class="vocab-label">Collocations</span>
+          <span class="vocab-value">
+            <ul class="colloc-list">
+              <li><span class="colloc-term">critical pedagogy</span>：批判教育學</li>
+              <li><span class="colloc-term">pedagogical approach</span>：教學方法（形容詞形式，更常見於學術論文）</li>
+              <li><span class="colloc-term">rethink pedagogy</span>：重新思考教學法</li>
+            </ul>
+          </span>
+        </div>
+        <div class="vocab-row">
+          <span class="vocab-label">易混淆</span>
+          <span class="vocab-value"><div class="confuse-box"><strong>pedagogy</strong>（教學的宏觀理論體系）vs. <strong>didactics</strong>（教學論，強調具體技術）— 前者更宏觀，後者更技術性。</div></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5: scrutiny -->
+    <div class="vocab-card">
+      <div class="vocab-card-header" style="background:#b45309;">
+        <span class="vocab-word">scrutiny</span>
+        <span class="vocab-ipa">/ˈskruː.tɪ.ni/</span>
+        <span class="vocab-cefr-badge">C1</span>
+      </div>
+      <div class="vocab-card-body">
+        <div class="vocab-row">
+          <span class="vocab-label">詞性</span>
+          <span class="vocab-value">不可數名詞 (n.) <em>語域：正式、法律、政策、新聞</em></span>
+        </div>
+        <div class="vocab-row">
+          <span class="vocab-label">中文釋義</span>
+          <span class="vocab-value">詳細審查、嚴密審視</span>
+        </div>
+        <div class="vocab-label" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#57606a;margin-bottom:0.3rem;">文章例句</div>
+        <div class="example-block">
+          <div class="orig">Processes involving admissions, assessment, academic progression or other high-impact decisions require considerably more <strong>scrutiny</strong> than routine administrative work.</div>
+          <div class="trans">涉及入學申請、成績評核、學業進度或其他高影響力決策的流程，需要比例行行政工作多得多的嚴密審查。</div>
+        </div>
+        <div class="vocab-label" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#57606a;margin-bottom:0.3rem;">延伸造句 <em style="text-transform:none;letter-spacing:0;">(場景：職場)</em></div>
+        <div class="example-block">
+          <div class="orig">The company's financial reports were placed under intense <strong>scrutiny</strong> following the audit findings.</div>
+          <div class="trans">在審計結果出爐後，該公司的財務報告受到嚴密審查。</div>
+        </div>
+        <div class="vocab-row" style="margin-top:.5rem;">
+          <span class="vocab-label">記憶鉤</span>
+          <span class="vocab-value">源自拉丁文 <em>scrutinium</em>（仔細搜查）→ 想像有人用放大鏡翻找每一個細節。常見於政治/法律/學術報導。</span>
+        </div>
+        <div class="vocab-row">
+          <span class="vocab-label">Collocations</span>
+          <span class="vocab-value">
+            <ul class="colloc-list">
+              <li><span class="colloc-term">come under / face scrutiny</span>：受到審查（最高頻搭配）</li>
+              <li><span class="colloc-term">close / intense scrutiny</span>：嚴密審查</li>
+              <li><span class="colloc-term">withstand scrutiny</span>：經得起審查</li>
+            </ul>
+          </span>
+        </div>
+        <div class="vocab-row">
+          <span class="vocab-label">易混淆</span>
+          <span class="vocab-value"><div class="confuse-box"><strong>scrutiny</strong>（名詞，審查這件事）vs. <strong>scrutinize</strong>（動詞，仔細審查）— 搭配注意：<em>under scrutiny</em>、<em>scrutinize the data</em>。</div></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Grammar ── -->
+  <div id="sec-grammar" class="section">
+    <div class="section-title">🔍 文法剖析 Grammar &amp; Syntax Breakdown<a class="back-to-top" href="#top">↑ 回頂部</a></div>
+
+    <!-- G1 -->
+    <div class="grammar-card">
+      <div class="grammar-card-header">句型 1 ── 否定性前置對比語 + 分詞構句串列（Contrastive Fronting + Participial Series）</div>
+      <div class="grammar-card-body">
+        <div class="grammar-quote">Instead of simply responding to a prompt, an AI agent can work towards a defined goal, <em>drawing on</em> different systems, <em>making decisions</em> between steps and <em>carrying out</em> routine actions where appropriate.</div>
+        <div class="grammar-section-label">結構標記</div>
+        <ul class="struct-list">
+          <li>前置對比 Instead of + V-ing</li>
+          <li>主句 S + V + Adv</li>
+          <li>分詞 1：drawing on...</li>
+          <li>分詞 2：making decisions...</li>
+          <li>分詞 3：carrying out... where appropriate</li>
+        </ul>
+        <div class="grammar-rule">
+          <em>Instead of + V-ing</em> 作前置對比語；三個分詞片語共享主語 <em>an AI agent</em>，表示伴隨動作並形成遞進（資料調用 → 判斷決策 → 執行行動）。<em>where appropriate</em> 是 <em>where it is appropriate</em> 的正式省略。
+        </div>
+        <div class="grammar-section-label">類比句型</div>
+        <div class="analogy-block">
+          <div class="orig">Rather than simply forwarding emails, a capable assistant can manage correspondence, drafting replies, prioritising urgent messages and flagging items for follow-up where necessary.</div>
+          <div class="trans">一位稱職的助理不只是轉發電子郵件，而是能管理往來信件——起草回覆、區分優先順序，並在必要時標注需跟進的事項。</div>
+        </div>
+        <div class="register-note">📝 <strong>語域備註</strong>：分詞構句串列是學術報導文的典型句式。口語替換：<em>...it draws on different systems, makes decisions, and carries out actions.</em></div>
+      </div>
+    </div>
+
+    <!-- G2 -->
+    <div class="grammar-card">
+      <div class="grammar-card-header">句型 2 ── 分裂句強調結構（It-Cleft for Emphasis）</div>
+      <div class="grammar-card-body">
+        <div class="grammar-quote">It is <u>this ability to act, rather than simply generate an answer</u>, <strong>that</strong> makes AI agents particularly relevant to higher education.</div>
+        <div class="grammar-section-label">結構標記</div>
+        <ul class="struct-list">
+          <li>It is [被強調成分] that [述語]</li>
+          <li>插入對比語：rather than simply generate an answer</li>
+          <li>主句述語：makes AI agents relevant...</li>
+        </ul>
+        <div class="grammar-rule">
+          <em>It is... that...</em> 分裂句將焦點移至 <em>It is</em> 與 <em>that</em> 之間的成分。<em>rather than</em> 插入作對比限定語，縮小「能力」的定義範圍，修辭力道強於直接陳述。
+        </div>
+        <div class="grammar-section-label">類比句型</div>
+        <div class="analogy-block">
+          <div class="orig">It is the ability to collaborate across disciplines, rather than conduct isolated experiments, that makes interdisciplinary research particularly valuable.</div>
+          <div class="trans">正是跨學科合作的能力，而非僅僅進行孤立的實驗，才使得跨領域研究格外有價值。</div>
+        </div>
+        <div class="register-note">📝 <strong>語域備註</strong>：It-Cleft 為學術與新聞寫作強調句型，口語較少。口語替換：<em>What makes AI agents relevant is their ability to act, not just generate answers.</em></div>
+      </div>
+    </div>
+
+    <!-- G3 -->
+    <div class="grammar-card">
+      <div class="grammar-card-header">句型 3 ── 否定對比 + 限定性關係從句（not A, but B + Restrictive Relative）</div>
+      <div class="grammar-card-body">
+        <div class="grammar-quote">The clearest opportunities are often <strong>not</strong> futuristic ones, <strong>but</strong> processes <u>that already consume large amounts of staff time</u>.</div>
+        <div class="grammar-section-label">結構標記</div>
+        <ul class="struct-list">
+          <li>主句否定補語：not futuristic ones</li>
+          <li>對比連接詞：but</li>
+          <li>對比補語：processes</li>
+          <li>限定性關係子句：that already consume...</li>
+          <li>軟化語氣副詞：often（Hedging）</li>
+        </ul>
+        <div class="grammar-rule">
+          <em>not A, but B</em> 強力對比，破除「AI 機會只存在於未來」的預設。<em>that</em> 引導限定性關係子句精確化 <em>processes</em>。<em>often</em> 置於 <em>not</em> 前保留普遍性，同時保持謹慎語氣（hedging）。
+        </div>
+        <div class="grammar-section-label">類比句型</div>
+        <div class="analogy-block">
+          <div class="orig">The greatest improvements are often not revolutionary breakthroughs, but small adjustments that consistently reduce friction in daily workflows.</div>
+          <div class="trans">最大的改善往往不是革命性的突破，而是那些持續減少日常工作流程摩擦的細微調整。</div>
+        </div>
+        <div class="register-note">📝 <strong>語域備註</strong>：<em>not A, but B</em> 在正式書面語和演講稿中均為高頻句型，比直接陳述更具說服力。</div>
+      </div>
+    </div>
+
+    <!-- G4 -->
+    <div class="grammar-card">
+      <div class="grammar-card-header">句型 4 ── 對比介系詞 + 名詞化 + Whether 列舉子句（Rather than + Nominalization + Whether-clause）</div>
+      <div class="grammar-card-body">
+        <div class="grammar-quote">Rather than accumulating large numbers of disconnected pilots, institutions can focus on workflows where there is an identifiable problem and a measurable benefit, <em>whether that is reducing processing time, improving response times or freeing staff capacity.</em></div>
+        <div class="grammar-section-label">結構標記</div>
+        <ul class="struct-list">
+          <li>前置對比：Rather than + V-ing</li>
+          <li>主句：institutions can focus on workflows</li>
+          <li>關係子句：where there is an identifiable problem...</li>
+          <li>列舉子句：whether that is... or...</li>
+        </ul>
+        <div class="grammar-rule">
+          <em>whether... or...</em> 此處非條件句，而是「不論是…還是…」的自由選擇列舉（Free Choice <em>whether</em>）。堆疊子句形成 C1 長難句；寫作時可拆為兩句以提升可讀性。
+        </div>
+        <div class="grammar-section-label">類比句型</div>
+        <div class="analogy-block">
+          <div class="orig">Rather than launching multiple uncoordinated campaigns, marketing teams should concentrate on channels where there is a clear audience and a trackable return, whether that is email, social media or paid advertising.</div>
+          <div class="trans">行銷團隊應集中火力在有明確受眾且可追蹤回報的管道上，無論是電子郵件、社群媒體或付費廣告，而非同時推出多個缺乏協調的行銷活動。</div>
+        </div>
+        <div class="register-note">📝 <strong>語域備註</strong>：<em>Rather than</em> 比 <em>Instead of</em> 更正式，更常見於政策與學術文件。</div>
+      </div>
+    </div>
+
+    <!-- G5 -->
+    <div class="grammar-card">
+      <div class="grammar-card-header">句型 5 ── 後置分詞定語 + 比較級強化（Post-nominal Participial Modifier + Amplified Comparative）</div>
+      <div class="grammar-card-body">
+        <div class="grammar-quote">Processes <u>involving admissions, assessment, academic progression or other high-impact decisions</u> require <strong>considerably more scrutiny</strong> than routine administrative work.</div>
+        <div class="grammar-section-label">結構標記</div>
+        <ul class="struct-list">
+          <li>主語：Processes</li>
+          <li>後置分詞定語：involving... （等同於 which involve）</li>
+          <li>述語：require</li>
+          <li>受詞 + 比較級：considerably more scrutiny than...</li>
+        </ul>
+        <div class="grammar-rule">
+          現在分詞片語 <em>involving...</em> 作後置定語，是學術書面語的精簡慣用結構。<em>considerably</em> 比 <em>much</em> 更正式，常見於學術與政策文本。
+        </div>
+        <div class="grammar-section-label">類比句型</div>
+        <div class="analogy-block">
+          <div class="orig">Projects involving sensitive personal data or financial transactions require considerably more oversight than standard internal reports.</div>
+          <div class="trans">涉及敏感個人資料或金融交易的專案，需要比標準內部報告多得多的監管。</div>
+        </div>
+        <div class="register-note">📝 <strong>語域備註</strong>：後置分詞定語（N + V-ing）與中文「涉及…的流程」語序相反，是中文母語者最需強化的句型之一。</div>
+      </div>
+    </div>
+
+    <!-- G6 -->
+    <div class="grammar-card">
+      <div class="grammar-card-header">句型 6 ── 動名詞主語 + 比較警示結構（Gerund Subject + "more than" Warning）</div>
+      <div class="grammar-card-body">
+        <div class="grammar-quote"><strong>Getting there</strong> will require <u>more than access to increasingly powerful AI models</u>.</div>
+        <div class="grammar-section-label">結構標記</div>
+        <ul class="struct-list">
+          <li>動名詞片語主語：Getting there</li>
+          <li>述語：will require</li>
+          <li>比較結構：more than [名詞化片語]</li>
+        </ul>
+        <div class="grammar-rule">
+          <em>Getting there</em> 以動名詞作主語，指代前文「從試驗走向整合」的目標（篇章銜接技巧）。<em>more than X</em> 意為「不只是 X 那麼簡單」，含「X 是必要但不充分條件」的語義，是政策文章的「警示性修辭」手法。
+        </div>
+        <div class="grammar-section-label">類比句型</div>
+        <div class="analogy-block">
+          <div class="orig">Closing the achievement gap will require more than access to better textbooks; it demands systemic change in how schools allocate resources.</div>
+          <div class="trans">縮小學習成就差距，需要的不只是更好的教科書；它需要學校在資源分配方式上進行系統性的改變。</div>
+        </div>
+        <div class="register-note">📝 <strong>語域備註</strong>：動名詞主語是學術寫作高密度表達的標誌，在結論段尤其常見。口語傾向：<em>If we want to get there, we'll need more than...</em></div>
+      </div>
+    </div>
+
+    <!-- G7 -->
+    <div class="grammar-card">
+      <div class="grammar-card-header">句型 7 ── 名詞串列主語 + Whether 間接疑問受詞（Noun-list Subject + Whether-Clause Object）</div>
+      <div class="grammar-card-body">
+        <div class="grammar-quote">Leadership, infrastructure, governance, staff skills and culture will <strong>all</strong> influence <u>whether AI agents remain isolated experiments or become useful parts of how the university works</u>.</div>
+        <div class="grammar-section-label">結構標記</div>
+        <ul class="struct-list">
+          <li>主語：五項並列名詞串列</li>
+          <li>all（mid-position 強調副詞）</li>
+          <li>受詞：whether 間接疑問子句</li>
+          <li>嵌套：how the university works（名詞子句）</li>
+        </ul>
+        <div class="grammar-rule">
+          <em>all</em> 置於助動詞後（mid-position adverb），強調「以上每一項都不可或缺」。<em>whether... or...</em> 提供二元對比框架。<em>how the university works</em> 是嵌套名詞子句，作介系詞 <em>of</em> 的受詞。
+        </div>
+        <div class="grammar-section-label">類比句型</div>
+        <div class="analogy-block">
+          <div class="orig">Team dynamics, leadership style, available resources and institutional culture will all shape whether a pilot programme becomes a scalable solution or remains a one-off experiment.</div>
+          <div class="trans">團隊動態、領導風格、可用資源與機構文化，都將影響一個試驗計畫究竟能成為可規模化的解決方案，還是只停留為一次性的實驗。</div>
+        </div>
+        <div class="register-note">📝 <strong>語域備註</strong>：「名詞串列主語 + <em>whether... or...</em>」是政策文件與學術論文結論段的典型收尾句式。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Cultural Context ── -->
+  <div id="sec-culture" class="section">
+    <div class="section-title">🌏 文化語境補充 Cultural Context<a class="back-to-top" href="#top">↑ 回頂部</a></div>
+
+    <div class="culture-item">
+      <div class="culture-item-title">語用層次 Register</div>
+      全文採用正式學術報導語域。標誌：大量被動式與名詞化（<em>governance becomes important</em>）、情態動詞軟化語氣（<em>may / could / might</em>）、正式連接詞（<em>however / therefore / whether</em>）。不適合直接套用於口語場合。
+    </div>
+
+    <div class="culture-item">
+      <div class="culture-item-title">慣用語 / 行業梗語</div>
+      <strong>"agent sprawl"</strong>：字面直譯「代理蔓延」，借用 IT 領域 <em>sprawl</em>（如 cloud sprawl 雲端資源失控擴張），指各部門各自建立大量未協調 AI 代理、缺乏統一管理的現象。<br><br>
+      <strong>"Don't bring an agent to an RPA fight"</strong>：改編自俚語 "Don't bring a knife to a gunfight"（帶著刀去槍戰），意指「用錯工具」→ 固定且可預測的流程用 RPA 就夠了，不需要動用複雜的 AI 代理。
+    </div>
+
+    <div class="culture-item">
+      <div class="culture-item-title">跨語言陷阱 Contrastive Pitfalls for Chinese Speakers</div>
+      <strong>① 後置 vs. 前置修飾</strong>：中文「涉及入學申請的流程」為前置；英文為後置 <em>processes involving admissions</em>，不能說 <em>involving-admissions processes</em>。<br><br>
+      <strong>② governance 的翻譯</strong>：≠「政府」（government）；≠ 單純「管理」（management）。在政策脈絡應譯為「治理架構」或「監管機制」。<br><br>
+      <strong>③ pedagogy 的語域</strong>：指「關於教學的理論與方法體系」，偏正式學術語域，不宜於口語直接使用（口語用 <em>teaching methods</em>）。
+    </div>
+  </div>
+
+  <!-- ── Flashcards ── -->
+  <div id="sec-flashcard" class="section">
+    <div class="section-title">🔁 間隔複習閃卡 Spaced Repetition Flashcards<a class="back-to-top" href="#top">↑ 回頂部</a></div>
+    <div class="review-tip">⏰ 建議複習時間：<strong>當日睡前</strong> → <strong>明日早晨</strong> → <strong>一週後</strong></div>
+
+    <div class="fc-section-title">詞彙閃卡</div>
+    <table>
+      <thead>
+        <tr>
+          <th>目標語言詞彙（+ 音標）</th>
+          <th>繁中釋義 + 詞性</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="fc-word">autonomy</span><br><span class="fc-ipa">/ɔːˈtɒn.ə.mi/</span></td>
+          <td>自主性（不可數名詞 n.）</td>
+        </tr>
+        <tr>
+          <td><span class="fc-word">governance</span><br><span class="fc-ipa">/ˈɡʌv.ən.əns/</span></td>
+          <td>治理架構（不可數名詞 n.）</td>
+        </tr>
+        <tr>
+          <td><span class="fc-word">interoperability</span><br><span class="fc-ipa">/ˌɪntərˌɒp.ər.əˈbɪl.ɪ.ti/</span></td>
+          <td>系統互通性（不可數名詞 n.）</td>
+        </tr>
+        <tr>
+          <td><span class="fc-word">pedagogy</span><br><span class="fc-ipa">/ˈped.ə.ɡɒdʒ.i/</span></td>
+          <td>教育學、教學法（名詞 n.）</td>
+        </tr>
+        <tr>
+          <td><span class="fc-word">scrutiny</span><br><span class="fc-ipa">/ˈskruː.tɪ.ni/</span></td>
+          <td>嚴密審查（不可數名詞 n.）</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="fc-section-title">句型記憶卡</div>
+    <table>
+      <thead>
+        <tr>
+          <th>句型結構</th>
+          <th>功能與使用條件</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><em>Instead of / Rather than + V-ing, S + V...</em></td>
+          <td>前置對比語；強調「以 B 取代 A」；正式書面語常見</td>
+        </tr>
+        <tr>
+          <td><em>It is [X] that [makes/does...]</em></td>
+          <td>分裂句（It-Cleft）；強調 X 為關鍵因素；學術/新聞體</td>
+        </tr>
+        <tr>
+          <td><em>not A, but B that/which...</em></td>
+          <td>否定對比；破除預設假設；說服力強</td>
+        </tr>
+        <tr>
+          <td><em>N + V-ing + [修飾語]</em></td>
+          <td>後置分詞定語；精簡等同 N which/that V；學術書面語核心</td>
+        </tr>
+        <tr>
+          <td><em>whether... remain... or become...</em></td>
+          <td>間接疑問作受詞；二元對比框架；政策文件結尾常見</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── Full Article ── -->
+  <div id="sec-article" class="section">
+    <div class="section-title">📰 原始文章全文 Full Article Text<a class="back-to-top" href="#top">↑ 回頂部</a></div>
+    <div class="article-body">
+      <p>For the past few years, much of the conversation around artificial intelligence in higher education has focused on Generative AI: tools that can answer questions, summarise information, create content and support research.</p>
+      <p>Use is already widespread. QS research found that <strong>67% of academics and 62% of students use Generative AI at least weekly</strong>, suggesting that AI is becoming an increasingly familiar part of university life.</p>
+      <p>Agentic AI takes this a step further. Instead of simply responding to a prompt, an AI agent can work towards a defined goal, drawing on different systems, making decisions between steps and carrying out routine actions where appropriate.</p>
+      <p>For universities, this has obvious potential. Many institutional processes still involve staff moving between systems, gathering information manually and coordinating relatively repetitive tasks across teams.</p>
+      <p>So, what could agentic AI in higher education look like in practice?</p>
+      <p><strong>What is agentic AI in higher education?</strong></p>
+      <p>Agentic AI refers to AI systems that can plan and complete multi-step tasks with a degree of autonomy, often interacting with different tools and sources of information along the way. A Generative AI tool might suggest suitable meeting times. An AI agent could potentially check calendars, identify available rooms, compare availability and prepare invitations for approval.</p>
+      <p>It is this ability to act, rather than simply generate an answer, that makes AI agents particularly relevant to higher education.</p>
+      <p>In the QS webinar <em>The Responsive Campus: Putting AI Agents to Work</em>, Terrence Gee, Chief Information Officer at Rice University, framed the opportunity around a broader question: "How do I fundamentally change the workflows and not just tweak around the edges?"</p>
+      <p><strong>How can universities use agentic AI?</strong></p>
+      <p>The clearest opportunities are often not futuristic ones, but processes that already consume large amounts of staff time.</p>
+      <p><em>Automating complex administrative workflows</em> — University administration is full of processes spread across several systems and teams. Gee gave the example of organising campus visits, where staff had previously spent considerable time coordinating room availability, accommodation and other requirements. An agent can instead gather information across different sources and bring the options together.</p>
+      <p>Rice University has also explored agentic approaches to processes such as tenure, where information needs to be collected from several internal and external databases.</p>
+      <p>Not every task needs an AI agent, however. Fixed and predictable processes may already be better suited to conventional automation. As Gee put it: <strong>"Don't bring an agent to an RPA fight."</strong> The starting point should be the workflow and the problem that needs solving, rather than the technology itself.</p>
+      <p><em>Supporting students more personally</em> — AI agents could also help students navigate information that currently sits across multiple university systems. An agent might bring together course information, careers resources, learning platforms and university services to help a student understand their options and what to do next.</p>
+      <p><em>Creating more responsive learning experiences</em> — Agentic AI could also change how students interact with course materials. An agent could go further by responding to a student's progress, identifying new course materials, suggesting relevant revision activities or highlighting areas where more support may be useful.</p>
+      <p>The role of faculty remains important here. Pedagogy, assessment and critical thinking therefore need to be considered as part of the design of an agent, rather than after it has been introduced.</p>
+      <p><em>Giving researchers more time</em> — Researchers spend significant time on funding searches, administration and information gathering. Gee described the objective simply as trying to <strong>"find that hour"</strong>: giving researchers back even a small amount of time each week for their core work.</p>
+      <p>One application being explored at Rice uses an AI agent to match researchers' expertise with relevant grant opportunities. Removing small amounts of friction across many researchers can create meaningful additional capacity for research.</p>
+      <p><strong>How should universities implement agentic AI?</strong></p>
+      <p>As AI systems become capable of taking actions across university systems, governance becomes more important.</p>
+      <p>Universities need to be clear about which systems an agent can access, what data it can use, which actions it is allowed to take and where human approval is required.</p>
+      <p>A practical approach is to begin with a small number of clearly defined use cases. Rather than accumulating large numbers of disconnected pilots, institutions can focus on workflows where there is an identifiable problem and a measurable benefit, whether that is reducing processing time, improving response times or freeing staff capacity.</p>
+      <p>Human oversight also needs to reflect the consequences of the task. Processes involving admissions, assessment, academic progression or other high-impact decisions require considerably more scrutiny than routine administrative work.</p>
+      <p>During the QS webinar, speakers also warned about the risk of <strong>"agent sprawl"</strong>, where departments create large numbers of independent agents without sufficient central oversight.</p>
+      <p>This points to the need for a common institutional foundation. Identity management, permissions, data architecture, security and interoperability all become more important as agents begin working across university systems.</p>
+      <p><strong>From AI pilots to the responsive campus</strong></p>
+      <p>The most useful measure of agentic AI in higher education may not be how many agents an institution deploys, but whether they make the university more responsive. That could mean helping a student reach the right support more quickly, shortening an administrative process or giving a researcher more time to focus on their work.</p>
+      <p>With 67% of academics and 62% of students already using Generative AI at least weekly, the question for many institutions is increasingly shifting from whether AI will be used to how it should be integrated responsibly and effectively. Getting there will require more than access to increasingly powerful AI models. Universities will need to identify the right problems, redesign existing workflows and put the appropriate governance around how agents operate. That also requires broader institutional AI capability. Leadership, infrastructure, governance, staff skills and culture will all influence whether AI agents remain isolated experiments or become useful parts of how the university works.</p>
+    </div>
+  </div>
+
+  <footer>Made with IBM Bob</footer>
+</div>
+</body>
+</html>
