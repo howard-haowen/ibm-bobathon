@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IBM Bob — 報告索引</title>
+  <title>IBM Bob — AI Agents 工作流工作坊</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&display=swap">
   <style>
@@ -51,6 +51,7 @@
       text-decoration: none;
     }
     .top-nav .logo span { color: #0f62fe; }
+
     /* Main content */
     .page-content {
       max-width: 1056px;
@@ -85,7 +86,36 @@
       max-width: 760px;
     }
 
-    /* Section label */
+    /* Workflow pills */
+    .workflow-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 24px;
+    }
+    .workflow-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #f4f4f4;
+      border: 1px solid #e0e0e0;
+      padding: 6px 14px;
+      font-size: 13px;
+      color: #525252;
+    }
+    .workflow-pill .step-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot-blue   { background: #0f62fe; }
+    .dot-purple { background: #8a3ffc; }
+    .dot-green  { background: #198038; }
+    .dot-teal   { background: #0072c3; }
+    .workflow-arrow { font-size: 16px; color: #8d8d8d; align-self: center; }
+
+    /* Section label (small caps, used inside sections) */
     .section-label {
       font-size: 12px;
       font-weight: 600;
@@ -94,6 +124,67 @@
       text-transform: uppercase;
       margin-bottom: 16px;
     }
+
+    /* Section heading (large, numbered, left-border) */
+    .section-heading {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      padding-left: 16px;
+      border-left: 4px solid #0f62fe;
+      margin-bottom: 24px;
+    }
+    .section-heading .section-num {
+      font-size: 13px;
+      font-weight: 600;
+      color: #0f62fe;
+      letter-spacing: 0.32px;
+      white-space: nowrap;
+    }
+    .section-heading h2 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #161616;
+      line-height: 1.3;
+      margin: 0;
+    }
+
+    /* TOC bar */
+    .toc-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      border: 1px solid #e0e0e0;
+      margin-top: 32px;
+      margin-bottom: 0;
+    }
+    .toc-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 24px;
+      text-decoration: none;
+      color: #161616;
+      font-size: 14px;
+      font-weight: 400;
+      border-right: 1px solid #e0e0e0;
+      background: #f4f4f4;
+      flex: 1;
+      min-width: 180px;
+      transition: background 0.1s;
+    }
+    .toc-item:last-child { border-right: none; }
+    .toc-item:hover { background: #e0e0e0; }
+    .toc-item .toc-num {
+      font-size: 20px;
+      font-weight: 300;
+      color: #0f62fe;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .toc-item .toc-label { line-height: 1.3; }
+    .toc-item .toc-label strong { display: block; font-weight: 600; font-size: 14px; }
+    .toc-item .toc-label span { font-size: 12px; color: #525252; }
 
     /* Card grid */
     .card-grid {
@@ -155,17 +246,49 @@
 
     /* Footer */
     footer {
-      background: #161616;
-      color: #c6c6c6;
+      background: #f4f4f4;
+      color: #525252;
       font-size: 14px;
       letter-spacing: 0.16px;
       line-height: 1.29;
-      padding: 32px;
+      padding: 64px 32px;
       text-align: center;
-      border-top: 1px solid #262626;
+      border-top: 1px solid #e0e0e0;
       margin-top: 64px;
     }
-    footer span { font-size: 12px; color: #8c8c8c; }
+    footer span { font-size: 12px; color: #8d8d8d; }
+
+    /* Callout box */
+    .callout-box {
+      margin-top: 24px;
+      border-left: 3px solid #0f62fe;
+      background: #edf4ff;
+      padding: 16px 20px;
+    }
+    .callout-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #0043ce;
+      margin-bottom: 8px;
+    }
+    .callout-box p {
+      font-size: 14px;
+      color: #393939;
+      line-height: 1.6;
+      margin-bottom: 0;
+    }
+    .callout-box p + p { margin-top: 8px; }
+    .callout-hint {
+      font-size: 13px;
+      color: #525252;
+    }
+    .callout-hint code {
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      font-size: 12px;
+      background: #d0e2ff;
+      color: #0043ce;
+      padding: 1px 5px;
+    }
 
     /* Clone box */
     .clone-box {
@@ -201,7 +324,7 @@
       line-height: 1.5;
       white-space: nowrap;
     }
-    .copy-btn:hover { background: #edf4ff; }
+    .copy-btn:hover { background: #0f62fe; color: #ffffff; }
     .copy-btn.copied { color: #198038; border-color: #198038; background: #defbe6; }
     .clone-box .prompt-text {
       font-family: 'IBM Plex Mono', 'Courier New', monospace;
@@ -216,17 +339,55 @@
       display: block;
     }
 
+    /* AI prompt clone box variant */
+    .clone-box.ai-variant {
+      border-color: #e8daff;
+      background: #f6f2ff;
+    }
+    .clone-box.ai-variant .clone-box-header {
+      border-bottom-color: #e8daff;
+      background: #f6f2ff;
+    }
+    .clone-box.ai-variant h3 { color: #6929c4; }
+    .clone-box.ai-variant .prompt-text {
+      background: #f6f2ff;
+      color: #21272a;
+    }
+    .clone-box.ai-variant .copy-btn {
+      color: #6929c4;
+      border-color: #6929c4;
+    }
+    .clone-box.ai-variant .copy-btn:hover { background: #6929c4; color: #ffffff; }
+    .clone-box.ai-variant .copy-btn.copied { color: #198038; border-color: #198038; background: #defbe6; }
+    .clone-box-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      font-size: 12px;
+      color: #8d8d8d;
+      letter-spacing: 0.32px;
+      text-transform: uppercase;
+    }
+    .clone-box-divider::before,
+    .clone-box-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e0e0e0;
+    }
+
     @media (max-width: 672px) {
       .utility-bar { display: none; }
       .page-content { padding: 40px 16px 64px; }
       .hero h1 { font-size: 32px; }
-      .clone-box code { font-size: 11px; }
+      .workflow-arrow { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <div class="utility-bar">IBM Bob · 工作坊教學材料</div>
+  <div class="utility-bar">IBM Bob · AI Agents 工作流工作坊</div>
 
   <nav class="top-nav">
     <a class="logo" href="index.html">IBM <span>Bob</span></a>
@@ -234,60 +395,127 @@
 
   <main class="page-content">
 
-    <div class="hero">
-      <p class="hero-eyebrow">教學材料總覽</p>
-      <h1>本期課程教材</h1>
-      <p>以下為本次工作坊的學習教材，主題涵蓋 IBM Bob 核心功能與 COBOL 程式解讀，請依序瀏覽。</p>
-      
-      <div class="clone-box">
-        <div class="clone-box-header">
-          <h3>取得本工作坊程式碼</h3>
-          <button class="copy-btn" id="copyBtn">複製 Prompt</button>
-        </div>
-        <code class="prompt-text" id="promptText">請在終端機執行以下 git 指令，單獨 clone 本工作坊的 orphan 分支（workshop/w04），不會下載 main 分支的任何歷史：
+    <!-- ── 頁首：大標題 + TOC ── -->
+    <div style="padding-bottom: 40px; border-bottom: 1px solid #e0e0e0; margin-bottom: 56px;">
+      <p class="hero-eyebrow">教學材料總覽 · Workshop W05</p>
+      <h1 style="font-size: 42px; font-weight: 300; line-height: 1.20; color: #161616; margin-bottom: 0; margin-top: 12px;">AI Agents 工作流<br>工作坊教材</h1>
 
-git clone --single-branch --branch workshop/w04 \
-  https://github.com/howard-haowen/ibm-bobathon.git \
-  ibm-bobathon-w04
-
-執行完成後，切換至新建立的目錄：
-
-cd ibm-bobathon-w04</code>
-      </div>
+      <nav class="toc-bar" aria-label="頁面目錄">
+        <a class="toc-item" href="#section-goal">
+          <span class="toc-num">01</span>
+          <span class="toc-label"><strong>工作坊的核心目標</strong><span>了解本工作坊的學習方向</span></span>
+        </a>
+        <a class="toc-item" href="#section-prep">
+          <span class="toc-num">02</span>
+          <span class="toc-label"><strong>準備工作</strong><span>取得工作坊專案檔案</span></span>
+        </a>
+        <a class="toc-item" href="#section-materials">
+          <span class="toc-num">03</span>
+          <span class="toc-label"><strong>全部教材</strong><span>共 3 份學習材料</span></span>
+        </a>
+      </nav>
     </div>
 
-    <p class="section-label">全部教材（2）</p>
+    <!-- ── 區塊一：工作坊的核心目標 ── -->
+    <section id="section-goal" style="padding-bottom: 56px; border-bottom: 1px solid #e0e0e0; margin-bottom: 56px;">
+      <div class="section-heading">
+        <span class="section-num">01</span>
+        <h2>工作坊的核心目標</h2>
+      </div>
+      <p>本工作坊的核心目標，是帶你學會用 IBM Bob 打造屬於自己的 <strong>AI 工作流（Agentic Workflow）</strong>——讓 AI 自動串接多個步驟、依序完成任務，不需要任何程式背景即可上手。</p>
+
+      <p style="margin-top:12px; font-size:16px; color:#525252; line-height:1.5;">為了說明 AI 工作流的概念，本工作坊以「<strong>AI 外語自學系統</strong>」作為範例情境——從閱讀外語新聞、自動提取生詞與文法，到將學習成果存入 Obsidian 筆記庫，完整示範一條四步驟的自動化流程：</p>
+
+      <div class="workflow-row">
+        <div class="workflow-pill"><span class="step-dot dot-blue"></span>Step 1 語料獲取</div>
+        <span class="workflow-arrow">→</span>
+        <div class="workflow-pill"><span class="step-dot dot-purple"></span>Step 2 語言分析</div>
+        <span class="workflow-arrow">→</span>
+        <div class="workflow-pill"><span class="step-dot dot-green"></span>Step 3 知識庫寫入</div>
+        <span class="workflow-arrow">→</span>
+        <div class="workflow-pill"><span class="step-dot dot-teal"></span>Step 4 網頁發佈</div>
+      </div>
+
+      <div class="callout-box">
+        <p class="callout-label">💡 學完之後，換你打造自己的工作流</p>
+        <p>外語自學系統只是一個引路的範例。熟悉工作坊的內容之後，你可以輕易將同樣的思維套用到任何場景——無論是學術研究、文件整理、內容創作，或任何你能想到的應用，都可以用 IBM Bob 打造專屬的自動化工作流。</p>
+        <p class="callout-hint">本工作坊的示例工作流已完整記錄在專案根目錄的 <code>AGENTS.md</code>，可作為設計自己工作流的參考起點。</p>
+      </div>
+    </section>
+
+    <!-- ── 區塊二：準備工作 ── -->
+    <section id="section-prep" style="padding-bottom: 56px; border-bottom: 1px solid #e0e0e0; margin-bottom: 56px;">
+      <div class="section-heading">
+        <span class="section-num">02</span>
+        <h2>準備工作</h2>
+      </div>
+      <p style="font-size: 16px; color: #161616; font-weight: 400; margin-bottom: 4px;">取得工作坊專案檔案</p>
+      <p style="font-size: 14px; color: #525252; line-height: 1.6; margin-bottom: 20px;">本工作坊所有教材與設定檔案均存放於 GitHub 專案中。在開始任何操作之前，請先將專案下載至你的電腦——這是能夠跟著工作坊內容實作的必要準備步驟。將以下 prompt 貼給 IBM Bob（Agent 模式），AI 會自動幫你完成 Git 安裝與專案下載，全程不需要你自己輸入任何指令。</p>
+
+      <div class="clone-box ai-variant">
+        <div class="clone-box-header">
+          <h3>🤖 請 AI 幫你安裝 Git 並取得專案檔案</h3>
+          <button class="copy-btn" id="copyBtn2">複製 Prompt</button>
+        </div>
+        <code class="prompt-text" id="promptText2">請幫我完成以下兩件事，所有步驟都用命令列工具自動執行，不需要我另外開終端機：
+
+1. 偵測我的電腦是否已安裝 Git：
+   - macOS：先確認 Homebrew 是否存在；若有則執行 brew install git；若沒有 Homebrew，先執行官方安裝腳本安裝 Homebrew，再執行 brew install git
+   - Windows：執行 winget install --id Git.Git 安裝
+
+2. 安裝完成後，執行以下指令下載工作坊專案：
+   git clone --single-branch --branch workshop/w05 \
+     https://github.com/howard-haowen/ibm-bobathon.git \
+     ibm-bobathon-w05
+
+完成後告訴我：(a) Git 版本號，(b) 下載的資料夾完整路徑，(c) 資料夾內的頂層檔案清單。</code>
+      </div>
+    </section>
+
+    <!-- ── 區塊三：全部教材 ── -->
+    <section id="section-materials">
+      <div class="section-heading">
+        <span class="section-num">03</span>
+        <h2>全部教材（3）</h2>
+      </div>
 
     <div class="card-grid">
       <a class="card" href="01-ibm-bob-basic-usage.html">
-        <p class="card-eyebrow">工作坊教材 · 單元一</p>
+        <p class="card-eyebrow">工作坊教材 · IBM Bob 入門</p>
         <h2>IBM Bob 入門操作指南</h2>
-        <p>Ask、Plan、Agent — 三種模式對應三種工作場景。以一份真實的 Checkmarx SAST 掃描報告為起點，帶你走完從「看懂弱點」到「修復上線」的完整工作流程。</p>
+        <p>以「從外語新聞學單字」為情境，帶你走完 Ask（搞懂文章）、Plan（規劃學習筆記）、Agent（自動產出生詞卡）三種模式的完整操作流程。附實際 Prompt 範例與生詞卡產出示例，零程式背景也能輕鬆上手。</p>
         <span class="card-cta">開始學習</span>
       </a>
 
       <a class="card" href="02-bob-advanced-usage.html">
         <p class="card-eyebrow">工作坊教材 · IBM Bob 進階</p>
         <h2>IBM Bob 進階功能設定</h2>
-        <p>掌握三大模式後，本教材帶您深入 IBM Bob 的進階工具：內建 Slash Commands、Skills 技能擴充、MCP Server 連接、Bob Rules 行為規範，以及 .bobignore 檔案存取控管。</p>
+        <p>深入掌握讓語言學習助手更強大的進階工具：語言學習專屬 Skills（language-learning、obsidian-cli、defuddle 等）、NetNewsWire 與 rss-reader MCP 新聞串接，以及 Bob Rules 行為規範持久化設定。</p>
         <span class="card-cta">開始學習</span>
       </a>
 
+      <a class="card" href="03-a-practical-guide-to-agentic-ai-in-higher-education.html">
+        <p class="card-eyebrow">工作流產出範例 · Agentic AI 應用</p>
+        <h2>高等教育中 Agentic AI 的實踐指南</h2>
+        <p>本頁為工作流最終產出範例，示範完整四步驟工作流（語料獲取 → 語言分析 → 知識庫寫入 → 網頁發佈）自動生成的 Cheatsheet 風格學習報告，以一篇探討 Agentic AI 在高等教育應用的英文文章為語料。</p>
+        <span class="card-cta">查看成果</span>
+      </a>
     </div>
+    </section>
 
   </main>
 
   <script>
     (function () {
-      var btn = document.getElementById('copyBtn');
-      var txt = document.getElementById('promptText');
-      btn.addEventListener('click', function () {
-        navigator.clipboard.writeText(txt.innerText).then(function () {
-          btn.textContent = '已複製 ✓';
-          btn.classList.add('copied');
+      var btn2 = document.getElementById('copyBtn2');
+      var txt2 = document.getElementById('promptText2');
+      btn2.addEventListener('click', function () {
+        navigator.clipboard.writeText(txt2.innerText).then(function () {
+          btn2.textContent = '已複製 ✓';
+          btn2.classList.add('copied');
           setTimeout(function () {
-            btn.textContent = '複製 Prompt';
-            btn.classList.remove('copied');
+            btn2.textContent = '複製 Prompt';
+            btn2.classList.remove('copied');
           }, 2000);
         });
       });
