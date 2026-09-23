@@ -257,25 +257,9 @@
     <div class="hero">
       <p class="hero-eyebrow">教學材料總覽</p>
       <h1>本期課程教材</h1>
-      <p>以下為本次工作坊的學習教材，主題涵蓋 IBM Bob 核心功能與 COBOL 程式解讀，請依序瀏覽。</p>
+      <p>以下為本次工作坊的學習教材，主題涵蓋 IBM Bob 核心功能與進階設定，請依序瀏覽。</p>
       
-      <div class="clone-box">
-        <div class="clone-box-header">
-          <h3>取得本工作坊程式碼</h3>
-          <button class="copy-btn" id="copyBtn">複製 Prompt</button>
-        </div>
-        <code class="prompt-text" id="promptText">請在終端機執行以下 git 指令，單獨 clone 本工作坊的分支（workshop/w05），不會下載 main 分支的任何歷史：
-
-git clone --single-branch --branch workshop/w05 \
-  https://github.com/howard-haowen/ibm-bobathon.git \
-  ibm-bobathon-w05
-
-執行完成後，切換至新建立的目錄：
-
-cd ibm-bobathon-w05</code>
-      </div>
-
-      <div class="clone-box ai-variant" style="margin-top: 16px;">
+      <div class="clone-box ai-variant" style="margin-top: 40px;">
         <div class="clone-box-header">
           <h3>🤖 請 AI 幫你安裝 Git 並取得專案檔案</h3>
           <button class="copy-btn" id="copyBtn2">複製 Prompt</button>
@@ -287,9 +271,9 @@ cd ibm-bobathon-w05</code>
    - Windows：執行 winget install --id Git.Git 安裝
 
 2. 安裝完成後，執行以下指令下載工作坊專案：
-   git clone --single-branch --branch workshop/w05 \
+   git clone --single-branch --branch workshop/w04 \
      https://github.com/howard-haowen/ibm-bobathon.git \
-     ibm-bobathon-w05
+     ibm-bobathon-w04
 
 完成後告訴我：(a) Git 版本號，(b) 下載的資料夾完整路徑，(c) 資料夾內的頂層檔案清單。</code>
       </div>
@@ -317,23 +301,18 @@ cd ibm-bobathon-w05</code>
 
   <script>
     (function () {
-      function setupCopyBtn(btnId, txtId) {
-        var btn = document.getElementById(btnId);
-        var txt = document.getElementById(txtId);
-        if (!btn || !txt) return;
-        btn.addEventListener('click', function () {
-          navigator.clipboard.writeText(txt.innerText).then(function () {
-            btn.textContent = '已複製 ✓';
-            btn.classList.add('copied');
-            setTimeout(function () {
-              btn.textContent = '複製 Prompt';
-              btn.classList.remove('copied');
-            }, 2000);
-          });
+      var btn = document.getElementById('copyBtn2');
+      var txt = document.getElementById('promptText2');
+      btn.addEventListener('click', function () {
+        navigator.clipboard.writeText(txt.innerText).then(function () {
+          btn.textContent = '已複製 ✓';
+          btn.classList.add('copied');
+          setTimeout(function () {
+            btn.textContent = '複製 Prompt';
+            btn.classList.remove('copied');
+          }, 2000);
         });
-      }
-      setupCopyBtn('copyBtn', 'promptText');
-      setupCopyBtn('copyBtn2', 'promptText2');
+      });
     })();
   </script>
 
