@@ -10,6 +10,10 @@
         "-y",
         "rss-reader-mcp"
       ]
+    },
+    "zotero": {
+      "command": "zotero-mcp",
+      "env": { "ZOTERO_LOCAL": "true" }
     }
   }
 }
