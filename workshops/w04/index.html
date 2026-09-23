@@ -173,6 +173,26 @@
       border: 1px solid #e0e0e0;
       background: #f4f4f4;
     }
+    .clone-box.ai-variant {
+      border-color: #0f62fe;
+      background: #edf4ff;
+    }
+    .clone-box.ai-variant .clone-box-header {
+      background: #0f62fe;
+      border-bottom-color: #0353e9;
+    }
+    .clone-box.ai-variant h3 {
+      color: #ffffff;
+    }
+    .clone-box.ai-variant .copy-btn {
+      color: #0f62fe;
+      border-color: #ffffff;
+      background: #ffffff;
+    }
+    .clone-box.ai-variant .copy-btn:hover { background: #edf4ff; }
+    .clone-box.ai-variant .prompt-text {
+      background: #edf4ff;
+    }
     .clone-box-header {
       display: flex;
       align-items: center;
@@ -237,22 +257,25 @@
     <div class="hero">
       <p class="hero-eyebrow">教學材料總覽</p>
       <h1>本期課程教材</h1>
-      <p>以下為本次工作坊的學習教材，主題涵蓋 IBM Bob 核心功能與 COBOL 程式解讀，請依序瀏覽。</p>
+      <p>以下為本次工作坊的學習教材，主題涵蓋 IBM Bob 核心功能與進階設定，請依序瀏覽。</p>
       
-      <div class="clone-box">
+      <div class="clone-box ai-variant" style="margin-top: 40px;">
         <div class="clone-box-header">
-          <h3>取得本工作坊程式碼</h3>
-          <button class="copy-btn" id="copyBtn">複製 Prompt</button>
+          <h3>🤖 請 AI 幫你安裝 Git 並取得專案檔案</h3>
+          <button class="copy-btn" id="copyBtn2">複製 Prompt</button>
         </div>
-        <code class="prompt-text" id="promptText">請在終端機執行以下 git 指令，單獨 clone 本工作坊的 orphan 分支（workshop/w04），不會下載 main 分支的任何歷史：
+        <code class="prompt-text" id="promptText2">請幫我完成以下兩件事，所有步驟都用命令列工具自動執行，不需要我另外開終端機：
 
-git clone --single-branch --branch workshop/w04 \
-  https://github.com/howard-haowen/ibm-bobathon.git \
-  ibm-bobathon-w04
+1. 偵測我的電腦是否已安裝 Git：
+   - macOS：先確認 Homebrew 是否存在；若有則執行 brew install git；若沒有 Homebrew，先執行官方安裝腳本安裝 Homebrew，再執行 brew install git
+   - Windows：執行 winget install --id Git.Git 安裝
 
-執行完成後，切換至新建立的目錄：
+2. 安裝完成後，執行以下指令下載工作坊專案：
+   git clone --single-branch --branch workshop/w04 \
+     https://github.com/howard-haowen/ibm-bobathon.git \
+     ibm-bobathon-w04
 
-cd ibm-bobathon-w04</code>
+完成後告訴我：(a) Git 版本號，(b) 下載的資料夾完整路徑，(c) 資料夾內的頂層檔案清單。</code>
       </div>
     </div>
 
@@ -260,27 +283,26 @@ cd ibm-bobathon-w04</code>
 
     <div class="card-grid">
       <a class="card" href="01-ibm-bob-basic-usage.html">
-        <p class="card-eyebrow">工作坊教材 · 單元一</p>
+        <p class="card-eyebrow">工作坊教材 · IBM Bob 入門</p>
         <h2>IBM Bob 入門操作指南</h2>
-        <p>Ask、Plan、Agent — 三種模式對應三種工作場景。以一份真實的 Checkmarx SAST 掃描報告為起點，帶你走完從「看懂弱點」到「修復上線」的完整工作流程。</p>
+        <p>以一份 Checkmarx SAST Critical 弱點報告為情境，帶您走完 Ask（看懂弱點）、Plan（規劃修補）、Agent（執行修正）三種模式的完整工作流程。</p>
         <span class="card-cta">開始學習</span>
       </a>
 
       <a class="card" href="02-bob-advanced-usage.html">
         <p class="card-eyebrow">工作坊教材 · IBM Bob 進階</p>
         <h2>IBM Bob 進階功能設定</h2>
-        <p>掌握三大模式後，本教材帶您深入 IBM Bob 的進階工具：內建 Slash Commands、Skills 技能擴充、MCP Server 連接、Bob Rules 行為規範，以及 .bobignore 檔案存取控管。</p>
+        <p>深入掌握 IBM Bob 的進階工具：內建 Slash Commands（/init、/review）、Skills 技能擴充、MCP Server 連接、Bob Rules 行為規範，以及 .bobignore 檔案存取控管。</p>
         <span class="card-cta">開始學習</span>
       </a>
-
     </div>
 
   </main>
 
   <script>
     (function () {
-      var btn = document.getElementById('copyBtn');
-      var txt = document.getElementById('promptText');
+      var btn = document.getElementById('copyBtn2');
+      var txt = document.getElementById('promptText2');
       btn.addEventListener('click', function () {
         navigator.clipboard.writeText(txt.innerText).then(function () {
           btn.textContent = '已複製 ✓';
