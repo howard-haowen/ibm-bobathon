@@ -173,6 +173,26 @@
       border: 1px solid #e0e0e0;
       background: #f4f4f4;
     }
+    .clone-box.ai-variant {
+      border-color: #0f62fe;
+      background: #edf4ff;
+    }
+    .clone-box.ai-variant .clone-box-header {
+      background: #0f62fe;
+      border-bottom-color: #0353e9;
+    }
+    .clone-box.ai-variant h3 {
+      color: #ffffff;
+    }
+    .clone-box.ai-variant .copy-btn {
+      color: #0f62fe;
+      border-color: #ffffff;
+      background: #ffffff;
+    }
+    .clone-box.ai-variant .copy-btn:hover { background: #edf4ff; }
+    .clone-box.ai-variant .prompt-text {
+      background: #edf4ff;
+    }
     .clone-box-header {
       display: flex;
       align-items: center;
@@ -244,15 +264,34 @@
           <h3>取得本工作坊程式碼</h3>
           <button class="copy-btn" id="copyBtn">複製 Prompt</button>
         </div>
-        <code class="prompt-text" id="promptText">請在終端機執行以下 git 指令，單獨 clone 本工作坊的 orphan 分支（workshop/w04），不會下載 main 分支的任何歷史：
+        <code class="prompt-text" id="promptText">請在終端機執行以下 git 指令，單獨 clone 本工作坊的分支（workshop/w05），不會下載 main 分支的任何歷史：
 
-git clone --single-branch --branch workshop/w04 \
+git clone --single-branch --branch workshop/w05 \
   https://github.com/howard-haowen/ibm-bobathon.git \
-  ibm-bobathon-w04
+  ibm-bobathon-w05
 
 執行完成後，切換至新建立的目錄：
 
-cd ibm-bobathon-w04</code>
+cd ibm-bobathon-w05</code>
+      </div>
+
+      <div class="clone-box ai-variant" style="margin-top: 16px;">
+        <div class="clone-box-header">
+          <h3>🤖 請 AI 幫你安裝 Git 並取得專案檔案</h3>
+          <button class="copy-btn" id="copyBtn2">複製 Prompt</button>
+        </div>
+        <code class="prompt-text" id="promptText2">請幫我完成以下兩件事，所有步驟都用命令列工具自動執行，不需要我另外開終端機：
+
+1. 偵測我的電腦是否已安裝 Git：
+   - macOS：先確認 Homebrew 是否存在；若有則執行 brew install git；若沒有 Homebrew，先執行官方安裝腳本安裝 Homebrew，再執行 brew install git
+   - Windows：執行 winget install --id Git.Git 安裝
+
+2. 安裝完成後，執行以下指令下載工作坊專案：
+   git clone --single-branch --branch workshop/w05 \
+     https://github.com/howard-haowen/ibm-bobathon.git \
+     ibm-bobathon-w05
+
+完成後告訴我：(a) Git 版本號，(b) 下載的資料夾完整路徑，(c) 資料夾內的頂層檔案清單。</code>
       </div>
     </div>
 
@@ -278,18 +317,23 @@ cd ibm-bobathon-w04</code>
 
   <script>
     (function () {
-      var btn = document.getElementById('copyBtn');
-      var txt = document.getElementById('promptText');
-      btn.addEventListener('click', function () {
-        navigator.clipboard.writeText(txt.innerText).then(function () {
-          btn.textContent = '已複製 ✓';
-          btn.classList.add('copied');
-          setTimeout(function () {
-            btn.textContent = '複製 Prompt';
-            btn.classList.remove('copied');
-          }, 2000);
+      function setupCopyBtn(btnId, txtId) {
+        var btn = document.getElementById(btnId);
+        var txt = document.getElementById(txtId);
+        if (!btn || !txt) return;
+        btn.addEventListener('click', function () {
+          navigator.clipboard.writeText(txt.innerText).then(function () {
+            btn.textContent = '已複製 ✓';
+            btn.classList.add('copied');
+            setTimeout(function () {
+              btn.textContent = '複製 Prompt';
+              btn.classList.remove('copied');
+            }, 2000);
+          });
         });
-      });
+      }
+      setupCopyBtn('copyBtn', 'promptText');
+      setupCopyBtn('copyBtn2', 'promptText2');
     })();
   </script>
 
