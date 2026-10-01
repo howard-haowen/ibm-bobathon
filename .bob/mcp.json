@@ -2,7 +2,9 @@
   "mcpServers": {
     "netnewswire": {
       "command": "npx",
-      "args": ["@jellllly/netnewswire-mcp"]
+      "args": [
+        "@jellllly/netnewswire-mcp"
+      ]
     },
     "rss-reader": {
       "command": "npx",
@@ -13,7 +15,9 @@
     },
     "zotero": {
       "command": "zotero-mcp",
-      "env": { "ZOTERO_LOCAL": "true" }
+      "env": {
+        "ZOTERO_LOCAL": "true"
+      }
     }
   }
 }
