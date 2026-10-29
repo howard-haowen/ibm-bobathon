@@ -6,3 +6,5 @@ docs/
 .bob/artifacts/
 bin/
 output/
+.env
+!.env.sample
