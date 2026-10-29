@@ -14,10 +14,17 @@
       ]
     },
     "zotero": {
-      "command": "zotero-mcp",
+      "command": "/Users/haowen_jiang/.local/bin/zotero-mcp",
+      "args": [
+        "serve"
+      ],
       "env": {
         "ZOTERO_LOCAL": "true"
       }
+    },
+    "workspacemcp": {
+      "type": "streamable-http",
+      "url": "http://localhost:8000/mcp"
     }
   }
 }
