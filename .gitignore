@@ -1,0 +1,10 @@
+.vscode/
+plans/
+docs/
+.worktrees/
+/_site/
+.bob/artifacts/
+bin/
+output/
+.env
+!.env.sample

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head>
+    <title>Multilingual Language Learning Feeds</title>
+    <dateCreated>2025-02-27T00:00:00Z</dateCreated>
+    <docs>http://opml.org/spec2.opml</docs>
+  </head>
+  <body>
+    <outline text="🇹🇼 中文 (Chinese)" title="🇹🇼 中文 (Chinese)" language="zh-TW">
+      <outline type="rss" text="中央社即時新聞 科技新聞" title="中央社即時新聞 科技新聞" xmlUrl="https://feeds.feedburner.com/rsscna/technology" htmlUrl="https://www.cna.com.tw" language="zh-TW" />
+    </outline>
+    <outline text="🇫🇷 法語 (French)" title="🇫🇷 法語 (French)" language="fr">
+      <outline type="rss" text="France 24" title="France 24" xmlUrl="https://www.france24.com/fr/rss" htmlUrl="https://www.france24.com/fr/" language="fr" />
+    </outline>
+    <outline text="🇯🇵 日語 (Japanese)" title="🇯🇵 日語 (Japanese)" language="ja">
+      <outline type="rss" text="朝日新聞" title="朝日新聞" xmlUrl="https://www.asahi.com/rss/asahi/newsheadlines.rdf" htmlUrl="https://www.asahi.com" language="ja" />
+    </outline>
+    <outline text="🇰🇷 韓語 (Korean)" title="🇰🇷 韓語 (Korean)" language="ko">
+      <outline type="rss" text="연합뉴스TV 세계" title="연합뉴스TV 세계" xmlUrl="http://www.yonhapnewstv.co.kr/category/news/international/feed/" htmlUrl="https://www.yonhapnewstv.co.kr" language="ko" />
+    </outline>
+    <outline text="🇩🇪 德語 (German)" title="🇩🇪 德語 (German)" language="de">
+      <outline type="rss" text="DER SPIEGEL - Schlagzeilen" title="DER SPIEGEL - Schlagzeilen" xmlUrl="https://www.spiegel.de/schlagzeilen/eilmeldungen/index.rss" htmlUrl="https://www.spiegel.de" language="de" />
+    </outline>
+  </body>
+</opml>
