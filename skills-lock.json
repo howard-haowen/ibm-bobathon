@@ -25,35 +25,11 @@
       "skillPath": "skills/find-skills/SKILL.md",
       "computedHash": "b146008599c31057cef1c145774cea5d5afb30e8f43fa802e47a4b461419aaaf"
     },
-    "here-now": {
-      "source": "heredotnow/skill",
-      "sourceType": "github",
-      "skillPath": "here-now/SKILL.md",
-      "computedHash": "6dc6d539343ebe53fe31d1539a0151f744cdd656d7eed9bdd14748d6ca5e0e15"
-    },
-    "language-learning": {
-      "source": "jackjin1997/clawforge",
-      "sourceType": "github",
-      "skillPath": "skills/language-learning/SKILL.md",
-      "computedHash": "7c2798181991958e210513bdf4e69d909f6da088ce0c1902e3976c8be3003410"
-    },
     "markdown-to-html": {
       "source": "github/awesome-copilot",
       "sourceType": "github",
       "skillPath": "skills/markdown-to-html/SKILL.md",
       "computedHash": "fc87b1a02397a9dbcfdff39cdcf627659d433608bafbd347c60049dd2766a227"
-    },
-    "obsidian-cli": {
-      "source": "kepano/obsidian-skills",
-      "sourceType": "github",
-      "skillPath": "skills/obsidian-cli/SKILL.md",
-      "computedHash": "f46ae626875f7e47c410c2ee93896c4526024ebe127719e8fb430261b5677edc"
-    },
-    "obsidian-markdown": {
-      "source": "kepano/obsidian-skills",
-      "sourceType": "github",
-      "skillPath": "skills/obsidian-markdown/SKILL.md",
-      "computedHash": "0f47297035d7824e7bf0f1984e8145a59a123e2258b5d54c9ac9642f9f77e177"
     }
   }
 }

@@ -1,27 +1,11 @@
 {
   "mcpServers": {
-    "netnewswire": {
-      "command": "npx",
-      "args": [
-        "@jellllly/netnewswire-mcp"
-      ]
-    },
     "rss-reader": {
       "command": "npx",
       "args": [
         "-y",
         "rss-reader-mcp"
       ]
-    },
-    "zotero": {
-      "command": "/Users/haowen_jiang/.local/bin/zotero-mcp",
-      "args": [
-        "serve"
-      ],
-      "env": {
-        "ZOTERO_LOCAL": "true"
-      },
-      "disabled": true
     },
     "workspacemcp": {
       "type": "streamable-http",
