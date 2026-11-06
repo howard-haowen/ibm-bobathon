@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IBM Bob 入門操作指南 — AI Agents 工作流工作坊</title>
+  <title>IBM Bob 入門操作指南 — 高中教師 AI 備課與教學素材工作坊</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&display=swap">
   <style>
@@ -482,7 +482,7 @@
 </head>
 <body>
 
-  <div class="utility-bar">IBM Bob · 多語言學習助手工作坊 · 從外語新聞學單字</div>
+  <div class="utility-bar">IBM Bob · 高中教師 AI 備課與教學素材工作坊 · 為課程主題備課</div>
 
   <nav class="top-nav">
     <a class="logo" href="index.html">IBM <span>Bob</span></a>
@@ -493,122 +493,126 @@
 
     <div class="hero">
       <p class="hero-eyebrow">工作坊教材 · IBM Bob 入門</p>
-      <span class="scenario-tag">情境：從外語新聞學單字</span>
+      <span class="scenario-tag">情境：為課程主題備課</span>
       <h1>IBM Bob 入門操作指南</h1>
-      <p>Ask、Plan、Agent — 三種模式對應三種工作場景。以一篇真實的<strong>英語新聞文章</strong>為起點，帶你走完從「讀懂文章」到「生成個人化生詞卡」的完整學習流程。不需要任何程式知識。</p>
+      <p>Ask、Plan、Agent — 三種模式對應三種工作場景。以一個<strong>高中課程主題</strong>為起點，帶你走完從「搞懂主題」到「產出教案與教學網頁」的完整備課流程。不需要任何程式知識。</p>
     </div>
 
-    <!-- Article Preview Panel -->
-    <h2 class="section-title">情境：讀到一篇有趣的英語新聞，想用它來練英文</h2>
-    <p class="section-desc">你在手機上看到一篇關於 AI 改變教育的英語新聞，覺得生詞很多、句子很長，想把它變成一份自己的學習材料。這正是 IBM Bob 多語言學習助手的用武之地。</p>
+    <!-- Teacher Input Panel -->
+    <h2 class="section-title">情境：下週要教新單元，想先備好一份教案</h2>
+    <p class="section-desc">你是高二國文老師，下週要教一個新單元，想要一份能直接調整使用的教案、幾組能帶動課堂討論的提問，還有一個可以分享給學生的教學網頁。這正是 IBM Bob 教師備課助手的用武之地。以下為說明用的示例輸入，請換成你自己的課程。</p>
 
     <div class="article-panel">
       <div class="article-panel-header">
-        <span class="source-name">QS Insights — 外語文章來源</span>
-        <span class="article-meta">語言：English &nbsp;|&nbsp; CEFR 難度：B2–C1 &nbsp;|&nbsp; 建立日期：2026-09-22</span>
+        <span class="source-name">教師輸入欄位 — 示例（僅供說明）</span>
+        <span class="article-meta">必填欄位：subject、grade、lesson_topic、duration_minutes、student_level</span>
       </div>
       <div class="article-body">
         <div class="article-row">
-          <span class="label">文章標題</span>
-          <span class="value">A practical guide to agentic AI in higher education</span>
+          <span class="label">課程主題</span>
+          <span class="value">赤壁賦：情景交融</span>
         </div>
         <div class="article-row">
-          <span class="label">來源媒體 / 作者</span>
-          <span class="value">QS Insights (Louie Brand)</span>
+          <span class="label">時數</span>
+          <span class="value">50 分鐘 × 2 堂</span>
         </div>
         <div class="article-row">
-          <span class="label">目標語言</span>
-          <span class="value"><span class="lang-badge">English</span></span>
+          <span class="label">學科 / 年級</span>
+          <span class="value"><span class="lang-badge">國文</span> <span class="lang-badge">高二</span></span>
         </div>
         <div class="article-row">
-          <span class="label">學習目標</span>
-          <span class="value">提取高頻生詞、解析長難句句型、產出閃卡複習清單</span>
+          <span class="label">本次目標</span>
+          <span class="value">產出教案、設計啟發提問、撰寫摘要與宣傳文案，並發佈成教學網頁</span>
         </div>
 
         <div class="article-excerpt">
           <div class="excerpt-header">
-            <span>文章節錄（原文）</span>
-            <span class="tag">LEARNING MATERIAL</span>
+            <span>你會給 Bob 的資料（示例）</span>
+            <span class="tag">TEACHER INPUT</span>
           </div>
-          <pre>For the past few years, much of the conversation around artificial intelligence in higher education has focused on Generative AI: tools that can answer questions, summarise information, create content and support research.
+          <pre>學科：國文
+年級：高二
+課程主題：赤壁賦：情景交融
+時數：50 分鐘 × 2 堂
+學生程度：一般程度（此為示例，請改成你的班級特性）
 
-Use is already widespread. QS research found that 67% of academics and 62% of students use Generative AI at least weekly, suggesting that AI is becoming an increasingly familiar part of university life.
-
-Agentic AI takes this a step further. Instead of simply responding to a prompt, an AI agent can work towards a defined goal, drawing on different systems, making decisions between steps and carrying out routine actions where appropriate.</pre>
+注意：以上為示例輸入。必填資訊缺少時，Bob 會先詢問你，不會自行假設。
+若需要對應課綱，請由教師提供課綱要點；專案內沒有 108 課綱的對應技能。
+請勿在對話中放入學生姓名、座號、成績等個資。</pre>
         </div>
       </div>
     </div>
 
     <!-- Mode Overview Cards -->
     <h2 class="section-title">三種模式一覽</h2>
-    <p class="section-desc">拿到這篇文章後，正確的學習流程是依序切換三個模式，每個模式做它最擅長的事。</p>
+    <p class="section-desc">確定課程主題後，正確的備課流程是依序切換三個模式，每個模式做它最擅長的事。</p>
 
     <div class="mode-grid">
       <div class="mode-card ask">
         <span class="mode-badge">Ask</span>
         <h3>知識模式</h3>
-        <p class="desc">閱讀文章、解釋生詞、分析句型、說明文化背景。<strong>不會修改任何檔案</strong>，適合搞懂文章內容與語言知識。</p>
+        <p class="desc">釐清課程主題的概念、預想學生可能的學習難點、討論教學方向。<strong>不會修改任何檔案</strong>，適合在動手備課前先搞懂主題。</p>
         <div class="tag-row">
-          <span class="tag">讀懂文章</span>
-          <span class="tag">解釋生詞</span>
-          <span class="tag">分析句型</span>
-          <span class="tag">文化說明</span>
+          <span class="tag">理解主題</span>
+          <span class="tag">解釋概念</span>
+          <span class="tag">預想難點</span>
+          <span class="tag">討論教法</span>
         </div>
         <p class="permission"><strong>權限：</strong>唯讀。不寫入本地檔案，不執行命令。</p>
       </div>
       <div class="mode-card plan">
         <span class="mode-badge">Plan</span>
         <h3>規劃模式</h3>
-        <p class="desc">規劃筆記結構、決定要提取哪些生詞、設計閃卡格式。聚焦「<strong>學什麼、怎麼記</strong>」，在動手前確認方向。</p>
+        <p class="desc">規劃教案結構、擬定教學目標、切分時間流程與活動。聚焦「<strong>教什麼、怎麼教</strong>」，在動手前確認方向。</p>
         <div class="tag-row">
-          <span class="tag">生詞篩選策略</span>
-          <span class="tag">筆記架構設計</span>
-          <span class="tag">CEFR 層級定位</span>
-          <span class="tag">記憶方法規劃</span>
+          <span class="tag">教學目標擬定</span>
+          <span class="tag">時間流程切分</span>
+          <span class="tag">活動設計</span>
+          <span class="tag">提問方向規劃</span>
         </div>
         <p class="permission"><strong>權限：</strong>可讀取檔案，僅輸出計畫文字，不直接執行修改。</p>
       </div>
       <div class="mode-card agent">
         <span class="mode-badge">Agent</span>
         <h3>執行模式</h3>
-        <p class="desc">根據規劃，自動產出生詞卡、文法剖析、閃卡清單，並直接生成 Cheatsheet 風格的 HTML 學習複習頁面。</p>
+        <p class="desc">根據規劃，自動產出教案、啟發提問、摘要與宣傳文案，並生成 Cheatsheet 風格的教學網頁。</p>
         <div class="tag-row">
-          <span class="tag">生成生詞卡</span>
-          <span class="tag">剖析長難句</span>
+          <span class="tag">生成教案</span>
+          <span class="tag">設計提問</span>
+          <span class="tag">撰寫文案</span>
           <span class="tag">產出 HTML</span>
-          <span class="tag">建立閃卡</span>
         </div>
         <p class="permission"><strong>權限：</strong>完整讀寫，可呼叫工具、執行 Shell 命令。</p>
       </div>
     </div>
 
     <!-- Workflow -->
-    <h2 class="section-title">完整學習工作流程</h2>
-    <p class="section-desc">從拿到文章到完成學習筆記，依序走四個步驟。</p>
+    <h2 class="section-title">完整備課工作流程</h2>
+    <p class="section-desc">從確定課程主題到完成教案與教學網頁，依序走三個步驟。</p>
 
     <div class="workflow-steps">
       <div class="workflow-step ask">
         <div class="step-num">Step 1</div>
         <div class="step-mode">Ask 模式</div>
-        <div class="step-desc">讀懂文章內容<br>確認語言難度</div>
+        <div class="step-desc">搞懂課程主題<br>確認學生難點</div>
       </div>
       <div class="workflow-arrow">→</div>
       <div class="workflow-step plan">
         <div class="step-num">Step 2</div>
         <div class="step-mode">Plan 模式</div>
-        <div class="step-desc">規劃生詞清單<br>與筆記架構</div>
+        <div class="step-desc">規劃教學目標<br>與時間流程</div>
       </div>
       <div class="workflow-arrow">→</div>
       <div class="workflow-step agent">
         <div class="step-num">Step 3</div>
         <div class="step-mode">Agent 模式</div>
-        <div class="step-desc">執行學習計畫<br>生成 HTML 網頁</div>
+        <div class="step-desc">執行備課計畫<br>生成教案與網頁</div>
       </div>
     </div>
 
     <!-- Demos -->
     <h2 class="section-title">實際演練</h2>
-    <p class="section-desc">以上方英語新聞文章為起點，依序示範三個模式的正確用法。</p>
+    <p class="section-desc">以上方的示例課程主題為起點，依序示範三個模式的正確用法。</p>
 
     <!-- Tip Callout -->
     <div class="callout-tip">
@@ -621,51 +625,51 @@ Agentic AI takes this a step further. Instead of simply responding to a prompt, 
     <!-- Ask Demo -->
     <div class="demo-section ask">
       <p class="demo-label">Step 1 — Ask 模式</p>
-      <h3>讀懂文章，確認學習起點</h3>
-      <p>拿到文章，第一步不是馬上整理筆記。先用 Ask 模式，在對話中直接引用本機檔案 <code>@A practical guide to agentic AI in higher education.md</code>，讓 Bob 讀取全文、判斷 CEFR 難度、說明哪些詞彙對你最有學習價值、解釋讓你困惑的長難句。</p>
+      <h3>搞懂課程主題，確認教學起點</h3>
+      <p>拿到課程主題，第一步不是馬上寫教案。先用 Ask 模式，把學科、年級與學生程度告訴 Bob，請它說明這個主題的核心概念、學生可能卡在哪裡，以及哪些內容適合先講。若你已有課本或講義檔案，可用 <code>@檔案名稱</code> 引用。Bob 的說明僅供參考，請依課本與你的專業判斷核對。</p>
 
       <div class="prompt-block">
         <div class="prompt-block-header">
           <span class="prompt-block-label">Prompt — Ask 模式</span>
           <button class="copy-btn" data-target="prompt-ask">複製</button>
         </div>
-        <pre id="prompt-ask">我想用 @A practical guide to agentic AI in higher education.md 這篇文章學英文，請判斷它的 CEFR 難度，並告訴我這篇文章對英語學習者最有價值的 3 個生詞是什麼，以及第一段裡最複雜的句子結構是怎麼運作的。</pre>
+        <pre id="prompt-ask">我是高二國文老師，下週要教「赤壁賦：情景交融」，共 50 分鐘 × 2 堂，班級為一般程度。請先幫我說明這個主題的核心概念、學生可能的學習難點，以及哪些內容適合先講、哪些適合留給進階討論。請不要修改任何檔案。</pre>
       </div>
-      <div class="expected-label">Bob 會回答的內容方向</div>
-      <div class="expected">✓ 判定文章 CEFR 難度：B2–C1（教育科技評論體，詞彙密度中等偏高）
-✓ 推薦 3 個高價值生詞：agentic（具代理能力的/自主能動的）、autonomy（自主性/自主權）、governance（治理/監管機制）
-✓ 解析長難句：「Instead of simply responding to a prompt, an AI agent can work towards a defined goal, drawing on different systems, making decisions between steps and carrying out routine actions where appropriate.」
-  → 介系詞片語前置對比 + 主句（S+V+O）+ 連續現在分詞片語（drawing, making, carrying out）做伴隨修飾
+      <div class="expected-label">Bob 會回答的內容方向（示意，實際回答依你的輸入而定）</div>
+      <div class="expected">✓ 說明這個主題的核心概念與常見教學重點（請教師依課本核對）
+✓ 列出一般程度學生可能的學習難點，並建議對應的教學策略方向
+✓ 建議先講的基礎內容，以及可留給進階提問的延伸內容
+✓ 若有不確定之處，會提醒你向課本或可靠來源確認
 ✓ 不修改任何檔案</div>
     </div>
 
     <!-- Plan Demo -->
     <div class="demo-section plan">
       <p class="demo-label">Step 2 — Plan 模式</p>
-      <h3>規劃生詞筆記的架構與學習策略</h3>
-      <p>Ask 模式已幫你掌握文章難度與核心詞彙。現在切換 Plan 模式，在動手產出網頁之前，讓 Bob 規劃完整的學習目標與內容結構（包含生詞卡、句型剖析與 Cheatsheet HTML 學習網頁）。<strong>執行此步驟後，Bob 會在工作區產生一份結構化的規劃文件（如 <code>.plan.md</code> 或 <code>plan-xxx.md</code>）</strong>，供你在進入 Agent 模式前檢視確認。</p>
+      <h3>規劃教案的目標、時間流程與活動</h3>
+      <p>Ask 模式已幫你掌握主題與學生難點。現在切換 Plan 模式，在動手產出教案之前，讓 Bob 規劃教學目標、時間流程與活動設計的草案。<strong>執行此步驟後，Bob 會在工作區產生一份結構化的規劃文件（一份規劃文件）</strong>，供你在進入 Agent 模式前檢視確認。教學目標若由 Bob 擬定，會標示為「擬定，請教師確認」，最終由你決定。</p>
 
       <div class="prompt-block">
         <div class="prompt-block-header">
           <span class="prompt-block-label">Prompt — Plan 模式</span>
           <button class="copy-btn" data-target="prompt-plan">複製</button>
         </div>
-        <pre id="prompt-plan">請幫我規劃上面這篇文章的學習計畫，目標包含生詞提取、句型剖析、閃卡設計，以及最終產出 .html 學習複習網頁。請產出一份完整的規劃文件。</pre>
+        <pre id="prompt-plan">請幫我規劃上面這個單元的備課計畫，內容包含教學目標、50 分鐘 × 2 堂的時間流程與活動設計、每個段落的啟發提問方向，以及最後要產出的教案與教學網頁。請產出一份完整的規劃文件。</pre>
       </div>
-      <div class="expected-label">Bob 會回答的內容方向</div>
-      <div class="expected">✓ 產生一份結構化規劃文件（.md 檔）
-✓ 列出 8～10 個待提取生詞（含 CEFR 等級與選取理由，如 agentic, autonomy, governance, tenure, sprawl 等）
-✓ 建議剖析句型：① Instead of... 對比句型結合伴隨分詞構句 ② Rather than... 倒裝與條件句
-✓ 規劃閃卡格式與間隔複習節奏（當日 → 隔日 → 一週後）
-✓ 規劃輸出目標：生成獨立的 Cheatsheet HTML 學習複習網頁（.html）
-✓ 僅產生/輸出計畫文件，不執行實際的網頁生成或修改</div>
+      <div class="expected-label">Bob 會回答的內容方向（示意）</div>
+      <div class="expected">✓ 產生一份結構化的規劃文件
+✓ 擬定教學目標草案，標示為「擬定，請教師確認」
+✓ 規劃時間流程：各段時間加總須等於 100 分鐘（50 分鐘 × 2 堂）
+✓ 建議每個教學段落的活動，以及暖身、核心、延伸三層提問的方向
+✓ 規劃輸出目標：一份教案文件與一個教學網頁
+✓ 僅產生/輸出計畫文件，不執行實際的教案生成或修改</div>
     </div>
 
     <!-- Agent Demo -->
     <div class="demo-section agent">
       <p class="demo-label">Step 3 — Agent 模式</p>
-      <h3>自動產出學習材料，生成 HTML 學習網頁</h3>
-      <p>學習規劃已在 Plan 模式確認。切換至 Agent 模式，Bob 會自動執行：讀取文章全文 → 生成生詞卡與文法剖析 → 直接產出 Cheatsheet 風格的 HTML 學習複習網頁。</p>
+      <h3>自動產出教案，生成教學網頁</h3>
+      <p>備課規劃已在 Plan 模式確認。切換至 Agent 模式，Bob 會依本專案的「工作說明書」（<code>AGENTS.md</code>）所定的四步驟工作流自動執行：教案設計 → 啟發提問 → 摘要與宣傳文案 → 主題網頁發佈。其中宣傳文案的對象與語氣若你沒有指定，Bob 會先詢問你，不會自行假設。</p>
 
       <div class="prompt-block">
         <div class="prompt-block-header">
@@ -674,21 +678,21 @@ Agentic AI takes this a step further. Instead of simply responding to a prompt, 
         </div>
         <pre id="prompt-agent">請執行上面的計畫。</pre>
       </div>
-      <div class="expected-label">Bob 會做的動作</div>
-      <div class="expected">✓ Step 1：讀取 @A practical guide to agentic AI in higher education.md 文章全文，確認語言為 English
-✓ Step 2：執行 language-learning Skill → 產出 CEFR 判定 + 生詞卡 + 文法剖析 + 閃卡
-✓ Step 3：生成 Cheatsheet 風格 HTML 學習複習網頁，輸出至 output/a-practical-guide-to-agentic-ai-in-higher-education.html
-✓ 全程自動，完成後回報生成的 HTML 檔案路徑與瀏覽方式</div>
+      <div class="expected-label">Bob 會做的動作（依專案工作說明書）</div>
+      <div class="expected">✓ Step 1 教案設計：確認必填資訊後，建立教案文件「國文-高二-赤壁賦-情景交融」，寫入教學概覽、教學目標、時間流程與活動設計
+✓ Step 2 啟發提問：把暖身、核心、延伸與批判提問寫入同一份教案
+✓ Step 3 摘要與宣傳文案：寫入摘要與宣傳文案章節（海報僅在你要求時才做）
+✓ Step 4 主題網頁發佈：把教案轉成教學網頁，並設計版面與配色，輸出同名的教學網頁檔
+✓ 完成後告訴你檔案存放在哪裡；教學目標與評量方式仍由教師確認</div>
 
       <!-- Sample Output Preview -->
       <div style="margin-top: 12px;">
-        <div class="expected-label">生詞卡產出範例（部分）</div>
+        <div class="expected-label">教案產出片段（示例，僅供說明版型，非實際執行結果）</div>
         <div class="output-block">
-          <p><span class="word">autonomy</span> <span class="ipa">/ɔːˈtɒn.ə.mi/</span> &nbsp;·&nbsp; n. &nbsp;·&nbsp; CEFR C1</p>
-          <p class="meaning">【繁中釋義】自主性；自治權（語域：學術 / 正式書面體）</p>
-          <p class="example">文章例句：Agentic AI refers to AI systems that can plan and complete multi-step tasks with a degree of <strong>autonomy</strong>.<br>→「代理型 AI 是指能夠以一定程度的自主性規劃並完成多步驟任務的 AI 系統。」</p>
-          <p class="example" style="margin-top:8px">延伸造句（職場場景）：Senior researchers are given substantial autonomy in designing and conducting their experiments.<br>→「資深研究人員在設計與進行實驗方面享有相當大的自主權。」</p>
-          <p style="margin-top:8px; font-size:12px; color:#8d8d8d;">記憶鉤：auto（自己）+ nomos（法律/規則）→ 自己制定規則管理自己 →「自主性、自治」</p>
+          <p><span class="word">時間流程與活動設計</span> <span class="ipa">教案：國文-高二-赤壁賦-情景交融</span> &nbsp;·&nbsp; 50 分鐘 × 2 堂</p>
+          <p class="meaning">【示例】0–5 分鐘 引起動機｜5–25 分鐘 文本導讀｜…（各段時間加總須等於 100 分鐘）</p>
+          <p class="example">啟發提問示例：暖身提問、核心提問、延伸與批判提問，各附「設計意圖」與「可能的學生回應 / 追問」。</p>
+          <p style="margin-top:8px; font-size:12px; color:#8d8d8d;">以上為版型示意；實際內容由 Bob 依你的輸入產生，並由教師審閱調整。</p>
         </div>
       </div>
     </div>
@@ -700,7 +704,7 @@ Agentic AI takes this a step further. Instead of simply responding to a prompt, 
       <thead>
         <tr>
           <th>模式</th>
-          <th>語言學習情境下的用途</th>
+          <th>備課情境下的用途</th>
           <th>典型 Prompt 關鍵字</th>
           <th>會修改檔案？</th>
         </tr>
@@ -708,19 +712,19 @@ Agentic AI takes this a step further. Instead of simply responding to a prompt, 
       <tbody>
         <tr>
           <td><span class="pill pill-ask">Ask</span></td>
-          <td>讀懂文章、解釋生詞、分析句型</td>
-          <td>「解釋」「翻譯」「這個詞是什麼意思」「不要改任何東西」</td>
+          <td>搞懂課程主題、解釋概念、預想學生難點</td>
+          <td>「解釋」「這個概念是什麼」「學生可能卡在哪」「不要改任何東西」</td>
           <td>否</td>
         </tr>
         <tr>
           <td><span class="pill pill-plan">Plan</span></td>
-          <td>規劃生詞清單、設計筆記架構、制定學習策略</td>
-          <td>「規劃」「建議」「我要學哪些詞」「怎麼設計筆記」「不要改代碼」</td>
+          <td>規劃教學目標、切分時間流程、設計活動與提問方向</td>
+          <td>「規劃」「建議」「教學目標」「時間怎麼分配」「不要改檔案」</td>
           <td>否</td>
         </tr>
         <tr>
           <td><span class="pill pill-agent">Agent</span></td>
-          <td>自動產出生詞卡、剖析長難句、輸出 HTML 學習網頁</td>
+          <td>自動產出教案、啟發提問、摘要與文案，輸出教學網頁</td>
           <td>「執行」「幫我產出」「生成 HTML」「依照計畫做」</td>
           <td>是</td>
         </tr>
@@ -730,7 +734,7 @@ Agentic AI takes this a step further. Instead of simply responding to a prompt, 
     <!-- CTA -->
     <div class="cta-banner">
       <h3>掌握三種模式後，下一步是進階功能</h3>
-      <p>設定Skills、MCP Servers 以及 Bob Rules 行為規範，讓 AI 助手更強大、更個人化。</p>
+      <p>認識 MCP、模式與技能，讓 AI 助手更強大、更貼近你的教學需求。</p>
       <p style="margin-top:14px"><a href="02-bob-advanced-usage.html" class="cta-link">進入單元二：IBM Bob 進階功能 →</a></p>
     </div>
 
