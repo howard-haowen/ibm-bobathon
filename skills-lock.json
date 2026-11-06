@@ -13,6 +13,12 @@
       "skillPath": "skills/defuddle/SKILL.md",
       "computedHash": "5ae2d9f2d5de3f27adb5b4d0a752c16be38f1a2d6316721a74ab721866d5fb2e"
     },
+    "deploy-to-vercel": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/deploy-to-vercel/SKILL.md",
+      "computedHash": "a024eac409b1bb2e072a19e7e0d7f194ac5482c87fb1a2ad6f62d041b454040c"
+    },
     "excalidraw-diagram-generator": {
       "source": "github/awesome-copilot",
       "sourceType": "github",
