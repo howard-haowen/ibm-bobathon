@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <opml version="2.0">
   <head>
-    <title>Multilingual Language Learning Feeds</title>
-    <dateCreated>2025-02-27T00:00:00Z</dateCreated>
+    <title>高中教師備課與教學素材 Feeds</title>
+    <dateCreated>2026-11-01T00:00:00Z</dateCreated>
     <docs>http://opml.org/spec2.opml</docs>
   </head>
   <body>
-    <outline text="🇹🇼 中文 (Chinese)" title="🇹🇼 中文 (Chinese)" language="zh-TW">
-      <outline type="rss" text="中央社即時新聞 科技新聞" title="中央社即時新聞 科技新聞" xmlUrl="https://feeds.feedburner.com/rsscna/technology" htmlUrl="https://www.cna.com.tw" language="zh-TW" />
+    <outline text="教育新聞" title="教育新聞" language="zh-TW">
+      <outline type="rss" text="國立教育廣播電臺 - 文教新聞" title="國立教育廣播電臺 - 文教新聞" xmlUrl="https://webapi.ner.gov.tw/nerwebFront/api/RSS/NewsRSS" htmlUrl="https://www.ner.gov.tw/CultureNews/" language="zh-TW" />
+      <outline type="rss" text="The Guardian - Education" title="The Guardian - Education" xmlUrl="https://www.theguardian.com/education/rss" htmlUrl="https://www.theguardian.com/education" language="en" />
+      <outline type="rss" text="The Hechinger Report" title="The Hechinger Report" xmlUrl="https://hechingerreport.org/feed/" htmlUrl="https://hechingerreport.org/" language="en" />
+      <outline type="rss" text="EdSurge Articles" title="EdSurge Articles" xmlUrl="https://www.edsurge.com/articles_rss" htmlUrl="https://www.edsurge.com/" language="en" />
     </outline>
-    <outline text="🇫🇷 法語 (French)" title="🇫🇷 法語 (French)" language="fr">
-      <outline type="rss" text="France 24" title="France 24" xmlUrl="https://www.france24.com/fr/rss" htmlUrl="https://www.france24.com/fr/" language="fr" />
+    <outline text="科普" title="科普" language="zh-TW">
+      <outline type="rss" text="研之有物（中央研究院）" title="研之有物（中央研究院）" xmlUrl="https://research.sinica.edu.tw/feed/" htmlUrl="https://research.sinica.edu.tw/" language="zh-TW" />
     </outline>
-    <outline text="🇯🇵 日語 (Japanese)" title="🇯🇵 日語 (Japanese)" language="ja">
-      <outline type="rss" text="朝日新聞" title="朝日新聞" xmlUrl="https://www.asahi.com/rss/asahi/newsheadlines.rdf" htmlUrl="https://www.asahi.com" language="ja" />
-    </outline>
-    <outline text="🇰🇷 韓語 (Korean)" title="🇰🇷 韓語 (Korean)" language="ko">
-      <outline type="rss" text="연합뉴스TV 세계" title="연합뉴스TV 세계" xmlUrl="http://www.yonhapnewstv.co.kr/category/news/international/feed/" htmlUrl="https://www.yonhapnewstv.co.kr" language="ko" />
-    </outline>
-    <outline text="🇩🇪 德語 (German)" title="🇩🇪 德語 (German)" language="de">
-      <outline type="rss" text="DER SPIEGEL - Schlagzeilen" title="DER SPIEGEL - Schlagzeilen" xmlUrl="https://www.spiegel.de/schlagzeilen/eilmeldungen/index.rss" htmlUrl="https://www.spiegel.de" language="de" />
+    <outline text="各科教學資源" title="各科教學資源" language="zh-TW">
+      <outline type="rss" text="報導者（社會與公民議題）" title="報導者（社會與公民議題）" xmlUrl="https://www.twreporter.org/a/rss2.xml" htmlUrl="https://www.twreporter.org/" language="zh-TW" />
+      <outline type="rss" text="我們的島（公視，環境與土地議題）" title="我們的島（公視，環境與土地議題）" xmlUrl="https://ourisland.pts.org.tw/rss.xml" htmlUrl="https://ourisland.pts.org.tw/" language="zh-TW" />
+      <outline type="rss" text="BBC 6 Minute English（英語聽力）" title="BBC 6 Minute English（英語聽力）" xmlUrl="https://podcasts.files.bbci.co.uk/p02pc9tn.rss" htmlUrl="http://www.bbc.co.uk/programmes/p02pc9tn" language="en" />
+      <outline type="rss" text="TED-Ed（跨科教學影片）" title="TED-Ed（跨科教學影片）" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCsooa4yRKGN_zEE8iknghZA" htmlUrl="https://www.youtube.com/channel/UCsooa4yRKGN_zEE8iknghZA" language="en" />
     </outline>
   </body>
 </opml>
