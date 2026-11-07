@@ -1,17 +1,25 @@
 {
   "mcpServers": {
     "netnewswire": {
-      "command": "npx",
+      "command": "/opt/homebrew/bin/npx",
       "args": [
+        "-y",
         "@jellllly/netnewswire-mcp"
-      ]
+      ],
+      "env": {
+        "PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
+      },
+      "disabled": false
     },
     "rss-reader": {
-      "command": "npx",
+      "command": "/opt/homebrew/bin/npx",
       "args": [
         "-y",
         "rss-reader-mcp"
-      ]
+      ],
+      "env": {
+        "PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
+      }
     },
     "zotero": {
       "command": "/Users/haowen_jiang/.local/bin/zotero-mcp",
