@@ -474,7 +474,7 @@
     </table>
 
     <div class="callout">
-      <strong>本專案的 MCP 現況</strong>：<strong>rss-reader</strong> 啟用中，可讀取 Feed 的文章清單，也能取得單篇文章的內容。<strong>workspacemcp</strong>（連接 Google 日曆、Gmail 等，選用 C 行政整理）與 <strong>excalidraw</strong> 預設為停用，本流程的四個主步驟都用不到它們。涉及學生個資的內容，請不要交給任何外部服務處理。
+      <strong>本專案的 MCP 現況</strong>：<strong>rss-reader</strong> 啟用中，可讀取 Feed 的文章清單，也能取得單篇文章的內容。<strong>workspacemcp</strong>（連接 Google 日曆、Gmail 等，選用 C 行政整理）與 <strong>excalidraw</strong> 預設為停用，本流程的主步驟都用不到它們。涉及學生個資的內容，請不要交給任何外部服務處理。
     </div>
 
     <p class="section-desc">專案根目錄的 <code>teacher-feeds.opml</code> 收錄了 9 個精選 Feeds，分為「教育新聞」（國立教育廣播電臺文教新聞、The Guardian Education、The Hechinger Report、EdSurge）、「科普」（研之有物）與「各科教學資源」（報導者、我們的島、BBC 6 Minute English、TED-Ed）。注意：其中 BBC 6 Minute English 為 Podcast、TED-Ed 為影片連結，不是文字全文；遇到時 Bob 會請你改提供文字稿或其他來源，不會自行編造內容。國文、物理、生物、地球科學、歷史等科目目前沒有專屬 Feed，可自行補充。</p>
@@ -611,7 +611,7 @@
 你是一位熟悉高中教學的教學設計顧問，協助教師依學科、年級、時數與學生程度設計教案、活動與啟發提問。
 
 Custom Instructions：
-一律使用繁體中文（台灣）。缺少學科、年級、課程主題、單堂分鐘數、學生程度其中任一項時，先向教師詢問，不要自行假設。教學目標若由你擬定，須標示為「擬定，請教師確認」。不引用不確定的課綱條文。</div>
+一律使用繁體中文（台灣）。缺少學科、年級、課程主題、單堂分鐘數、學生程度其中任一項時，先向教師詢問，不要自行假設。產生教材前，先查專案內 108 課綱資料夾的對應內容；找不到對應科目就略過，不要自行補課綱。教學目標若由你擬定，須標示為「擬定，請教師確認」。不引用不確定的課綱條文。</div>
       <div class="response-header">這樣設定的效果（示意）</div>
       <div class="response-content">
         之後只要切換到這個模式，Bob 就會以教學設計顧問的方式回應，並主動確認必填資訊，不必每次重新說明你的偏好。
@@ -661,7 +661,7 @@ Custom Instructions：
       </tbody>
     </table>
 
-    <p class="section-desc">本專案目前預先安裝了以下 7 個技能（說明依各技能的說明檔與 <code>AGENTS.md</code>）：</p>
+    <p class="section-desc">本專案目前預先安裝了以下 8 個技能（說明依各技能的說明檔與 <code>AGENTS.md</code>）。另外，專案內的 108 課綱資料夾不是技能，而是 Step 0 查閱的資料：</p>
 
     <table class="carbon-table">
       <thead>
@@ -676,16 +676,20 @@ Custom Instructions：
           <td>網頁正文萃取。選用 A 素材匯入時，Feed 只有摘要、或你直接貼網址，Bob 就用它從網頁取得乾淨的文章全文。</td>
         </tr>
         <tr>
-          <td><code>markdown-to-html</code></td>
-          <td>文字檔轉網頁。Step 4 用它把教案內容轉成網頁；視覺風格再交給 <code>design-taste-frontend</code>。</td>
+          <td><code>markitdown-cli</code></td>
+          <td>文件轉檔與影片逐字稿。選用 A 素材匯入時，把你提供的 PDF、Word、PowerPoint、Excel 檔轉成文字供 Bob 閱讀，也能取得 YouTube 影片的逐字稿（影片沒有字幕時會如實告知）。電腦需另外安裝轉檔軟體，Bob 會先徵求你的同意。含學生個資的檔案請勿提供。</td>
         </tr>
         <tr>
           <td><code>design-taste-frontend</code></td>
-          <td>網頁與海報的視覺設計。負責 Step 3 海報（僅輸出 HTML/CSS 或 SVG 排版）與 Step 4 教學網頁的版面、字體與配色。</td>
+          <td>網頁的視覺設計。負責 Step 4 主題式網站（課程官網、活動宣傳頁、遊戲化互動專題）的版面、字體與配色，不用來產生圖片。</td>
         </tr>
         <tr>
-          <td><code>excalidraw-diagram-generator</code></td>
-          <td>選用 D 學生互動看板。產出可在 excalidraw.com 開啟編輯的圖檔。它沒有現成的看板圖型，會用欄位加卡片的方式組出看板；每張圖建議不超過約 20 個元素，需要時請拆成多張。</td>
+          <td><code>svg-logo-designer</code></td>
+          <td>選用 E 學習圖表。產出 SVG 圖表幫助學生理解較難的概念。它原本是設計品牌標誌的技能，用於教學圖表時會跳過品牌相關的詢問，成果請老師檢視。</td>
+        </tr>
+        <tr>
+          <td><code>deploy-to-vercel</code></td>
+          <td>把網頁發佈到 internet。只在你於本機確認成果、並明確要求發佈時才使用；Bob 會先列出要上傳的檔案給你確認，只上傳網頁相關檔案（不含教案文件），預設為預覽版本。</td>
         </tr>
         <tr>
           <td><code>workspace-cli</code></td>
@@ -693,7 +697,7 @@ Custom Instructions：
         </tr>
         <tr>
           <td><code>agent-browser</code></td>
-          <td>瀏覽器自動化。需要操作網頁、截圖或檢查網頁呈現時使用，不是四個主步驟的必要工具。</td>
+          <td>瀏覽器自動化。需要操作網頁、截圖或檢查網頁呈現時使用，不是主步驟的必要工具。</td>
         </tr>
         <tr>
           <td><code>find-skills</code></td>
@@ -710,7 +714,7 @@ Custom Instructions：
       <div class="prompt-text" id="p-skill-list">請用淺白的方式列出這個專案目前有哪些技能，各自適合在備課的哪個步驟使用？我是不會寫程式的高中老師。</div>
       <div class="response-header">預期 Bob 的回應方向（示意）</div>
       <div class="response-content">
-        Bob 會依專案內的技能整理出清單，並對照教案設計、啟發提問、摘要與宣傳文案、主題網頁發佈四個步驟說明各技能的用途。你也可以同時打開 Skills 分頁，核對 Bob 說的和畫面上看到的是否一致。
+        Bob 會依專案內的技能整理出清單，並對照課綱對照、差異化教案設計、啟發提問、摘要與宣傳文案、主題式網站等步驟說明各技能的用途。你也可以同時打開 Skills 分頁，核對 Bob 說的和畫面上看到的是否一致。
       </div>
     </div>
 
@@ -718,7 +722,7 @@ Custom Instructions：
       <span class="tip-icon">💡</span>
       <div>
         <p><strong>小技巧</strong></p>
-        <p>教案設計、啟發提問、摘要與宣傳文案（Step 1 到 3）沒有專屬技能，由 Bob 依 <code>AGENTS.md</code> 的範本直接生成，所以品質取決於你提供的資訊是否完整。專案也沒有 108 課綱的對應技能，需要課綱對應時請提供課綱要點。部分技能需要電腦另外安裝軟體才能完整運作；若 Bob 回報缺少什麼，請照它的說明處理，或請它協助。</p>
+        <p>教案設計、啟發提問、摘要與宣傳文案（Step 1 到 3）沒有專屬技能，由 Bob 依 <code>AGENTS.md</code> 的範本直接生成，所以品質取決於你提供的資訊是否完整。課綱對照（Step 0）讀的是專案內的 108 課綱資料夾（綜合型高級中等學校版本）；找不到你的科目時會直接略過，不需要你補課綱。部分技能需要電腦另外安裝軟體才能完整運作；若 Bob 回報缺少什麼，請照它的說明處理，或請它協助。</p>
       </div>
     </div>
 
