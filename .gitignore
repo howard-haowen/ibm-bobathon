@@ -8,3 +8,6 @@ bin/
 output/
 .env
 !.env.sample
+.bob/tmp/
+artifacts/.vercel/
+.taste-skill/
