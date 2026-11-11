@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>人文素養闖關練習 — AI 時代的人文素養（高二英文）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #e5e1d8; --surface: #dad5ca; --ink: #2a1d17; --muted: #5a4a40;
+  --accent: #456f3a; --accent-ink: #ffffff;
+  --step-small: clamp(0.875rem, 0.85rem + 0.1vw, 0.9375rem);
+  --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  --margin: clamp(20px, 4vw, 48px);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: "Epilogue", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif; background: var(--bg); color: var(--ink); font-size: var(--step-body); line-height: 1.6; }
+a { color: inherit; }
+a:focus-visible, button:focus-visible, textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+header.top { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 28px var(--margin) 0; font-size: var(--step-small); }
+header.top .mark { font-weight: 900; text-decoration: none; letter-spacing: -0.02em; }
+header.top nav { display: flex; gap: 24px; flex-wrap: wrap; }
+header.top nav a { text-decoration: none; }
+header.top nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.backlink { display: inline-block; margin: 20px var(--margin) 0; font-size: var(--step-small); font-weight: 500; }
+
+.hero { min-height: 66svh; display: grid; grid-template-columns: 4fr 8fr; column-gap: 32px; align-content: end; padding: 0 var(--margin) 72px; }
+.hero h1 { grid-column: 2; grid-row: 1; font-weight: 900; font-size: clamp(3rem, 9vw, 9rem); line-height: 0.95; letter-spacing: -0.04em; align-self: end; }
+.hero .side { grid-column: 1; grid-row: 1; align-self: end; max-width: 32ch; font-size: var(--step-lead); line-height: 1.4; color: var(--muted); padding-bottom: 8px; }
+.mask { display: block; overflow: hidden; padding-bottom: 0.08em; }
+.mask > span { display: block; }
+.js .mask > span { transform: translateY(105%); animation: rise 900ms cubic-bezier(.16,1,.3,1) forwards; }
+.js .mask:nth-child(2) > span { animation-delay: 110ms; }
+@keyframes rise { to { transform: translateY(0); } }
+
+.btn { display: inline-block; background: var(--accent); color: var(--accent-ink); font-weight: 500; font-size: var(--step-body); padding: 14px 28px; min-height: 48px; text-decoration: none; border: 0; cursor: pointer; font-family: inherit; transition: transform 160ms ease, background 160ms ease; }
+.btn:hover { background: var(--ink); transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+.btn.quiet { background: var(--surface); color: var(--ink); }
+.btn.quiet:hover { background: var(--ink); color: var(--bg); }
+.hero .side .btn { margin-top: 28px; }
+
+section { padding: 140px var(--margin); }
+section h2 { font-weight: 900; font-size: clamp(2rem, 1.2rem + 3.4vw, 4.25rem); line-height: 1; letter-spacing: -0.04em; margin-bottom: 40px; max-width: 18ch; }
+.surface { background: var(--surface); }
+.muted { color: var(--muted); }
+.small { font-size: var(--step-small); }
+
+/* game */
+.game { display: grid; grid-template-columns: 4fr 8fr; column-gap: 32px; }
+.game .panel-left { position: sticky; top: 24px; align-self: start; }
+.levels { list-style: none; margin-bottom: 28px; }
+.levels li { padding: 8px 0; font-size: var(--step-body); color: var(--muted); }
+.levels li.now { color: var(--ink); font-weight: 900; }
+.levels li.done { color: var(--accent); }
+.levels li .st { font-size: var(--step-small); margin-left: 8px; }
+.bar { height: 14px; background: var(--surface); }
+.bar > i { display: block; height: 100%; width: 0; background: var(--accent); transition: width 400ms ease; }
+.score { margin-top: 12px; font-size: var(--step-small); color: var(--muted); font-variant-numeric: tabular-nums; }
+.stage { min-height: 420px; }
+.stage .lvl-title { font-weight: 900; font-size: clamp(1.75rem, 1.2rem + 2.2vw, 3rem); letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 12px; }
+.stage .lvl-intro { color: var(--muted); max-width: 52ch; margin-bottom: 36px; }
+.stage .prog { font-size: var(--step-small); color: var(--muted); margin-bottom: 8px; font-variant-numeric: tabular-nums; }
+.stage .qtext { font-size: var(--step-lead); line-height: 1.4; font-weight: 500; max-width: 34ch; margin-bottom: 28px; }
+.stage .qtext[lang="en"] { font-weight: 500; }
+.opts { display: grid; gap: 12px; max-width: 640px; }
+.opt { text-align: left; font-family: inherit; font-size: var(--step-body); line-height: 1.4; padding: 16px 20px; min-height: 52px; background: var(--surface); color: var(--ink); border: 0; cursor: pointer; transition: background 160ms ease, transform 160ms ease; }
+.opt:hover:not(:disabled) { background: var(--ink); color: var(--bg); transform: translateX(4px); }
+.opt:disabled { cursor: default; }
+.opt.right { background: var(--accent); color: var(--accent-ink); }
+.opt.wrong { background: var(--ink); color: var(--bg); }
+.opt.dim { opacity: 0.55; }
+@keyframes pop { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+.stage > * { animation: pop 500ms cubic-bezier(.16,1,.3,1) both; }
+.stage > *:nth-child(2) { animation-delay: 60ms; }
+.stage > *:nth-child(3) { animation-delay: 120ms; }
+.stage > *:nth-child(4) { animation-delay: 180ms; }
+.opts .opt { animation: pop 500ms cubic-bezier(.16,1,.3,1) both; }
+.opts .opt:nth-child(1) { animation-delay: 240ms; }
+.opts .opt:nth-child(2) { animation-delay: 310ms; }
+.opts .opt:nth-child(3) { animation-delay: 380ms; }
+.opts .opt:nth-child(4) { animation-delay: 450ms; }
+.fb { margin-top: 24px; max-width: 56ch; min-height: 3em; }
+.fb strong { font-weight: 900; }
+.next { margin-top: 20px; }
+.hidden { display: none; }
+
+.stance { max-width: 640px; }
+.stance label, .stance legend { display: block; font-weight: 500; margin: 24px 0 10px; }
+.stance fieldset { border: 0; }
+.stance textarea { width: 100%; min-height: 96px; font-family: inherit; font-size: var(--step-body); padding: 14px 16px; background: var(--bg); color: var(--ink); border: 3px solid var(--surface); resize: vertical; }
+.sentence { margin-top: 28px; padding: 24px; background: var(--accent); color: var(--accent-ink); font-size: var(--step-lead); line-height: 1.4; max-width: 640px; }
+.sentence p + p { margin-top: 12px; }
+
+.result { max-width: 56ch; }
+.result .big { font-weight: 900; font-size: clamp(3rem, 8vw, 7rem); line-height: 0.95; letter-spacing: -0.04em; margin-bottom: 16px; font-variant-numeric: tabular-nums; }
+.result p { margin-bottom: 16px; }
+
+/* teacher info */
+.two { display: grid; grid-template-columns: 4fr 8fr; column-gap: 32px; }
+.two > h2 { margin-bottom: 0; }
+.txt { max-width: 60ch; }
+.txt p + p, .txt ul { margin-top: 20px; }
+.txt ul { padding-left: 1.2em; }
+.txt li { margin-bottom: 8px; }
+.promo-title { font-weight: 900; font-size: clamp(1.75rem, 3.6vw, 3.5rem); line-height: 1.05; letter-spacing: -0.04em; margin-bottom: 20px; max-width: 16ch; }
+
+footer.end { background: var(--ink); color: var(--bg); padding: 40px var(--margin) 28px; min-height: 60svh; display: flex; flex-direction: column; justify-content: space-between; }
+footer.end a { color: var(--bg); }
+footer.end .notes { font-size: var(--step-small); display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+footer.end .big { font-weight: 900; font-size: clamp(2.5rem, 8.4vw, 8.5rem); line-height: 0.95; letter-spacing: -0.04em; }
+footer.end .meta { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: var(--step-small); margin-top: 40px; }
+
+body.ready .score { transition: color 300ms ease; }
+.js .reveal { opacity: 0; transform: translateY(24px); transition: opacity 700ms ease, transform 700ms cubic-bezier(.16,1,.3,1); }
+.js .reveal.in { opacity: 1; transform: none; }
+noscript .ns { padding: 24px var(--margin); background: var(--surface); }
+
+@media (max-width: 900px) {
+  .hero { display: block; padding-bottom: 48px; min-height: 76svh; }
+  .hero h1 { font-size: 13vw; margin-top: 26svh; margin-bottom: 28px; }
+  .hero .side { font-size: 1.125rem; }
+  section { padding: 88px var(--margin); }
+  .game, .two { display: block; }
+  .game .panel-left { position: static; margin-bottom: 80px; }
+  .two > h2 { margin-bottom: 32px; }
+  .stage { min-height: 0; }
+  footer.end .big { font-size: 10.5vw; margin-top: 48px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js .mask > span { transform: none; animation: none; }
+  .js .reveal { opacity: 1; transform: none; transition: none; }
+  .btn, .opt, .bar > i { transition: none; }
+  .stage > *, .opts .opt { animation: none; }
+}
+@media print { header.top, .btn { display: none; } body { background: #fff; } section { padding: 24pt 0; } }
+</style>
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+<header class="top">
+  <a class="mark" href="#top">英文・高二</a>
+  <nav aria-label="頁面導覽">
+    <a href="#play">開始闖關</a>
+    <a href="#teacher">教師說明</a>
+  </nav>
+</header>
+
+<main id="top">
+  <a class="backlink" href="index.html">← 回入口頁</a>
+
+  <div class="hero">
+    <h1><span class="mask"><span>人文素養</span></span><span class="mask"><span>闖關練習</span></span></h1>
+    <div class="side">
+      <p>四關：詞彙、事實或看法、閱讀理解、AI 倫理立場。題目都來自這兩堂英文課的教案。</p>
+      <a class="btn" href="#play">開始闖關</a>
+    </div>
+  </div>
+
+  <section id="play" class="surface" aria-labelledby="h-play">
+    <h2 id="h-play">四關，一關一關過</h2>
+    <noscript><p class="ns">闖關練習需要開啟瀏覽器的 JavaScript。題目內容也可以在<a href="ai-humanities-course-site.html">課程官網</a>的「時間流程」與「啟發提問」中查看。</p></noscript>
+    <div class="game">
+      <div class="panel-left">
+        <ol class="levels" id="levels" aria-label="關卡進度"></ol>
+        <div class="bar" role="progressbar" aria-label="整體進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="bar"><i></i></div>
+        <p class="score" id="score">得分 0 / 0</p>
+      </div>
+      <div class="stage" id="stage" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section id="teacher" aria-labelledby="h-teacher">
+    <div class="two">
+      <h2 id="h-teacher">給老師的說明</h2>
+      <div class="txt reveal">
+        <p><strong>教學目標（擬定，請教師確認）</strong></p>
+        <ul>
+          <li>讀懂改寫自新聞的英文短文並說出主旨（3-Ⅴ-9、5-Ⅴ-10）。</li>
+          <li>依據文中線索分辨事實與看法（9-Ⅴ-3、D-Ⅴ-3）。</li>
+          <li>用英文簡短陳述看法並說出理由（2-Ⅴ-3、*6-Ⅴ-6、8-Ⅴ-5）。</li>
+          <li>檢視自己的學習並提出一項改進（7-Ⅴ-8）。</li>
+        </ul>
+        <p>本頁題目對應：詞彙關對應第 1 堂「關鍵詞彙預習」；事實或看法關對應「六句敘述卡」；閱讀理解關對應「閱讀新聞短文」；倫理立場關對應第 2 堂「倫理案例討論」與「準備短講」。作答結果只留在學生當下的瀏覽器畫面，不會送出或儲存，也請勿在文字框中填寫姓名等個人資料。</p>
+        <p><strong>教案摘要</strong>　本單元以中央社 2026/8/28 的新聞為素材，讓高二學生透過英文改寫短文，認識美國大學（USC、UCLA）開設 AI 學位與學程的趨勢，以及專家認為人文素養在 AI 時代更重要的看法。兩堂課依序進行詞彙預習、閱讀、事實與看法分類、倫理案例討論與英文短講。</p>
+        <p class="promo-title">AI 什麼都能答，你還剩下什麼本事？</p>
+        <p>下週英文課，帶著你的好奇心來，也帶一個你想問 AI 的問題。</p>
+        <p>完整教案（時間流程、差異化設計、啟發提問）請見<a href="ai-humanities-course-site.html">課程官網</a>。素材出處：<a href="https://www.cna.com.tw/news/aopl/202608280020.aspx" target="_blank" rel="noopener">中央社 2026/8/28</a>。</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="end">
+  <div class="notes">
+    <span>題目為草案（擬定，請教師確認）</span>
+    <a href="index.html">回入口頁</a>
+    <a href="#top">回到頁首</a>
+  </div>
+  <p class="big">我們是誰，我們應該做什麼</p>
+  <div class="meta"><span>引自霍恩於中央社報導</span><span>高二英文</span><span>2026</span></div>
+</footer>
+
+<script>
+(function () {
+  var stage = document.getElementById('stage');
+  var levelsEl = document.getElementById('levels');
+  var scoreEl = document.getElementById('score');
+  var bar = document.getElementById('bar');
+
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+
+  /* ---- 題庫：全部來自教案內容 ---- */
+  var vocab = [
+    ['degree', '學位'], ['program', '學程'], ['ethics', '倫理'], ['responsible', '負責的'],
+    ['humanities', '人文學科'], ['judgment', '判斷力'], ['false information', '錯誤資訊']
+  ];
+  function vocabQs() {
+    return shuffle(vocab).map(function (p) {
+      var others = shuffle(vocab.filter(function (x) { return x[0] !== p[0]; })).slice(0, 2).map(function (x) { return x[1]; });
+      return { text: p[0], lang: 'en', options: shuffle([p[1]].concat(others)), answer: p[1],
+        explain: p[0] + ' 的意思是「' + p[1] + '」。' };
+    });
+  }
+  var factQs = [
+    { text: 'USC started a new four-year AI program this year.', answer: 'Fact', explain: '學程、年限、時間都可以查證，所以是事實。' },
+    { text: 'USC students must take a one-semester AI ethics course.', answer: 'Fact', explain: '必修課程可以查證，所以是事實。' },
+    { text: 'UCLA created a new Department of Digital Humanities.', answer: 'Fact', explain: '系所設立可以查證，所以是事實。' },
+    { text: 'The humanities matter more than ever in the age of AI.', answer: 'Opinion', explain: '這是專家霍恩的看法；more than ever 是強烈用語，無法像開設學程一樣直接查證。' },
+    { text: 'AI is like a calculator.', answer: 'Opinion', explain: '這是教授安納瓦倫的比喻，屬於看法。' },
+    { text: 'Students must be able to judge whether an AI answer is reasonable.', answer: 'Opinion', explain: '句中的 must 表達應然的主張，屬於看法。' }
+  ].map(function (q) { q.options = ['Fact', 'Opinion']; return q; });
+  var readQs = [
+    { text: 'Besides learning to build AI, what must USC students do?', lang: 'en',
+      options: ['Take a one-semester AI ethics course.', 'Start their own company.', 'Work in a hospital.'], answer: 'Take a one-semester AI ethics course.',
+      explain: '短文第 1 段：they must also take a one-semester AI ethics course.' },
+    { text: 'What does Professor Presner ask his students to do?', lang: 'en',
+      options: ['Use a language model to write a piece of history, then change it on purpose.', 'Translate a news article into English.', 'Build a self-driving car.'],
+      answer: 'Use a language model to write a piece of history, then change it on purpose.',
+      explain: '短文第 2 段：目的是讓學生看見 AI 如何製造 false information。' },
+    { text: 'Which sentence is the best main idea of the passage?', lang: 'en',
+      options: ['American universities teach AI, and experts say the humanities still matter.', 'Self-driving cars are safer than human drivers.', 'Harvard has closed its humanities program.'],
+      answer: 'American universities teach AI, and experts say the humanities still matter.',
+      explain: '另外兩個選項都沒有出現在短文中。' }
+  ];
+  var LEVELS = [
+    { name: '詞彙關', title: '詞彙關：這個字是什麼意思？', intro: '第 1 堂的關鍵詞彙。選出正確的中文意思。', qs: vocabQs() },
+    { name: '事實或看法關', title: '事實或看法關：能查證，還是專家的想法？', intro: '第 1 堂的六句敘述卡。判斷每一句是 Fact 還是 Opinion。', qs: shuffle(factQs) },
+    { name: '閱讀理解關', title: '閱讀理解關：短文說了什麼？', intro: '回想課堂的英文短文，選出最符合短文的答案。', qs: readQs },
+    { name: '倫理立場關', title: '倫理立場關：自動駕駛車撞傷人，誰該負責？', intro: '這一關沒有標準答案，不計分。選出你的立場和理由，組成一個英文句子。', stance: true }
+  ];
+
+  var li = 0, qi = 0, score = 0, total = 0, answered = false;
+  var maxScore = LEVELS.reduce(function (n, l) { return n + (l.qs ? l.qs.length : 0); }, 0);
+
+  function renderLevels() {
+    levelsEl.innerHTML = '';
+    LEVELS.forEach(function (l, i) {
+      var el = document.createElement('li');
+      var state = i < li ? 'done' : (i === li ? 'now' : '');
+      if (state) el.className = state;
+      el.textContent = l.name;
+      var st = document.createElement('span'); st.className = 'st';
+      st.textContent = i < li ? '已完成' : (i === li ? '進行中' : '');
+      el.appendChild(st);
+      levelsEl.appendChild(el);
+    });
+    var pct = Math.round((li / LEVELS.length) * 100);
+    bar.setAttribute('aria-valuenow', pct);
+    bar.firstElementChild.style.width = pct + '%';
+    scoreEl.textContent = '得分 ' + score + ' / ' + total;
+  }
+
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+  function showQuestion() {
+    var L = LEVELS[li];
+    if (L.stance) { return showStance(); }
+    var q = L.qs[qi];
+    answered = false;
+    stage.innerHTML = '';
+    stage.appendChild(el('h3', 'lvl-title', L.title));
+    stage.appendChild(el('p', 'lvl-intro', L.intro));
+    stage.appendChild(el('p', 'prog', '第 ' + (qi + 1) + ' 題，共 ' + L.qs.length + ' 題'));
+    var qt = el('p', 'qtext', q.text); if (q.lang) qt.setAttribute('lang', q.lang);
+    stage.appendChild(qt);
+    var opts = el('div', 'opts'); opts.setAttribute('role', 'group'); opts.setAttribute('aria-label', '選項');
+    q.options.forEach(function (o) {
+      var b = el('button', 'opt', o); b.type = 'button';
+      if (/^[A-Za-z]/.test(o)) b.setAttribute('lang', 'en');
+      b.addEventListener('click', function () { choose(q, o, opts); });
+      opts.appendChild(b);
+    });
+    stage.appendChild(opts);
+    var fb = el('p', 'fb'); fb.id = 'fb'; stage.appendChild(fb);
+    var nx = el('button', 'btn next hidden', qi + 1 < L.qs.length ? '下一題' : '完成這一關'); nx.type = 'button'; nx.id = 'next';
+    nx.addEventListener('click', function () { qi++; if (qi >= L.qs.length) { li++; qi = 0; } advance(); });
+    stage.appendChild(nx);
+  }
+
+  function choose(q, picked, optsEl) {
+    if (answered) return; answered = true; total++;
+    var ok = picked === q.answer; if (ok) score++;
+    Array.prototype.forEach.call(optsEl.children, function (b) {
+      b.disabled = true;
+      if (b.textContent === q.answer) b.classList.add('right');
+      else if (b.textContent === picked) b.classList.add('wrong');
+      else b.classList.add('dim');
+    });
+    var fb = document.getElementById('fb');
+    fb.innerHTML = '';
+    fb.appendChild(el('strong', null, ok ? '答對了。' : '這題答案是：' + q.answer + '。'));
+    fb.appendChild(document.createTextNode(' ' + q.explain));
+    var nx = document.getElementById('next'); nx.classList.remove('hidden'); nx.focus();
+    renderLevels();
+  }
+
+  function showStance() {
+    var L = LEVELS[li];
+    stage.innerHTML = '';
+    stage.appendChild(el('h3', 'lvl-title', L.title));
+    stage.appendChild(el('p', 'lvl-intro', L.intro));
+    var f = el('div', 'stance');
+    f.innerHTML =
+      '<fieldset><legend>你認為誰應該負責？</legend><div class="opts" id="who"></div></fieldset>' +
+      '<label for="why">用英文寫出理由（接在 because 後面，例如：the company made the car and tested it）</label>' +
+      '<textarea id="why" lang="en" maxlength="200" placeholder="because ..."></textarea>' +
+      '<p class="small muted" style="margin-top:8px;">請勿填寫姓名等個人資料。內容不會被送出或儲存。</p>' +
+      '<div style="margin-top:20px"><button type="button" class="btn" id="make">組成我的句子</button></div>' +
+      '<div id="out" aria-live="polite"></div>';
+    stage.appendChild(f);
+    var who = f.querySelector('#who'), pick = null;
+    [['the company', '公司'], ['the engineer', '工程師'], ['the owner', '車主'], ['the car', '車子本身']].forEach(function (w) {
+      var b = el('button', 'opt', w[0] + '（' + w[1] + '）'); b.type = 'button'; b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', function () {
+        pick = w[0];
+        Array.prototype.forEach.call(who.children, function (c) { c.classList.remove('right'); c.setAttribute('aria-pressed', 'false'); });
+        b.classList.add('right'); b.setAttribute('aria-pressed', 'true');
+      });
+      who.appendChild(b);
+    });
+    f.querySelector('#make').addEventListener('click', function () {
+      var out = f.querySelector('#out'); out.innerHTML = '';
+      var why = f.querySelector('#why').value.trim().replace(/^because\s+/i, '');
+      if (!pick) { out.appendChild(el('p', 'fb', '請先選一個你認為該負責的對象。')); return; }
+      if (!why) { out.appendChild(el('p', 'fb', '請用英文寫出一個理由。')); return; }
+      var s = el('div', 'sentence');
+      var p1 = el('p', null, 'I think ' + pick + ' should be responsible because ' + why + (/[.!?]$/.test(why) ? '' : '.'));
+      p1.setAttribute('lang', 'en');
+      s.appendChild(p1);
+      s.appendChild(el('p', 'small', '進階挑戰：再加一句反方回應，例如 However, some people may say ...'));
+      out.appendChild(s);
+      var done = el('button', 'btn quiet next', '看我的闖關結果'); done.type = 'button';
+      done.addEventListener('click', function () { li++; advance(); });
+      out.appendChild(done);
+    });
+  }
+
+  function showResult() {
+    stage.innerHTML = '';
+    var r = el('div', 'result');
+    r.appendChild(el('p', 'big', score + ' / ' + maxScore));
+    var msg = score >= maxScore - 2 ? '很穩。你已經能分辨詞彙、事實與看法，也讀懂了短文。接下來挑戰英文短講，試著加入反方回應。'
+      : score >= Math.round(maxScore * 0.6) ? '不錯。把答錯的題目回頭看一次，特別留意事實與看法的線索詞，例如 says、must、more than ever。'
+      : '再玩一次吧。先回課程官網看一遍詞彙與英文短文，再回來闖關。';
+    r.appendChild(el('p', null, msg));
+    r.appendChild(el('p', 'small muted', '倫理立場關不計分。你的句子可以抄進短講稿，作為第 2 堂「準備短講」的開頭。'));
+    var again = el('button', 'btn', '再玩一次'); again.type = 'button';
+    again.addEventListener('click', function () { reset(); });
+    r.appendChild(again);
+    stage.appendChild(r);
+  }
+
+  function advance() {
+    renderLevels();
+    if (li >= LEVELS.length) showResult(); else showQuestion();
+    stage.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+  function reset() {
+    LEVELS[0].qs = vocabQs(); LEVELS[1].qs = shuffle(factQs);
+    li = 0; qi = 0; score = 0; total = 0; advance();
+  }
+  renderLevels(); showQuestion();
+
+  /* reveal */
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('in'); }); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { threshold: 0 });
+  els.forEach(function (e) { io.observe(e); });
+})();
+</script>
+</body>
+</html>
