@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>成果範例入口 — 執行入門指南範例之後的實際產出</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #1f2328;
+    background: #ffffff;
+    padding: 0 1rem 4rem;
+  }
+
+  /* ── Top nav ── */
+  .top-nav {
+    background: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    margin: 0 -1rem 2rem;
+  }
+  .top-nav .logo { font-size: 18px; font-weight: 600; color: #161616; text-decoration: none; }
+  .top-nav .logo span { color: #0f62fe; }
+  .top-nav .back-link { font-size: 14px; color: #0f62fe; text-decoration: none; }
+  .top-nav .back-link:hover { text-decoration: underline; }
+
+  .container { max-width: 800px; margin: 0 auto; }
+
+  /* ── Header ── */
+  .doc-header { border-bottom: 2px solid #e5e7eb; padding-bottom: 1.25rem; margin-bottom: 2rem; }
+  .doc-header h1 { font-size: 1.45rem; font-weight: 700; line-height: 1.35; margin-bottom: 0.5rem; }
+  .doc-header p { color: #57606a; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+  .badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 12px; font-weight: 600; letter-spacing: 0.02em; }
+  .badge-ask   { background: #d0e2ff; color: #0043ce; }
+  .badge-plan  { background: #e8daff; color: #6929c4; }
+  .badge-agent { background: #defbe6; color: #0e6027; }
+  .badge-info  { background: #f3f4f6; color: #57606a; }
+
+  /* ── Section ── */
+  .section { margin-bottom: 2.5rem; }
+  .section-title { font-size: 1.1rem; font-weight: 700; border-left: 4px solid #3b82d4; padding-left: 0.7rem; margin-bottom: 0.6rem; }
+  .section-desc { color: #57606a; margin-bottom: 1.1rem; font-size: 14px; }
+
+  .summary-box { background: #f7f8fa; border: 1px solid #e5e7eb; border-radius: 6px; padding: 1rem 1.25rem; }
+  .summary-box dl { display: grid; grid-template-columns: 7rem 1fr; gap: 0.4rem 0.75rem; }
+  .summary-box dt { font-weight: 600; color: #57606a; font-size: 13px; padding-top: 0.1rem; }
+  .summary-box dd { font-size: 14px; }
+
+  /* ── Link cards ── */
+  .link-card {
+    display: block;
+    border: 1px solid #e5e7eb;
+    border-top-width: 4px;
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.9rem;
+    text-decoration: none;
+    color: inherit;
+    background: #ffffff;
+    transition: background 0.15s;
+  }
+  .link-card:hover { background: #f7f8fa; }
+  .link-card:focus-visible { outline: 3px solid #0f62fe; outline-offset: 2px; }
+  .link-card.ask   { border-top-color: #0f62fe; }
+  .link-card.plan  { border-top-color: #8a3ffc; }
+  .link-card.agent { border-top-color: #198038; }
+  .link-card h3 { font-size: 1.02rem; font-weight: 700; margin-bottom: 0.25rem; color: #161616; }
+  .link-card p { font-size: 14px; color: #393939; }
+  .link-card .file { display: block; margin-top: 0.4rem; font-size: 12px; color: #57606a; }
+  .link-card .cta { display: inline-block; margin-top: 0.5rem; font-size: 13px; font-weight: 600; color: #0f62fe; }
+  .link-card:hover .cta { text-decoration: underline; }
+
+  .sub-label { font-size: 13px; font-weight: 700; color: #57606a; margin: 1.1rem 0 0.5rem; }
+
+  /* ── Prompt & note ── */
+  .prompt-mini { background: #f7f8fa; border-left: 3px solid #c6c6c6; padding: 0.55rem 0.9rem; font-size: 13px; color: #393939; margin-bottom: 1rem; white-space: pre-wrap; }
+  .note { background: #fffbea; border: 1px solid #fde68a; border-radius: 6px; padding: 0.65rem 1rem; font-size: 13px; color: #713f12; margin-bottom: 0.6rem; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 1rem; }
+  th { background: #f7f8fa; border: 1px solid #e5e7eb; padding: 0.5rem 0.75rem; text-align: left; font-weight: 600; color: #57606a; font-size: 13px; }
+  td { border: 1px solid #e5e7eb; padding: 0.5rem 0.75rem; vertical-align: top; }
+
+  footer { border-top: 1px solid #e5e7eb; margin-top: 3rem; padding-top: 1rem; text-align: center; font-size: 12px; color: #57606a; }
+
+  @media (max-width: 600px) {
+    .summary-box dl { grid-template-columns: 1fr; }
+    .summary-box dt { font-weight: 700; color: #1f2328; }
+  }
+</style>
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a class="logo" href="index.html">IBM <span>Bob</span></a>
+    <a class="back-link" href="index.html">← 回索引</a>
+  </nav>
+<div class="container">
+
+  <div id="top" class="doc-header">
+    <h1>成果範例入口：把入門指南的範例實際跑一遍</h1>
+    <p>這裡收的是照著<a href="01-ibm-bob-basic-usage.html">入門操作指南</a>的三個 Prompt，依序在 Ask、Plan、Agent 模式實際執行後留下的成果。</p>
+    <div class="meta-row">
+      <span class="badge badge-info">實際執行結果</span>
+      <span class="badge badge-info">英文 · 高二 · 50 分鐘 × 2 堂</span>
+      <span class="badge badge-info">教案內容為草案，請教師確認</span>
+    </div>
+  </div>
+
+  <!-- Scenario -->
+  <div class="section">
+    <div class="section-title">範例情境</div>
+    <div class="summary-box">
+      <dl>
+        <dt>課程主題</dt>
+        <dd>AI 時代的人文素養：從美國大學開設 AI 學位談起</dd>
+        <dt>素材來源</dt>
+        <dd><a href="https://www.cna.com.tw/news/aopl/202608280020.aspx" target="_blank" rel="noopener">中央社〈美大學開AI學位蔚為風潮　專家：人文教育更顯重要〉</a>（2026/8/28）</dd>
+        <dt>學生程度</dt>
+        <dd>一般程度；同一堂課要照顧基礎與進階兩種程度</dd>
+        <dt>執行方式</dt>
+        <dd>依序送出入門指南中的三個 Prompt。Agent 模式需要的網站類型與宣傳文案對象，是另外指定的：課程官網加遊戲化互動專題，對象為高二學生、語氣親切。</dd>
+      </dl>
+    </div>
+  </div>
+
+  <!-- Step 1 Ask -->
+  <div class="section">
+    <div class="section-title">Step 1 — Ask 模式：讀懂新聞素材 <span class="badge badge-ask">唯讀</span></div>
+    <p class="section-desc">抓取新聞全文後，整理重點、可延伸的英文主題、學生可能卡住的地方，以及基礎與進階的分配。沒有修改任何專案檔案。</p>
+    <a class="link-card ask" href="ask-mode-news-briefing.html">
+      <h3>Ask 模式實際執行結果</h3>
+      <p>新聞重點整理、五個可延伸的英文討論主題、六項學生難點，以及先講與進階討論的分配表。</p>
+      <span class="file">ask-mode-news-briefing.html</span>
+      <span class="cta">查看回答 →</span>
+    </a>
+  </div>
+
+  <!-- Step 2 Plan -->
+  <div class="section">
+    <div class="section-title">Step 2 — Plan 模式：備課規劃文件 <span class="badge badge-plan">只產出計畫</span></div>
+    <p class="section-desc">查詢英語文課綱並逐字引用,再規劃教學目標、時間流程、分層教法、各段提問與最後要做出的成果。這一步還沒有製作教案。</p>
+    <a class="link-card plan" href="plan-mode-lesson-planning.html">
+      <h3>Plan 模式實際執行結果</h3>
+      <p>課綱對應 11 條、教學目標草案、兩堂各 50 分鐘的時間流程、基礎／一般／進階三層設計，與待老師確認的事項。</p>
+      <span class="file">plan-mode-lesson-planning.html</span>
+      <span class="cta">查看規劃文件 →</span>
+    </a>
+  </div>
+
+  <!-- Step 3 Agent -->
+  <div class="section">
+    <div class="section-title">Step 3 — Agent 模式：教案與教學網頁 <span class="badge badge-agent">完整讀寫</span></div>
+    <p class="section-desc">依專案工作流產出差異化教案，並搭建成網頁。以下三個網頁位於 <code>ai-humanities-lesson/</code> 資料夾，從入口頁進入即可連到另外兩頁。</p>
+
+    <a class="link-card agent" href="ai-humanities-lesson/index.html">
+      <h3>教案入口頁</h3>
+      <p>這份教案所有網頁的入口，從這裡可以前往課程官網與闖關練習。</p>
+      <span class="file">ai-humanities-lesson/index.html</span>
+      <span class="cta">開啟入口頁 →</span>
+    </a>
+
+    <a class="link-card agent" href="ai-humanities-lesson/ai-humanities-course-site.html">
+      <h3>課程官網</h3>
+      <p>完整教案：教學概覽與課綱對應、教學目標、兩堂課的時間流程、六句敘述卡、差異化設計、英文閱讀短文、啟發提問、摘要與宣傳文案。</p>
+      <span class="file">ai-humanities-lesson/ai-humanities-course-site.html</span>
+      <span class="cta">開啟課程官網 →</span>
+    </a>
+
+    <a class="link-card agent" href="ai-humanities-lesson/ai-humanities-practice-game.html">
+      <h3>遊戲化互動專題：闖關練習</h3>
+      <p>學生用的互動練習，共四關：詞彙、事實或看法、閱讀理解、AI 倫理立場。題目都來自教案內容。</p>
+      <span class="file">ai-humanities-lesson/ai-humanities-practice-game.html</span>
+      <span class="cta">開啟闖關練習 →</span>
+    </a>
+  </div>
+
+  <!-- Notes -->
+  <div class="section">
+    <div class="section-title">閱讀這些成果前，請先知道</div>
+    <div class="note">教學目標、差異化設計、六句敘述卡與英文閱讀短文都是 Bob 擬定的草案，最終由教師確認。英文短文是依中文新聞改寫的，請依原文核對。</div>
+    <div class="note">新聞全文受著作權保護，網頁只附出處連結，沒有轉載全文。教案原檔與素材全文只存在專案的 <code>output/英文-高二/</code> 資料夾，不在這些網頁中。</div>
+    <div class="note">依專案規則，網頁沒有放任何照片或圖片，視覺只用排版與色彩。</div>
+    <div class="note">每個教案網頁頂端都有「回入口頁」連結，會回到 <code>ai-humanities-lesson/index.html</code>。</div>
+  </div>
+
+  <footer>Made with IBM Bob</footer>
+</div>
+</body>
+</html>
