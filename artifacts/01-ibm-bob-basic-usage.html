@@ -500,7 +500,7 @@
 
     <!-- Teacher Input Panel -->
     <h2 class="section-title">情境：下週要教新單元，想先備好一份教案</h2>
-    <p class="section-desc">你是高二國文老師，下週要教一個新單元，想要一份能直接調整使用的教案、幾組能帶動課堂討論的提問，還有一個可以分享給學生的教學網頁。這正是 IBM Bob 教師備課助手的用武之地。以下為說明用的示例輸入，請換成你自己的課程。</p>
+    <p class="section-desc">你是高二英文老師，下週要以一篇時事新聞設計新單元，想要一份能直接調整使用的教案、幾組能帶動課堂討論的提問，還有一個可以分享給學生的教學網頁。這正是 IBM Bob 教師備課助手的用武之地。以下為說明用的示例輸入，請換成你自己的課程。</p>
 
     <div class="article-panel">
       <div class="article-panel-header">
@@ -510,7 +510,11 @@
       <div class="article-body">
         <div class="article-row">
           <span class="label">課程主題</span>
-          <span class="value">赤壁賦：情景交融</span>
+          <span class="value">AI 時代的人文素養：從美國大學開設 AI 學位談起</span>
+        </div>
+        <div class="article-row">
+          <span class="label">素材來源</span>
+          <span class="value"><a href="https://www.cna.com.tw/news/aopl/202608280020.aspx" target="_blank" rel="noopener">中央社〈美大學開AI學位蔚為風潮　專家：人文教育更顯重要〉</a></span>
         </div>
         <div class="article-row">
           <span class="label">時數</span>
@@ -518,11 +522,11 @@
         </div>
         <div class="article-row">
           <span class="label">學科 / 年級</span>
-          <span class="value"><span class="lang-badge">國文</span> <span class="lang-badge">高二</span></span>
+          <span class="value"><span class="lang-badge">英文</span> <span class="lang-badge">高二</span></span>
         </div>
         <div class="article-row">
           <span class="label">本次目標</span>
-          <span class="value">先對照課綱，再產出差異化教案、設計啟發提問、撰寫摘要與宣傳文案，並搭建成教學網站</span>
+          <span class="value">先對照課綱，再以這篇新聞為素材，產出差異化教案、設計啟發提問、撰寫摘要與宣傳文案，並搭建成教學網站</span>
         </div>
 
         <div class="article-excerpt">
@@ -530,9 +534,10 @@
             <span>你會給 Bob 的資料（示例）</span>
             <span class="tag">TEACHER INPUT</span>
           </div>
-          <pre>學科：國文
+          <pre>學科：英文
 年級：高二
-課程主題：赤壁賦：情景交融
+課程主題：AI 時代的人文素養：從美國大學開設 AI 學位談起
+素材：https://www.cna.com.tw/news/aopl/202608280020.aspx
 時數：50 分鐘 × 2 堂
 學生程度：一般程度（此為示例，請改成你的班級特性）
 差異化需求：希望同一堂課能照顧基礎與進階兩種程度的學生（此為示例，可不填）
@@ -553,9 +558,9 @@
       <div class="mode-card ask">
         <span class="mode-badge">Ask</span>
         <h3>知識模式</h3>
-        <p class="desc">釐清課程主題的概念、預想學生可能的學習難點、討論教學方向。<strong>不會修改任何檔案</strong>，適合在動手備課前先搞懂主題。</p>
+        <p class="desc">閱讀並消化課程素材（如這篇新聞）、釐清主題的概念、預想學生可能的學習難點、討論教學方向。<strong>不會修改任何檔案</strong>，適合在動手備課前先搞懂主題。</p>
         <div class="tag-row">
-          <span class="tag">理解主題</span>
+          <span class="tag">理解素材</span>
           <span class="tag">解釋概念</span>
           <span class="tag">預想難點</span>
           <span class="tag">討論教法</span>
@@ -627,19 +632,25 @@
     <!-- Ask Demo -->
     <div class="demo-section ask">
       <p class="demo-label">Step 1 — Ask 模式</p>
-      <h3>搞懂課程主題，確認教學起點</h3>
-      <p>拿到課程主題，第一步不是馬上寫教案。先用 Ask 模式，把學科、年級與學生程度告訴 Bob，請它說明這個主題的核心概念、學生可能卡在哪裡，以及哪些內容適合先講。若你已有課本或講義檔案，可用 <code>@檔案名稱</code> 引用。Bob 的說明僅供參考，請依課本與你的專業判斷核對。</p>
+      <h3>讀懂新聞素材，確認教學起點</h3>
+      <p>拿到課程主題與素材，第一步不是馬上寫教案。先用 Ask 模式，把新聞網址、學科、年級與學生程度告訴 Bob，請它整理這篇新聞的重點、可延伸的英文主題與關鍵詞彙、學生可能卡在哪裡，以及哪些內容適合先講。若你已有課本或講義檔案，可用 <code>@檔案名稱</code> 引用。Bob 的說明僅供參考，請依原文與你的專業判斷核對。</p>
 
       <div class="prompt-block">
         <div class="prompt-block-header">
           <span class="prompt-block-label">Prompt — Ask 模式</span>
           <button class="copy-btn" data-target="prompt-ask">複製</button>
         </div>
-        <pre id="prompt-ask">我是高二國文老師，下週要教「赤壁賦：情景交融」，共 50 分鐘 × 2 堂，班級為一般程度。請先幫我說明這個主題的核心概念、學生可能的學習難點，以及哪些內容適合先講、哪些適合留給進階討論。請不要修改任何檔案。</pre>
+        <pre id="prompt-ask">我是高二英文老師，下週想用這篇新聞當教材，主題是「AI 時代的人文素養」：https://www.cna.com.tw/news/aopl/202608280020.aspx
+課程是 50 分鐘上 2 堂，班上是一般程度。
+請先幫我讀這篇新聞，整理出重點，並告訴我：
+1. 可以延伸出哪些英文閱讀或討論的主題？
+2. 學生可能會卡在哪裡？
+3. 哪些內容適合先講，哪些留給程度好的學生進階討論？
+我現在只是想先了解，請不要修改任何檔案。</pre>
       </div>
       <div class="expected-label">Bob 會回答的內容方向（示意，實際回答依你的輸入而定）</div>
-      <div class="expected">✓ 說明這個主題的核心概念與常見教學重點（請教師依課本核對）
-✓ 列出一般程度學生可能的學習難點，並建議對應的教學策略方向
+      <div class="expected">✓ 整理新聞重點：美國大學開設 AI 學位的風潮、AI 倫理課程，以及「人文素養在 AI 時代更顯重要」的論點（請教師依原文核對）
+✓ 列出一般程度學生可能的學習難點（如抽象詞彙、論點理解），並建議對應的英語教學策略方向
 ✓ 建議先講的基礎內容，以及可留給進階提問的延伸內容
 ✓ 若有不確定之處，會提醒你向課本或可靠來源確認
 ✓ 不修改任何檔案</div>
@@ -656,15 +667,24 @@
           <span class="prompt-block-label">Prompt — Plan 模式</span>
           <button class="copy-btn" data-target="prompt-plan">複製</button>
         </div>
-        <pre id="prompt-plan">請幫我規劃上面這個單元的備課計畫，內容包含對應的課綱、教學目標、50 分鐘 × 2 堂的時間流程與活動設計、基礎與進階兩種程度的差異化做法、每個段落的啟發提問方向，以及最後要產出的教案與教學網站。請產出一份完整的規劃文件。</pre>
+        <pre id="prompt-plan">根據剛剛整理的內容，幫我規劃這個單元的備課計畫。
+計畫要包含：
+1. 對應的課綱
+2. 教學目標
+3. 2 堂課共 100 分鐘的時間流程與活動
+4. 基礎和進階兩種程度各自怎麼教
+5. 每個教學段落可以問學生什麼問題
+6. 最後要做出的教案和教學網站
+請整理成一份完整的規劃文件，先讓我確認，不要直接開始製作。</pre>
       </div>
       <div class="expected-label">Bob 會回答的內容方向（示意）</div>
       <div class="expected">✓ 產生一份結構化的規劃文件
 ✓ 擬定教學目標草案，標示為「擬定，請教師確認」
 ✓ 規劃時間流程：各段時間加總須等於 100 分鐘（50 分鐘 × 2 堂）
-✓ 建議每個教學段落的活動，以及暖身、核心、延伸三層提問的方向
+✓ 建議每個教學段落的活動（如關鍵詞彙預習、新聞閱讀、小組討論、英文短講或寫作），以及暖身、核心、延伸三層提問的方向
 ✓ 說明基礎與進階兩種程度各自的目標、任務與支持方式
-✓ 說明會先查 108 課綱資料夾；找不到對應科目時會略過，並在規劃中註明
+✓ 說明會先查 108 課綱資料夾（英語文）；找不到對應條目時會略過，並在規劃中註明
+✓ 規劃如何引用這篇新聞作為素材，並標示出處
 ✓ 規劃輸出目標：一份教案文件與一個教學網站
 ✓ 僅產生/輸出計畫文件，不執行實際的教案生成或修改</div>
     </div>
@@ -680,11 +700,12 @@
           <span class="prompt-block-label">Prompt — Agent 模式</span>
           <button class="copy-btn" data-target="prompt-agent">複製</button>
         </div>
-        <pre id="prompt-agent">請執行上面的計畫。</pre>
+        <pre id="prompt-agent">規劃我看過了，沒有問題。請照這份計畫開始幫我備課，把教案和教學網站做出來。</pre>
       </div>
       <div class="expected-label">Bob 會做的動作（依專案工作說明書）</div>
       <div class="expected">✓ Step 0 課綱對照：查 108 課綱資料夾中對應的領域；找到就逐字引用並請你確認，找不到就略過並在教案註明
-✓ Step 1 差異化教案設計：確認必填資訊後，建立教案文件「赤壁賦-情景交融」（放在「國文-高二」資料夾），寫入教學概覽、教學目標、時間流程與活動設計，以及分層的差異化設計
+✓ 選用 A 素材匯入：抓取指定的新聞全文作為教學素材，並標示出處
+✓ Step 1 差異化教案設計：確認必填資訊後，建立教案文件「AI時代的人文素養」（放在「英文-高二」資料夾），寫入教學概覽、教學目標、時間流程與活動設計，以及分層的差異化設計
 ✓ Step 2 啟發提問：把暖身、核心、延伸與批判提問寫入同一份教案，並附各程度可用的提示
 ✓ Step 3 摘要與宣傳文案：寫入摘要與宣傳文案章節
 ✓ Step 4 主題式網站：先問你要做課程官網、活動宣傳頁或遊戲化互動專題，再把教案搭建成網站並設計版面與配色，放進同一個教案資料夾；有多個網頁時另做一個入口頁（不需要你寫任何程式）
@@ -696,8 +717,8 @@
       <div style="margin-top: 12px;">
         <div class="expected-label">教案產出片段（示例，僅供說明版型，非實際執行結果）</div>
         <div class="output-block">
-          <p><span class="word">時間流程與活動設計</span> <span class="ipa">教案：國文-高二 / 赤壁賦-情景交融</span> &nbsp;·&nbsp; 50 分鐘 × 2 堂</p>
-          <p class="meaning">【示例】0–5 分鐘 引起動機｜5–25 分鐘 文本導讀｜…（各段時間加總須等於 100 分鐘）</p>
+          <p><span class="word">時間流程與活動設計</span> <span class="ipa">教案：英文-高二 / AI時代的人文素養</span> &nbsp;·&nbsp; 50 分鐘 × 2 堂</p>
+          <p class="meaning">【示例】0–5 分鐘 引起動機｜5–25 分鐘 新聞閱讀與關鍵詞彙｜…（各段時間加總須等於 100 分鐘）</p>
           <p class="example">啟發提問示例：暖身提問、核心提問、延伸與批判提問，各附「設計意圖」與「可能的學生回應 / 追問」。</p>
           <p style="margin-top:8px; font-size:12px; color:#8d8d8d;">以上為版型示意；實際內容由 Bob 依你的輸入產生，並由教師審閱調整。</p>
         </div>
