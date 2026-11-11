@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IBM Bob 入門操作指南 — 高中教師 AI 備課與教學素材工作坊</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&display=swap">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: 0.16px;
+      color: #161616;
+      background: #ffffff;
+    }
+
+    .utility-bar {
+      background: #f4f4f4;
+      color: #525252;
+      font-size: 12px;
+      letter-spacing: 0.32px;
+      line-height: 1.33;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .top-nav {
+      background: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+    }
+    .top-nav .logo { font-size: 18px; font-weight: 600; color: #161616; text-decoration: none; }
+    .top-nav .logo span { color: #0f62fe; }
+    .top-nav .back-link { font-size: 14px; color: #0f62fe; text-decoration: none; }
+    .top-nav .back-link:hover { text-decoration: underline; }
+
+    .page-content {
+      max-width: 1056px;
+      margin: 0 auto;
+      padding: 64px 32px 96px;
+    }
+
+    /* Hero */
+    .hero {
+      margin-bottom: 48px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .hero-eyebrow { font-size: 14px; color: #525252; margin-bottom: 12px; }
+    .hero h1 { font-size: 42px; font-weight: 300; line-height: 1.20; color: #161616; margin-bottom: 16px; }
+    .hero p { font-size: 18px; color: #525252; max-width: 760px; }
+    .hero .scenario-tag {
+      display: inline-block;
+      background: #edf4ff;
+      color: #0043ce;
+      border: 1px solid #d0e2ff;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      padding: 3px 10px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+
+    /* Article Preview Panel */
+    .article-panel {
+      border: 2px solid #d0e2ff;
+      background: #edf4ff;
+      margin-bottom: 48px;
+    }
+    .article-panel-header {
+      background: #0043ce;
+      color: #ffffff;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .article-panel-header .source-name {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      text-transform: uppercase;
+    }
+    .article-panel-header .article-meta {
+      font-size: 11px;
+      opacity: 0.85;
+      letter-spacing: 0.16px;
+    }
+    .article-body {
+      padding: 20px 24px;
+    }
+    .article-row {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 6px 16px;
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+    .article-row .label {
+      color: #6f6f6f;
+      font-weight: 600;
+      letter-spacing: 0.16px;
+    }
+    .article-row .value { color: #161616; }
+    .lang-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.32px;
+      padding: 2px 10px;
+      text-transform: uppercase;
+      background: #0f62fe;
+      color: #ffffff;
+    }
+    .article-excerpt {
+      margin: 16px 0 0;
+      background: #f4f4f4;
+      border-top: 1px solid #e0e0e0;
+    }
+    .excerpt-header {
+      padding: 6px 16px;
+      background: #e8e8e8;
+      font-size: 11px;
+      color: #525252;
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      letter-spacing: 0.16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .excerpt-header .tag {
+      background: #0043ce;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 8px;
+      letter-spacing: 0.32px;
+    }
+    .article-excerpt pre {
+      margin: 0;
+      padding: 14px 16px;
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      font-size: 12px;
+      color: #161616;
+      line-height: 1.7;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+    .excerpt-highlight { color: #0043ce; background: #d0e2ff; display: block; margin: 0 -16px; padding: 0 16px; }
+
+    /* Section */
+    .section-title {
+      font-size: 24px;
+      font-weight: 400;
+      color: #161616;
+      margin: 48px 0 8px;
+    }
+    .section-desc { font-size: 16px; color: #525252; margin-bottom: 28px; max-width: 760px; }
+
+    /* Mode cards */
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: #e0e0e0;
+      border: 1px solid #e0e0e0;
+      margin-bottom: 48px;
+    }
+    @media (max-width: 800px) { .mode-grid { grid-template-columns: 1fr; } }
+
+    .mode-card {
+      background: #fff;
+      padding: 28px 24px 24px;
+      border-top: 4px solid #e0e0e0;
+    }
+    .mode-card.ask  { border-top-color: #0f62fe; }
+    .mode-card.plan { border-top-color: #8a3ffc; }
+    .mode-card.agent{ border-top-color: #198038; }
+
+    .mode-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      margin-bottom: 12px;
+    }
+    .mode-card.ask  .mode-badge { background: #d0e2ff; color: #0043ce; }
+    .mode-card.plan .mode-badge { background: #e8daff; color: #6929c4; }
+    .mode-card.agent .mode-badge { background: #defbe6; color: #0e6027; }
+
+    .mode-card h3 { font-size: 20px; font-weight: 400; color: #161616; margin-bottom: 10px; }
+    .mode-card .desc { font-size: 14px; color: #525252; line-height: 1.5; margin-bottom: 16px; }
+    .mode-card .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+    .tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      background: #f4f4f4;
+      color: #525252;
+      border: 1px solid #e0e0e0;
+      white-space: nowrap;
+    }
+    .mode-card .permission {
+      font-size: 12px;
+      color: #525252;
+      border-top: 1px solid #e0e0e0;
+      padding-top: 12px;
+      line-height: 1.4;
+    }
+    .mode-card .permission strong { color: #161616; }
+
+    /* Workflow steps */
+    .workflow-steps {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+    .workflow-step {
+      flex: 1;
+      min-width: 160px;
+      padding: 16px 20px;
+      background: #f4f4f4;
+      border: 1px solid #e0e0e0;
+    }
+    .workflow-step + .workflow-step { border-left: none; }
+    .workflow-step .step-num {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      text-transform: uppercase;
+      color: #8d8d8d;
+      margin-bottom: 4px;
+    }
+    .workflow-step .step-mode {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .workflow-step.ask .step-mode { color: #0043ce; }
+    .workflow-step.plan .step-mode { color: #6929c4; }
+    .workflow-step.agent .step-mode { color: #0e6027; }
+    .workflow-step .step-desc { font-size: 12px; color: #525252; line-height: 1.4; }
+    .workflow-arrow {
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      font-size: 18px;
+      color: #8d8d8d;
+      align-self: center;
+    }
+    @media (max-width: 672px) { .workflow-arrow { display: none; } }
+
+    /* Callout & Tip box */
+    .callout-tip {
+      background: #edf4ff;
+      border-left: 4px solid #0f62fe;
+      padding: 14px 18px;
+      margin: 20px 0 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .callout-tip .tip-badge {
+      background: #0f62fe;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.32px;
+      padding: 2px 8px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      margin-top: 1px;
+    }
+    .callout-tip .tip-content {
+      font-size: 14px;
+      color: #161616;
+      line-height: 1.5;
+    }
+    .callout-tip code {
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      background: #d0e2ff;
+      color: #0043ce;
+      padding: 2px 6px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* Demo sections */
+    .demo-section {
+      border-left: 4px solid #e0e0e0;
+      padding: 0 0 0 20px;
+      margin-bottom: 40px;
+    }
+    .demo-section.ask  { border-left-color: #0f62fe; }
+    .demo-section.plan { border-left-color: #8a3ffc; }
+    .demo-section.agent{ border-left-color: #198038; }
+
+    .demo-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .demo-section.ask  .demo-label { color: #0043ce; }
+    .demo-section.plan .demo-label { color: #6929c4; }
+    .demo-section.agent .demo-label { color: #0e6027; }
+
+    .demo-section h3 { font-size: 18px; font-weight: 400; color: #161616; margin-bottom: 6px; }
+    .demo-section p { font-size: 14px; color: #525252; margin-bottom: 10px; }
+
+    /* Prompt block */
+    .prompt-block {
+      background: #f4f4f4;
+      margin: 10px 0 4px;
+    }
+    .prompt-block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 12px 0;
+    }
+    .prompt-block-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #525252;
+      text-transform: uppercase;
+    }
+    .copy-btn {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #0f62fe;
+      background: #ffffff;
+      border: 1px solid #0f62fe;
+      padding: 3px 10px;
+      cursor: pointer;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+    .copy-btn:hover { background: #0f62fe; color: #ffffff; }
+    .copy-btn.copied { background: #198038; border-color: #198038; color: #ffffff; }
+    .prompt-block pre {
+      margin: 0;
+      background: transparent;
+      padding: 10px 20px 14px;
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      font-size: 13px;
+      color: #161616;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* Expected output */
+    .expected {
+      background: #f4f4f4;
+      border-left: 2px solid #8d8d8d;
+      padding: 10px 16px;
+      font-size: 13px;
+      color: #525252;
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      line-height: 1.6;
+      margin-top: 4px;
+      white-space: pre-wrap;
+    }
+    .expected-label { font-size: 11px; color: #8d8d8d; font-weight: 600; letter-spacing: 0.32px; margin-bottom: 2px; }
+
+    /* Sample output block */
+    .output-block {
+      background: #f4f4f4;
+      border: 1px solid #e0e0e0;
+      padding: 16px 20px;
+      font-size: 13px;
+      color: #161616;
+      line-height: 1.7;
+      margin: 12px 0 4px;
+    }
+    .output-block .word { font-weight: 600; color: #0043ce; }
+    .output-block .ipa { color: #6f6f6f; font-family: 'IBM Plex Mono', 'Courier New', monospace; }
+    .output-block .meaning { color: #161616; }
+    .output-block .example { color: #525252; font-style: italic; margin-top: 4px; padding-left: 12px; border-left: 2px solid #e0e0e0; }
+
+    /* Quick reference table */
+    .carbon-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 32px;
+    }
+    .carbon-table th {
+      background: #f4f4f4;
+      color: #161616;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 12px 16px;
+      border-bottom: 2px solid #e0e0e0;
+      text-align: left;
+    }
+    .carbon-table td {
+      color: #525252;
+      font-size: 14px;
+      padding: 14px 16px;
+      border-bottom: 1px solid #e0e0e0;
+      line-height: 1.5;
+    }
+    .carbon-table tr:last-child td { border-bottom: none; }
+    .carbon-table tr:hover td { background: #f4f4f4; }
+
+    .pill {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+    }
+    .pill-ask   { background: #d0e2ff; color: #0043ce; }
+    .pill-plan  { background: #e8daff; color: #6929c4; }
+    .pill-agent { background: #defbe6; color: #0e6027; }
+
+    /* CTA */
+    .cta-banner {
+      background: #0f62fe;
+      color: #ffffff;
+      padding: 40px 48px;
+      margin-top: 48px;
+    }
+    .cta-banner h3 { font-size: 22px; font-weight: 300; margin-bottom: 10px; }
+    .cta-banner p { font-size: 15px; opacity: 0.9; max-width: 600px; }
+    .cta-link {
+      display: inline-block;
+      margin-top: 8px;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.16px;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.5);
+      padding-bottom: 2px;
+    }
+    .cta-link:hover { border-bottom-color: #ffffff; }
+
+    footer {
+      background: #f4f4f4;
+      color: #525252;
+      font-size: 14px;
+      letter-spacing: 0.16px;
+      line-height: 1.29;
+      padding: 64px 32px;
+      text-align: center;
+      margin-top: 64px;
+      border-top: 1px solid #e0e0e0;
+    }
+    footer span { font-size: 12px; color: #8d8d8d; }
+
+    @media (max-width: 672px) {
+      .utility-bar { display: none; }
+      .page-content { padding: 40px 16px 64px; }
+      .hero h1 { font-size: 32px; }
+      .cta-banner { padding: 32px 24px; }
+      .article-row { grid-template-columns: 90px 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="utility-bar">IBM Bob · 高中教師 AI 備課與教學素材工作坊 · 為課程主題備課</div>
+
+  <nav class="top-nav">
+    <a class="logo" href="index.html">IBM <span>Bob</span></a>
+    <a class="back-link" href="index.html">← 回索引</a>
+  </nav>
+
+  <main class="page-content">
+
+    <div class="hero">
+      <p class="hero-eyebrow">工作坊教材 · IBM Bob 入門</p>
+      <span class="scenario-tag">情境：為課程主題備課</span>
+      <h1>IBM Bob 入門操作指南</h1>
+      <p>Ask、Plan、Agent — 三種模式對應三種工作場景。以一個<strong>高中課程主題</strong>為起點，帶你走完從「搞懂主題」到「產出教案與教學網頁」的完整備課流程。不需要任何程式知識。</p>
+    </div>
+
+    <!-- Teacher Input Panel -->
+    <h2 class="section-title">情境：下週要教新單元，想先備好一份教案</h2>
+    <p class="section-desc">你是高二英文老師，下週要以一篇時事新聞設計新單元，想要一份能直接調整使用的教案、幾組能帶動課堂討論的提問，還有一個可以分享給學生的教學網頁。這正是 IBM Bob 教師備課助手的用武之地。以下為說明用的示例輸入，請換成你自己的課程。</p>
+
+    <div class="article-panel">
+      <div class="article-panel-header">
+        <span class="source-name">教師輸入欄位 — 示例（僅供說明）</span>
+        <span class="article-meta">必填欄位：subject、grade、lesson_topic、duration_minutes、student_level</span>
+      </div>
+      <div class="article-body">
+        <div class="article-row">
+          <span class="label">課程主題</span>
+          <span class="value">AI 時代的人文素養：從美國大學開設 AI 學位談起</span>
+        </div>
+        <div class="article-row">
+          <span class="label">素材來源</span>
+          <span class="value"><a href="https://www.cna.com.tw/news/aopl/202608280020.aspx" target="_blank" rel="noopener">中央社〈美大學開AI學位蔚為風潮　專家：人文教育更顯重要〉</a></span>
+        </div>
+        <div class="article-row">
+          <span class="label">時數</span>
+          <span class="value">50 分鐘 × 2 堂</span>
+        </div>
+        <div class="article-row">
+          <span class="label">學科 / 年級</span>
+          <span class="value"><span class="lang-badge">英文</span> <span class="lang-badge">高二</span></span>
+        </div>
+        <div class="article-row">
+          <span class="label">本次目標</span>
+          <span class="value">先對照課綱，再以這篇新聞為素材，產出差異化教案、設計啟發提問、撰寫摘要與宣傳文案，並搭建成教學網站</span>
+        </div>
+
+        <div class="article-excerpt">
+          <div class="excerpt-header">
+            <span>你會給 Bob 的資料（示例）</span>
+            <span class="tag">TEACHER INPUT</span>
+          </div>
+          <pre>學科：英文
+年級：高二
+課程主題：AI 時代的人文素養：從美國大學開設 AI 學位談起
+素材：https://www.cna.com.tw/news/aopl/202608280020.aspx
+時數：50 分鐘 × 2 堂
+學生程度：一般程度（此為示例，請改成你的班級特性）
+差異化需求：希望同一堂課能照顧基礎與進階兩種程度的學生（此為示例，可不填）
+
+注意：以上為示例輸入。必填資訊缺少時，Bob 會先詢問你，不會自行假設。
+產生教材前，Bob 會先查專案內的 108 課綱資料夾（綜合型高級中等學校版本）；
+若你的科目在裡面找不到，會直接略過這一步，不需要你補課綱。
+請勿在對話中放入學生姓名、座號、成績等個資。</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mode Overview Cards -->
+    <h2 class="section-title">三種模式一覽</h2>
+    <p class="section-desc">確定課程主題後，正確的備課流程是依序切換三個模式，每個模式做它最擅長的事。</p>
+
+    <div class="mode-grid">
+      <div class="mode-card ask">
+        <span class="mode-badge">Ask</span>
+        <h3>知識模式</h3>
+        <p class="desc">閱讀並消化課程素材（如這篇新聞）、釐清主題的概念、預想學生可能的學習難點、討論教學方向。<strong>不會修改任何檔案</strong>，適合在動手備課前先搞懂主題。</p>
+        <div class="tag-row">
+          <span class="tag">理解素材</span>
+          <span class="tag">解釋概念</span>
+          <span class="tag">預想難點</span>
+          <span class="tag">討論教法</span>
+        </div>
+        <p class="permission"><strong>權限：</strong>唯讀。不寫入本地檔案，不執行命令。</p>
+      </div>
+      <div class="mode-card plan">
+        <span class="mode-badge">Plan</span>
+        <h3>規劃模式</h3>
+        <p class="desc">規劃教案結構、擬定教學目標、切分時間流程與活動。聚焦「<strong>教什麼、怎麼教</strong>」，在動手前確認方向。</p>
+        <div class="tag-row">
+          <span class="tag">教學目標擬定</span>
+          <span class="tag">時間流程切分</span>
+          <span class="tag">活動設計</span>
+          <span class="tag">提問方向規劃</span>
+        </div>
+        <p class="permission"><strong>權限：</strong>可讀取檔案，僅輸出計畫文字，不直接執行修改。</p>
+      </div>
+      <div class="mode-card agent">
+        <span class="mode-badge">Agent</span>
+        <h3>執行模式</h3>
+        <p class="desc">根據規劃，先對照課綱，再自動產出差異化教案、啟發提問、摘要與宣傳文案，並搭建主題式教學網站（課程官網、活動宣傳頁或遊戲化互動專題）。</p>
+        <div class="tag-row">
+          <span class="tag">生成教案</span>
+          <span class="tag">設計提問</span>
+          <span class="tag">撰寫文案</span>
+          <span class="tag">產出 HTML</span>
+        </div>
+        <p class="permission"><strong>權限：</strong>完整讀寫，可呼叫工具、執行 Shell 命令。</p>
+      </div>
+    </div>
+
+    <!-- Workflow -->
+    <h2 class="section-title">完整備課工作流程</h2>
+    <p class="section-desc">從確定課程主題到完成教案與教學網頁，依序走三個步驟。</p>
+
+    <div class="workflow-steps">
+      <div class="workflow-step ask">
+        <div class="step-num">Step 1</div>
+        <div class="step-mode">Ask 模式</div>
+        <div class="step-desc">搞懂課程主題<br>確認學生難點</div>
+      </div>
+      <div class="workflow-arrow">→</div>
+      <div class="workflow-step plan">
+        <div class="step-num">Step 2</div>
+        <div class="step-mode">Plan 模式</div>
+        <div class="step-desc">規劃教學目標<br>與時間流程</div>
+      </div>
+      <div class="workflow-arrow">→</div>
+      <div class="workflow-step agent">
+        <div class="step-num">Step 3</div>
+        <div class="step-mode">Agent 模式</div>
+        <div class="step-desc">執行備課計畫<br>生成教案與網頁</div>
+      </div>
+    </div>
+
+    <!-- Demos -->
+    <h2 class="section-title">實際演練</h2>
+    <p class="section-desc">以上方的示例課程主題為起點，依序示範三個模式的正確用法。</p>
+
+    <!-- Tip Callout -->
+    <div class="callout-tip">
+      <span class="tip-badge">TIP</span>
+      <div class="tip-content">
+        在對話中輸入 <code>@</code> 符號（例如 <code>@檔案名稱</code> 或 <code>@資料夾名稱</code>），即可快速將專案中的特定檔案或整個資料夾加入對話上下文，讓 Bob 直接讀取與分析目標內容。
+      </div>
+    </div>
+
+    <!-- Ask Demo -->
+    <div class="demo-section ask">
+      <p class="demo-label">Step 1 — Ask 模式</p>
+      <h3>讀懂新聞素材，確認教學起點</h3>
+      <p>拿到課程主題與素材，第一步不是馬上寫教案。先用 Ask 模式，把新聞網址、學科、年級與學生程度告訴 Bob，請它整理這篇新聞的重點、可延伸的英文主題與關鍵詞彙、學生可能卡在哪裡，以及哪些內容適合先講。若你已有課本或講義檔案，可用 <code>@檔案名稱</code> 引用。Bob 的說明僅供參考，請依原文與你的專業判斷核對。</p>
+
+      <div class="prompt-block">
+        <div class="prompt-block-header">
+          <span class="prompt-block-label">Prompt — Ask 模式</span>
+          <button class="copy-btn" data-target="prompt-ask">複製</button>
+        </div>
+        <pre id="prompt-ask">我是高二英文老師，下週想用這篇新聞當教材，主題是「AI 時代的人文素養」：https://www.cna.com.tw/news/aopl/202608280020.aspx
+課程是 50 分鐘上 2 堂，班上是一般程度。
+請先幫我讀這篇新聞，整理出重點，並告訴我：
+1. 可以延伸出哪些英文閱讀或討論的主題？
+2. 學生可能會卡在哪裡？
+3. 哪些內容適合先講，哪些留給程度好的學生進階討論？
+我現在只是想先了解，請不要修改任何檔案。</pre>
+      </div>
+      <div class="expected-label">Bob 會回答的內容方向（示意，實際回答依你的輸入而定）</div>
+      <div class="expected">✓ 整理新聞重點：美國大學開設 AI 學位的風潮、AI 倫理課程，以及「人文素養在 AI 時代更顯重要」的論點（請教師依原文核對）
+✓ 列出一般程度學生可能的學習難點（如抽象詞彙、論點理解），並建議對應的英語教學策略方向
+✓ 建議先講的基礎內容，以及可留給進階提問的延伸內容
+✓ 若有不確定之處，會提醒你向課本或可靠來源確認
+✓ 不修改任何檔案</div>
+    </div>
+
+    <!-- Plan Demo -->
+    <div class="demo-section plan">
+      <p class="demo-label">Step 2 — Plan 模式</p>
+      <h3>規劃教案的目標、時間流程與活動</h3>
+      <p>Ask 模式已幫你掌握主題與學生難點。現在切換 Plan 模式，在動手產出教案之前，讓 Bob 規劃教學目標、時間流程與活動設計的草案。<strong>執行此步驟後，Bob 會在工作區產生一份結構化的規劃文件（一份規劃文件）</strong>，供你在進入 Agent 模式前檢視確認。教學目標若由 Bob 擬定，會標示為「擬定，請教師確認」，最終由你決定。</p>
+
+      <div class="prompt-block">
+        <div class="prompt-block-header">
+          <span class="prompt-block-label">Prompt — Plan 模式</span>
+          <button class="copy-btn" data-target="prompt-plan">複製</button>
+        </div>
+        <pre id="prompt-plan">根據剛剛整理的內容，幫我規劃這個單元的備課計畫。
+計畫要包含：
+1. 對應的課綱
+2. 教學目標
+3. 2 堂課共 100 分鐘的時間流程與活動
+4. 基礎和進階兩種程度各自怎麼教
+5. 每個教學段落可以問學生什麼問題
+6. 最後要做出的教案和教學網站
+請整理成一份完整的規劃文件，先讓我確認，不要直接開始製作。</pre>
+      </div>
+      <div class="expected-label">Bob 會回答的內容方向（示意）</div>
+      <div class="expected">✓ 產生一份結構化的規劃文件
+✓ 擬定教學目標草案，標示為「擬定，請教師確認」
+✓ 規劃時間流程：各段時間加總須等於 100 分鐘（50 分鐘 × 2 堂）
+✓ 建議每個教學段落的活動（如關鍵詞彙預習、新聞閱讀、小組討論、英文短講或寫作），以及暖身、核心、延伸三層提問的方向
+✓ 說明基礎與進階兩種程度各自的目標、任務與支持方式
+✓ 說明會先查 108 課綱資料夾（英語文）；找不到對應條目時會略過，並在規劃中註明
+✓ 規劃如何引用這篇新聞作為素材，並標示出處
+✓ 規劃輸出目標：一份教案文件與一個教學網站
+✓ 僅產生/輸出計畫文件，不執行實際的教案生成或修改</div>
+    </div>
+
+    <!-- Agent Demo -->
+    <div class="demo-section agent">
+      <p class="demo-label">Step 3 — Agent 模式</p>
+      <h3>自動產出差異化教案，搭建教學網站</h3>
+      <p>備課規劃已在 Plan 模式確認。切換至 Agent 模式，Bob 會依本專案的「工作說明書」（<code>AGENTS.md</code>）所定的工作流自動執行：課綱對照 → 差異化教案設計 → 啟發提問 → 摘要與宣傳文案 → 主題式網站。其中宣傳文案的對象與語氣、網站要做成哪一種類型，若你沒有指定，Bob 會先詢問你，不會自行假設。</p>
+
+      <div class="prompt-block">
+        <div class="prompt-block-header">
+          <span class="prompt-block-label">Prompt — Agent 模式</span>
+          <button class="copy-btn" data-target="prompt-agent">複製</button>
+        </div>
+        <pre id="prompt-agent">規劃我看過了，沒有問題。請照這份計畫開始幫我備課，把教案和教學網站做出來。</pre>
+      </div>
+      <div class="expected-label">Bob 會做的動作（依專案工作說明書）</div>
+      <div class="expected">✓ Step 0 課綱對照：查 108 課綱資料夾中對應的領域；找到就逐字引用並請你確認，找不到就略過並在教案註明
+✓ 選用 A 素材匯入：抓取指定的新聞全文作為教學素材，並標示出處
+✓ Step 1 差異化教案設計：確認必填資訊後，建立教案文件「AI時代的人文素養」（放在「英文-高二」資料夾），寫入教學概覽、教學目標、時間流程與活動設計，以及分層的差異化設計
+✓ Step 2 啟發提問：把暖身、核心、延伸與批判提問寫入同一份教案，並附各程度可用的提示
+✓ Step 3 摘要與宣傳文案：寫入摘要與宣傳文案章節
+✓ Step 4 主題式網站：先問你要做課程官網、活動宣傳頁或遊戲化互動專題，再把教案搭建成網站並設計版面與配色，放進同一個教案資料夾；有多個網頁時另做一個入口頁（不需要你寫任何程式）
+✓ 選用：需要用圖表幫助學生理解某個概念時，可請 Bob 另外畫一張 SVG 學習圖表
+✓ 選用 Step 5：你在本機確認成果後，若想發佈到 internet，Bob 會先請你確認要上傳的網頁檔案（不含教案文件），再用發佈技能處理
+✓ 完成後告訴你檔案存放在哪裡；教學目標與評量方式仍由教師確認</div>
+
+      <!-- Sample Output Preview -->
+      <div style="margin-top: 12px;">
+        <div class="expected-label">教案產出片段（示例，僅供說明版型，非實際執行結果）</div>
+        <div class="output-block">
+          <p><span class="word">時間流程與活動設計</span> <span class="ipa">教案：英文-高二 / AI時代的人文素養</span> &nbsp;·&nbsp; 50 分鐘 × 2 堂</p>
+          <p class="meaning">【示例】0–5 分鐘 引起動機｜5–25 分鐘 新聞閱讀與關鍵詞彙｜…（各段時間加總須等於 100 分鐘）</p>
+          <p class="example">啟發提問示例：暖身提問、核心提問、延伸與批判提問，各附「設計意圖」與「可能的學生回應 / 追問」。</p>
+          <p style="margin-top:8px; font-size:12px; color:#8d8d8d;">以上為版型示意；實際內容由 Bob 依你的輸入產生，並由教師審閱調整。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Reference Table -->
+    <h2 class="section-title">快速對照表</h2>
+
+    <table class="carbon-table">
+      <thead>
+        <tr>
+          <th>模式</th>
+          <th>備課情境下的用途</th>
+          <th>典型 Prompt 關鍵字</th>
+          <th>會修改檔案？</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="pill pill-ask">Ask</span></td>
+          <td>搞懂課程主題、解釋概念、預想學生難點</td>
+          <td>「解釋」「這個概念是什麼」「學生可能卡在哪」「不要改任何東西」</td>
+          <td>否</td>
+        </tr>
+        <tr>
+          <td><span class="pill pill-plan">Plan</span></td>
+          <td>規劃教學目標、切分時間流程、設計活動與提問方向</td>
+          <td>「規劃」「建議」「教學目標」「時間怎麼分配」「不要改檔案」</td>
+          <td>否</td>
+        </tr>
+        <tr>
+          <td><span class="pill pill-agent">Agent</span></td>
+          <td>對照課綱後自動產出差異化教案、啟發提問、摘要與文案，搭建教學網站</td>
+          <td>「執行」「幫我產出」「生成 HTML」「依照計畫做」</td>
+          <td>是</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- CTA -->
+    <div class="cta-banner">
+      <h3>掌握三種模式後，下一步是進階功能</h3>
+      <p>認識 MCP、模式與技能，讓 AI 助手更強大、更貼近你的教學需求。</p>
+      <p style="margin-top:14px"><a href="02-bob-advanced-usage.html" class="cta-link">進入單元二：IBM Bob 進階功能 →</a></p>
+    </div>
+
+  </main>
+
+  <footer>
+    <span>Made with IBM Bob</span>
+  </footer>
+
+<script>
+  document.querySelectorAll('.copy-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var targetId = btn.getAttribute('data-target');
+      var text = document.getElementById(targetId).innerText;
+      navigator.clipboard.writeText(text).then(function() {
+        btn.textContent = '已複製 ✓';
+        btn.classList.add('copied');
+        setTimeout(function() {
+          btn.textContent = '複製';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    });
+  });
+</script>
+</body>
+</html>

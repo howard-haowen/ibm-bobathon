@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 時代的人文素養 — 高二英文課程官網</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #e5e1d8; --surface: #dad5ca; --ink: #2a1d17; --muted: #5a4a40;
+  --accent: #456f3a; --accent-ink: #ffffff;
+  --step-small: clamp(0.875rem, 0.85rem + 0.1vw, 0.9375rem);
+  --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  --step-head: clamp(2.5rem, 1.2rem + 5vw, 5.5rem);
+  --margin: clamp(20px, 4vw, 48px);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: "Epilogue", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif; background: var(--bg); color: var(--ink); font-size: var(--step-body); line-height: 1.6; }
+a { color: inherit; }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.wrap { padding-left: var(--margin); padding-right: var(--margin); }
+header.top { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 28px var(--margin) 0; font-size: var(--step-small); }
+header.top .mark { font-weight: 900; text-decoration: none; letter-spacing: -0.02em; }
+header.top nav { display: flex; gap: 24px; flex-wrap: wrap; }
+header.top nav a { text-decoration: none; }
+header.top nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.backlink { display: inline-block; margin: 20px var(--margin) 0; font-size: var(--step-small); font-weight: 500; }
+
+/* hero */
+.hero { min-height: 66svh; display: grid; grid-template-columns: 4fr 8fr; column-gap: 32px; align-content: end; padding: 0 var(--margin) 72px; }
+.hero .side { align-self: end; max-width: 32ch; font-size: var(--step-lead); line-height: 1.4; color: var(--muted); padding-bottom: 8px; }
+.hero .side .btn { margin-top: 28px; }
+.hero h1 { grid-column: 2; grid-row: 1; font-weight: 900; font-size: clamp(3rem, 8.4vw, 8.5rem); line-height: 0.95; letter-spacing: -0.04em; align-self: end; }
+.hero .side { grid-column: 1; grid-row: 1; }
+.mask { display: block; overflow: hidden; padding-bottom: 0.08em; }
+.mask > span { display: block; transform: translateY(0); }
+.js .mask > span { transform: translateY(105%); animation: rise 900ms cubic-bezier(.16,1,.3,1) forwards; }
+.js .mask:nth-child(2) > span { animation-delay: 110ms; }
+@keyframes rise { to { transform: translateY(0); } }
+.btn { display: inline-block; background: var(--accent); color: var(--accent-ink); font-weight: 500; font-size: var(--step-body); padding: 14px 28px; min-height: 48px; text-decoration: none; border: 0; cursor: pointer; font-family: inherit; transition: transform 160ms ease, background 160ms ease; }
+.btn:hover { background: var(--ink); transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+
+/* sections */
+section { padding: 140px var(--margin); }
+section h2 { font-weight: 900; font-size: clamp(2rem, 1.2rem + 3.4vw, 4.25rem); line-height: 1; letter-spacing: -0.04em; margin-bottom: 56px; max-width: 18ch; }
+.tight { padding-top: 40px; }
+.surface { background: var(--surface); }
+p.statement { font-size: var(--step-lead); line-height: 1.45; max-width: 30ch; }
+.muted { color: var(--muted); }
+.small { font-size: var(--step-small); }
+
+/* rows list */
+.rows { max-width: 760px; margin-left: 22%; }
+.rows .row { display: flex; justify-content: space-between; gap: 24px; padding: 10px 0; font-size: var(--step-body); }
+.rows .row .k { font-weight: 500; flex: 0 0 auto; max-width: 62%; }
+.rows .row .v { font-size: var(--step-small); color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+.rows .group { margin-top: 44px; font-size: var(--step-small); color: var(--muted); }
+.rows h3 { font-weight: 500; font-size: var(--step-lead); margin-bottom: 20px; }
+
+/* goals */
+.goals { display: grid; grid-template-columns: 1fr 1fr; gap: 56px 56px; }
+.goals p { font-size: var(--step-lead); line-height: 1.45; }
+.goals p small { display: block; margin-top: 10px; font-size: var(--step-small); color: var(--muted); }
+
+/* staircase */
+.stairs { display: grid; grid-template-columns: repeat(12, 1fr); row-gap: 56px; }
+.stairs .stage:nth-child(1) { grid-column: 1 / -1; }
+.stairs .stage:nth-child(2) { grid-column: 3 / -1; }
+.stairs .stage:nth-child(3) { grid-column: 5 / -1; }
+.stairs .stage:nth-child(4) { grid-column: 7 / -1; }
+.stairs h3 { font-weight: 900; font-size: clamp(2rem, 1.2rem + 3.4vw, 4.25rem); line-height: 1; letter-spacing: -0.03em; }
+.stairs .stage:last-child h3 { color: var(--accent); }
+.stairs p { margin-top: 12px; max-width: 34ch; font-size: var(--step-body); color: var(--muted); }
+
+/* tables (real tables keep lines) */
+.tablewrap { overflow-x: auto; margin: 24px 0 8px; }
+table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: var(--step-small); background: var(--bg); }
+th, td { text-align: left; vertical-align: top; padding: 12px 14px; border: 1px solid #b9b3a6; line-height: 1.5; }
+th { background: var(--surface); font-weight: 500; }
+.surface table { background: var(--bg); }
+.subhead { font-weight: 500; font-size: var(--step-lead); margin: 64px 0 8px; }
+.subhead:first-of-type { margin-top: 0; }
+
+/* reading passage */
+.field { background: var(--accent); color: var(--accent-ink); }
+.field h2 { color: var(--accent-ink); }
+.passage { max-width: 62ch; font-size: var(--step-lead); line-height: 1.5; }
+.passage p + p { margin-top: 24px; }
+.passage-note { margin-top: 32px; font-size: var(--step-small); max-width: 62ch; }
+
+/* questions */
+.qcols { columns: 2; column-gap: 64px; }
+.q { break-inside: avoid; margin-bottom: 28px; }
+.q .qt { font-weight: 500; }
+.q ul { list-style: none; margin-top: 6px; font-size: var(--step-small); color: var(--muted); }
+.q li { margin-bottom: 4px; }
+.q li b { color: var(--ink); font-weight: 500; }
+.qgroup { font-weight: 900; font-size: var(--step-lead); letter-spacing: -0.03em; margin: 112px 0 24px; break-after: avoid; column-span: all; }
+.qgroup:first-child { margin-top: 0; }
+
+/* summary / promo */
+.two { display: grid; grid-template-columns: 4fr 8fr; column-gap: 32px; }
+.two > h2 { margin-bottom: 0; }
+.summary-text { max-width: 60ch; }
+.summary-text p + p, .summary-text ul { margin-top: 20px; }
+.summary-text ul { padding-left: 1.2em; }
+.summary-text li { margin-bottom: 8px; }
+.promo-title { font-weight: 900; font-size: clamp(2rem, 1.2rem + 3.4vw, 4.25rem); line-height: 1; letter-spacing: -0.04em; max-width: 14ch; margin-bottom: 32px; }
+.promo p { max-width: 52ch; margin-bottom: 20px; }
+.promo dl { max-width: 52ch; }
+.promo dt { font-weight: 500; margin-top: 20px; }
+
+/* cta band */
+a.cta { display: block; position: relative; background: var(--accent); color: var(--accent-ink); min-height: 60svh; padding: 20px var(--margin) 24px; text-decoration: none; overflow: hidden; }
+a.cta .tl { max-width: 24ch; font-size: var(--step-body); }
+a.cta .arrow { position: absolute; top: 20px; right: var(--margin); width: 48px; height: 48px; }
+a.cta .word { position: absolute; left: var(--margin); right: var(--margin); bottom: 24px; font-weight: 900; font-size: clamp(5rem, 24vw, 22rem); line-height: 0.85; letter-spacing: -0.05em; white-space: nowrap; }
+a.cta:hover, a.cta:focus-visible { background: var(--ink); color: var(--bg); }
+a.cta:hover .word { transform: translateY(-4px); }
+a.cta .word { transition: transform 200ms ease; }
+
+/* footer */
+footer.end { background: var(--ink); color: var(--bg); min-height: 90svh; display: flex; flex-direction: column; justify-content: space-between; padding: 40px var(--margin) 28px; }
+footer.end .notes { display: grid; grid-template-columns: 7fr 5fr; gap: 24px; font-size: var(--step-small); }
+footer.end .notes p { max-width: 50ch; margin-bottom: 8px; }
+footer.end .notes .back { justify-self: end; }
+footer.end .big { font-weight: 900; font-size: clamp(2.5rem, 8.4vw, 8.5rem); line-height: 0.95; letter-spacing: -0.04em; }
+footer.end .meta { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: var(--step-small); margin-top: 48px; }
+footer.end a { color: var(--bg); }
+
+/* reveal */
+.js .reveal { opacity: 0; transform: translateY(24px); transition: opacity 700ms ease, transform 700ms cubic-bezier(.16,1,.3,1); }
+.js .reveal.in { opacity: 1; transform: none; }
+
+@media (max-width: 900px) {
+  .hero { display: block; padding-bottom: 48px; min-height: 80svh; }
+  .hero h1 { font-size: 12.5vw; margin-top: 28svh; margin-bottom: 28px; }
+  .hero .side { font-size: 1.125rem; }
+  section { padding: 88px var(--margin); }
+  .rows { margin-left: 0; }
+  .goals { grid-template-columns: 1fr; gap: 36px; }
+  .stairs { row-gap: 40px; }
+  .stairs { display: block; }
+  .stairs .stage { margin-bottom: 40px; }
+  .stairs .stage:nth-child(2) { margin-left: 6vw; }
+  .stairs .stage:nth-child(3) { margin-left: 12vw; }
+  .stairs .stage:nth-child(4) { margin-left: 18vw; }
+  .stairs h3 { font-size: 8.4vw; }
+  .qcols { columns: 1; }
+  .two { display: block; }
+  .two > h2 { margin-bottom: 32px; }
+  a.cta { min-height: 46svh; }
+  a.cta .arrow { width: 32px; height: 32px; }
+  footer.end .notes { display: block; }
+  footer.end .notes .back { display: block; margin-top: 12px; }
+  footer.end { min-height: 60svh; }
+  footer.end .big { font-size: 11vw; margin-top: 56px; }
+}
+@media (max-width: 700px) {
+  .tablewrap { overflow: visible; }
+  table { min-width: 0; }
+  table thead { position: absolute; left: -9999px; }
+  table, tbody, tr, td { display: block; width: 100%; }
+  tr { margin-bottom: 28px; }
+  td { border: 0; padding: 6px 14px; }
+  td::before { content: attr(data-label) "　"; font-weight: 500; color: var(--muted); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js .mask > span { transform: none; animation: none; }
+  .js .reveal { opacity: 1; transform: none; transition: none; }
+  .btn, a.cta .word { transition: none; }
+}
+@media print {
+  header.top, a.cta, .btn { display: none; }
+  body { background: #fff; font-size: 11pt; }
+  section { padding: 24pt 0; break-inside: auto; }
+  .hero { min-height: 0; padding-bottom: 24pt; }
+  .field, footer.end { background: #fff; color: #000; }
+  .field h2 { color: #000; }
+}
+</style>
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+<header class="top">
+  <a class="mark" href="#top">英文・高二</a>
+  <nav aria-label="頁面導覽">
+    <a href="#goals">教學目標</a>
+    <a href="#flow">兩堂課流程</a>
+    <a href="#questions">啟發提問</a>
+  </nav>
+</header>
+
+<main id="top">
+  <a class="backlink" href="index.html">← 回入口頁</a>
+
+  <div class="hero">
+    <h1><span class="mask"><span>AI 時代的</span></span><span class="mask"><span>人文素養</span></span></h1>
+    <div class="side">
+      <p>從美國大學開設 AI 學位談起。高二英文，50 分鐘 × 2 堂，讀一篇新聞，再用英文說出你的看法。</p>
+      <a class="btn" href="#flow">看兩堂課怎麼上</a>
+    </div>
+  </div>
+
+  <section id="overview" class="surface" aria-labelledby="h-overview">
+    <h2 id="h-overview">教學概覽</h2>
+    <div class="rows reveal">
+      <div class="row"><span class="k">學科 / 年級</span><span class="v">英文 / 高二</span></div>
+      <div class="row"><span class="k">課程主題</span><span class="v">AI 時代的人文素養：從美國大學開設 AI 學位談起</span></div>
+      <div class="row"><span class="k">時數</span><span class="v">50 分鐘 × 2 堂（共 100 分鐘）</span></div>
+      <div class="row"><span class="k">學生程度與背景</span><span class="v">一般程度（示例輸入，請依班級特性調整）</span></div>
+      <div class="row"><span class="k">差異化需求</span><span class="v">同堂照顧基礎與進階兩種程度</span></div>
+      <div class="row"><span class="k">素材</span><span class="v"><a href="https://www.cna.com.tw/news/aopl/202608280020.aspx" target="_blank" rel="noopener">中央社 2026/8/28 報導</a></span></div>
+
+      <p class="group">課綱對應</p>
+      <p class="small muted" style="margin:8px 0 16px;">逐字引用自 108 課綱英語文（綜合型高級中等學校版本）。學習階段Ⅴ涵蓋 10–12 年級，不分高一至高三。</p>
+      <div class="row"><span class="k">能閱讀不同體裁、不同主題的文章。</span><span class="v">學習表現 3-Ⅴ-9</span></div>
+      <div class="row"><span class="k">能讀懂簡易短文或故事，並以簡短的句子述說或寫出主旨或大意。</span><span class="v">學習表現 5-Ⅴ-10</span></div>
+      <div class="row"><span class="k">能依據上下文分辨客觀事實與主觀意見。</span><span class="v">學習表現 9-Ⅴ-3</span></div>
+      <div class="row"><span class="k">能依主題或情境以英語簡短描述事件或回答問題。</span><span class="v">學習表現 2-Ⅴ-3</span></div>
+      <div class="row"><span class="k">樂於以英語文為工具，接觸新知並關注國際議題。</span><span class="v">學習表現 *6-Ⅴ-6</span></div>
+      <div class="row"><span class="k">能關心時事，了解國際情勢，以培養國際視野。</span><span class="v">學習表現 8-Ⅴ-5</span></div>
+      <div class="row"><span class="k">能檢視自我學習過程，並隨時改進。</span><span class="v">學習表現 7-Ⅴ-8</span></div>
+      <div class="row"><span class="k">不同體裁、不同主題之文章。</span><span class="v">學習內容 Ae-Ⅴ-8</span></div>
+      <div class="row"><span class="k">藉文字線索，對客觀事實及主觀意見的分辨。</span><span class="v">學習內容 D-Ⅴ-3</span></div>
+      <div class="row"><span class="k">引導式討論。</span><span class="v">學習內容 B-Ⅴ-4</span></div>
+      <div class="row"><span class="k">國際議題(如環境與永續、正義與人權等) 。</span><span class="v">學習內容 *C-Ⅴ-4</span></div>
+    </div>
+  </section>
+
+  <section id="goals" aria-labelledby="h-goals">
+    <h2 id="h-goals">教學目標</h2>
+    <p class="small muted reveal" style="margin:-32px 0 40px;">擬定，請教師確認</p>
+    <div class="goals">
+      <p class="reveal">讀懂一篇改寫自新聞的英文短文，用簡短英文說出主旨。<small>對應 3-Ⅴ-9、5-Ⅴ-10</small></p>
+      <p class="reveal">依據文中線索，分辨可查證的事實與專家的看法。<small>對應 9-Ⅴ-3、D-Ⅴ-3</small></p>
+      <p class="reveal">用英文簡短陳述「AI 時代為什麼還需要人文素養」，並說出一個理由。<small>對應 2-Ⅴ-3、*6-Ⅴ-6、8-Ⅴ-5</small></p>
+      <p class="reveal">回頭檢視自己這兩堂課的學習，提出一項改進。<small>對應 7-Ⅴ-8</small></p>
+    </div>
+  </section>
+
+  <section id="flow" class="surface" aria-labelledby="h-flow">
+    <h2 id="h-flow">兩堂課的流程</h2>
+    <div class="stairs">
+      <div class="stage reveal"><h3>先讀懂新聞。</h3><p>詞彙預習，再默讀短文，標出每段主旨。</p></div>
+      <div class="stage reveal"><h3>再分辨事實與看法。</h3><p>六句敘述卡分類，圈出線索詞。</p></div>
+      <div class="stage reveal"><h3>接著討論誰該負責。</h3><p>自動駕駛車撞傷人，用句型表態並說明理由。</p></div>
+      <div class="stage reveal"><h3>最後說出你的看法。</h3><p>準備三到五句英文短講，分享並自評。</p></div>
+    </div>
+  </section>
+
+  <section id="timeline" aria-labelledby="h-timeline">
+    <h2 id="h-timeline">時間流程與活動設計</h2>
+    <p class="small muted" style="margin:-32px 0 32px;">各堂時間加總皆為 50 分鐘。</p>
+
+    <h3 class="subhead">第 1 堂：讀懂新聞、分辨事實與看法</h3>
+    <div class="tablewrap reveal"><table>
+      <thead><tr><th>時間</th><th>階段</th><th>教師活動</th><th>學生活動</th><th>所需教材 / 設備</th></tr></thead>
+      <tbody>
+        <tr><td>0–5 分鐘</td><td>引起動機</td><td>提問：If AI can answer every question, what do you still need to learn? 收集 2–3 個回答</td><td>兩人一組用英文短句或中英夾雜回答</td><td>投影</td></tr>
+        <tr><td>5–15 分鐘</td><td>關鍵詞彙預習</td><td>帶讀 degree、program、ethics、responsible、humanities、judgment、false information，並用圖示或例句說明</td><td>配對詞彙與中文意思，跟讀</td><td>詞彙卡（投影或講義）</td></tr>
+        <tr><td>15–30 分鐘</td><td>閱讀新聞短文</td><td>說明閱讀任務：找出每一段的主旨；巡視提示</td><td>默讀，標出每段主旨句，兩人核對</td><td>英文短文講義</td></tr>
+        <tr><td>30–45 分鐘</td><td>分辨事實與看法</td><td>發下 6 句敘述卡，示範一句後請各組分類</td><td>小組把句子分成 Fact 與 Opinion 並圈出文字線索</td><td>敘述卡、小白板</td></tr>
+        <tr><td>45–50 分鐘</td><td>出場票</td><td>請每人寫一句英文主旨</td><td>寫一句：This article is about ...</td><td>便利貼</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 class="subhead">第 1 堂的敘述卡</h3>
+    <p class="small muted">6 句皆出自新聞內容；擬定，請教師確認。</p>
+    <div class="tablewrap reveal"><table>
+      <thead><tr><th>敘述</th><th>答案</th><th>線索</th></tr></thead>
+      <tbody>
+        <tr><td>USC started a new four-year AI program this year.</td><td>Fact</td><td>學程、年限、時間可查證</td></tr>
+        <tr><td>USC students must take a one-semester AI ethics course.</td><td>Fact</td><td>必修課程可查證</td></tr>
+        <tr><td>UCLA created a new Department of Digital Humanities.</td><td>Fact</td><td>系所設立可查證</td></tr>
+        <tr><td>The humanities matter more than ever in the age of AI.</td><td>Opinion</td><td>專家霍恩的看法，含 more than ever 這類強烈用語</td></tr>
+        <tr><td>AI is like a calculator.</td><td>Opinion</td><td>教授安納瓦倫的比喻</td></tr>
+        <tr><td>Students must be able to judge whether an AI answer is reasonable.</td><td>Opinion</td><td>含 must，表達應然的主張</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 class="subhead">第 2 堂：倫理討論與英文短講</h3>
+    <div class="tablewrap reveal"><table>
+      <thead><tr><th>時間</th><th>階段</th><th>教師活動</th><th>學生活動</th><th>所需教材 / 設備</th></tr></thead>
+      <tbody>
+        <tr><td>0–10 分鐘</td><td>回顧與暖身</td><td>用 3 題快問快答複習短文，說明本堂目標</td><td>搶答、複習詞彙</td><td>投影</td></tr>
+        <tr><td>10–25 分鐘</td><td>倫理案例討論</td><td>呈現新聞中的案例：自動駕駛車撞傷人，誰應該負責？提供句型：I think ... should be responsible because ...</td><td>小組討論，每組選一個立場並寫下理由</td><td>句型卡、小白板</td></tr>
+        <tr><td>25–40 分鐘</td><td>準備短講</td><td>題目：Why do we still need the humanities in the age of AI? 說明短講結構（看法、理由、例子）</td><td>依鷹架完成 3 到 5 句短講稿</td><td>短講稿紙</td></tr>
+        <tr><td>40–48 分鐘</td><td>分享</td><td>邀請 4 到 6 位學生或小組上台，其餘人用評語卡回饋</td><td>說出短講；聆聽並回饋</td><td>評語卡</td></tr>
+        <tr><td>48–50 分鐘</td><td>自我檢視</td><td>發下自評單，提醒寫下一項下次要改進的地方</td><td>勾選自評並寫一項改進</td><td>自評單</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 class="subhead">差異化設計</h3>
+    <p class="small muted">擬定，請教師確認</p>
+    <div class="tablewrap reveal"><table>
+      <thead><tr><th>層級</th><th>目標</th><th>活動 / 任務</th><th>支持策略</th><th>形成性檢核</th></tr></thead>
+      <tbody>
+        <tr><td>基礎</td><td>能找出每段主旨，並以句型說出一個看法</td><td>閱讀時使用已標出關鍵詞的短文；Fact/Opinion 分類只處理 4 句較明確的敘述；短講用填空句型完成</td><td>詞彙卡附中文；句型：I think AI ... / We still need the humanities because ...</td><td>出場票主旨句有主詞與動詞；短講稿完成 3 句</td></tr>
+        <tr><td>一般</td><td>能分辨事實與看法，並用 2–3 句說明理由</td><td>完成 6 句分類並圈出線索；短講稿 4 句，含一個理由</td><td>提供線索詞清單（says、believes、according to）</td><td>分類正確率；短講稿含看法與理由</td></tr>
+        <tr><td>進階</td><td>能質疑資訊來源並比較觀點</td><td>額外任務：判斷 Horn 的說法為何屬於「看法」，並寫出一個反方理由；短講加入新聞中的一個具體例子</td><td>提供進階表達：On the one hand ... On the other hand ...</td><td>短講稿 5 句，含例子與反方回應</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="reading" class="field" aria-labelledby="h-reading">
+    <h2 id="h-reading">英文閱讀短文</h2>
+    <div class="passage reveal" lang="en">
+      <p>More and more American universities now offer degrees in artificial intelligence. At the University of Southern California (USC), engineering students can join a new four-year AI program this year. They learn to design and build AI systems, and they must also take a one-semester AI ethics course. In that class, they discuss questions like this: if a self-driving car hurts someone, who should be responsible?</p>
+      <p>At the University of California, Los Angeles (UCLA), a new Department of Digital Humanities uses AI and digital tools in fields such as history and archaeology. Professor Todd Presner asks students to use a language model to write a piece of history. Then they use AI to change it on purpose. In this way, students see how AI can create false information.</p>
+      <p>Michael Horn, a professor at Harvard, says universities open AI degrees mainly because students and parents want what they study to connect with future jobs. He also says that in the age of AI, the humanities matter more than ever, because people need to ask, “Who are we, and what should we do?”</p>
+    </div>
+    <p class="passage-note">依新聞內容改寫的教學用短文，僅使用新聞中出現的事實與說法（擬定，請教師依原文核對）。素材出處：<a href="https://www.cna.com.tw/news/aopl/202608280020.aspx" target="_blank" rel="noopener">中央社〈美大學開AI學位蔚為風潮　專家：人文教育更顯重要〉</a>，記者林宏翰，2026/8/28。新聞全文受著作權保護，未放入本頁，請至原站閱讀。</p>
+  </section>
+
+  <section id="questions" aria-labelledby="h-questions">
+    <h2 id="h-questions">啟發提問</h2>
+    <div class="qcols">
+      <h3 class="qgroup">暖身提問</h3>
+      <div class="q"><p class="qt">If AI can answer almost any question, what do you still need to learn?（如果 AI 幾乎能回答任何問題，你還需要學什麼？）</p>
+        <ul><li><b>設計意圖</b>　先以學生的生活經驗連結主題，引出「判斷力」概念。</li>
+        <li><b>可能回應 / 追問</b>　「還是要考試」「要會用 AI」→ How do you know whether an answer from AI is correct?</li>
+        <li><b>分層提示</b>　基礎：I need to learn ... 句型；進階：給出一個具體情境。</li></ul></div>
+      <div class="q"><p class="qt">Have you ever used AI for homework? What happened?</p>
+        <ul><li><b>設計意圖</b>　了解學生背景，不評價，建立安全討論氛圍。</li>
+        <li><b>可能回應 / 追問</b>　用 AI 查字、翻譯 → Was the answer always right?</li>
+        <li><b>分層提示</b>　基礎：可先以中文回答再轉成英文；進階：描述一次 AI 答錯的經驗。</li></ul></div>
+
+      <h3 class="qgroup">核心提問</h3>
+      <div class="q"><p class="qt">According to the text, what do USC engineering students learn besides how to build AI?</p>
+        <ul><li><b>設計意圖</b>　檢核是否讀到「AI 倫理課」這項事實（5-Ⅴ-10）。</li>
+        <li><b>可能回應 / 追問</b>　They learn ethics. → What question do they discuss in that class?</li>
+        <li><b>分層提示</b>　基礎：提示看第 1 段最後兩句；進階：用自己的話改寫答案。</li></ul></div>
+      <div class="q"><p class="qt">What did Professor Presner ask his students to do with a language model? Why?</p>
+        <ul><li><b>設計意圖</b>　理解例子與目的之間的因果關係。</li>
+        <li><b>可能回應 / 追問</b>　Make a history story and change it. → What did students learn from the activity?</li>
+        <li><b>分層提示</b>　基礎：First ... Then ... 句型；進階：說明這個活動與「判斷力」的關係。</li></ul></div>
+      <div class="q"><p class="qt">Which sentence is a fact, and which is an opinion: “USC started a four-year AI program this year.” / “The humanities matter more than ever in the age of AI.”?</p>
+        <ul><li><b>設計意圖</b>　練習 9-Ⅴ-3、D-Ⅴ-3。第二句是教授霍恩的看法，可討論但無法像開設學程一樣直接查證。</li>
+        <li><b>可能回應 / 追問</b>　兩句都是真的 → Can we check the second sentence in the same way as the first one?</li>
+        <li><b>分層提示</b>　基礎：提供線索詞 says；進階：討論 “more than ever” 這類強烈用語。</li></ul></div>
+      <div class="q"><p class="qt">The text says AI is like a calculator. What is the same, and what is different?</p>
+        <ul><li><b>設計意圖</b>　理解比喻（安納瓦倫：學生仍需判斷答案是否正確、合理），並應用到日常使用 AI 的情境。</li>
+        <li><b>可能回應 / 追問</b>　Both help us work faster. → Who decides if the answer is reasonable?</li>
+        <li><b>分層提示</b>　基礎：Both ... but ... 句型；進階：說明比喻的限制。</li></ul></div>
+
+      <h3 class="qgroup">延伸與批判提問</h3>
+      <div class="q"><p class="qt">If a self-driving car hurts someone, who should be responsible: the company, the engineer, the owner, or the car? Why?</p>
+        <ul><li><b>設計意圖</b>　呈現新聞中的倫理案例，讓學生在沒有標準答案的問題上論述立場（B-Ⅴ-4）。</li>
+        <li><b>可能回應 / 追問</b>　公司要負責 → What if the owner did not follow the rules?</li>
+        <li><b>分層提示</b>　基礎：I think ... should be responsible because ...；進階：加入反方回應 However, some people may say ...</li></ul></div>
+      <div class="q"><p class="qt">Horn says universities open AI degrees mainly to respond to the job market. Do you think that is a good reason? What else should universities teach?</p>
+        <ul><li><b>設計意圖</b>　連結學生自己的升學與生涯想像，並練習評估理由。</li>
+        <li><b>可能回應 / 追問</b>　很實際 → Is a job the only reason to study something?</li>
+        <li><b>分層提示</b>　基礎：Yes / No + because；進階：比較「就業」與「思考我們是誰」兩種目的。</li></ul></div>
+      <div class="q"><p class="qt">Presner showed that AI can create false information. How can you protect yourself from it?</p>
+        <ul><li><b>設計意圖</b>　把課堂經驗轉化為日常行動。</li>
+        <li><b>可能回應 / 追問</b>　查別的網站 → How do you know that other website is reliable?</li>
+        <li><b>分層提示</b>　基礎：列出一個方法；進階：列出兩個方法並排序重要性。</li></ul></div>
+    </div>
+  </section>
+
+  <section id="summary" class="surface" aria-labelledby="h-summary">
+    <div class="two">
+      <h2 id="h-summary">摘要</h2>
+      <div class="summary-text">
+        <p><strong>教案摘要</strong>　本單元以中央社 2026/8/28 的新聞為素材，讓高二學生透過英文改寫短文，認識美國大學（USC、UCLA）開設 AI 學位與學程的趨勢，以及專家認為人文素養在 AI 時代更重要的看法。兩堂課依序進行詞彙預習、閱讀、事實與看法分類、倫理案例討論與英文短講。教案提供基礎、一般、進階三層任務與支持策略，並以出場票與自評單檢核學習。</p>
+        <p><strong>素材重點摘要</strong>（出處：中央社，記者林宏翰，2026/8/28）</p>
+        <ul>
+          <li>美國大學無論人文或理工科系，開設 AI 學位蔚為風潮；哈佛教育研究所教授霍恩指出，主要是在回應市場需求。</li>
+          <li>南加大工程學院今年新開設四年制「人工智慧學程」，必修一學期 AI 倫理課，討論例如自動駕駛車輛撞傷人誰應負責。</li>
+          <li>UCLA 新成立數位人文系，把 AI 與數位工具應用到社會學、考古、歷史、種族與性別研究；普雷斯納教授讓學生親自體驗 AI 如何製造錯誤資訊。</li>
+          <li>專家觀點：AI 能提高效率但不能取代人類下判斷；人文教育讓人思考「我們是誰，我們應該做什麼」。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="promo" aria-labelledby="h-promo">
+    <h2 id="h-promo">宣傳文案</h2>
+    <div class="promo">
+      <p class="promo-title">AI 什麼都能答，你還剩下什麼本事？</p>
+      <p>美國的大學一邊開設 AI 學位，一邊要學生修「AI 倫理」。為什麼？因為 AI 很會給答案，卻不負責任，判斷對不對、該不該做，還是要靠人。兩堂英文課，我們一起讀一篇新聞、拆解事實與看法，再用英文說出屬於你自己的觀點。不用英文很強，只要願意想、願意說。</p>
+      <dl>
+        <dt>對象 / 語氣</dt><dd>高二學生 / 親切、有啟發性</dd>
+        <dt>行動呼籲</dt><dd>下週英文課，帶著你的好奇心來，也帶一個你想問 AI 的問題。</dd>
+        <dt>短版（公告或社群）</dt><dd>AI 能寫、能翻、能答。那你的優勢是什麼？下週英文課，我們用一篇新聞和你的想法找答案。</dd>
+      </dl>
+    </div>
+  </section>
+
+  <a class="cta" href="ai-humanities-practice-game.html">
+    <span class="tl">讀完教案了？先自己玩一次課堂闖關。</span>
+    <svg class="arrow" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M12 36 L36 12 M16 12 H36 V32" fill="none" stroke="currentColor" stroke-width="4"/></svg>
+    <span class="word">闖關</span>
+  </a>
+</main>
+
+<footer class="end">
+  <div class="notes">
+    <div>
+      <p>AI 時代的人文素養，高二英文，50 分鐘 × 2 堂。</p>
+      <p>教學目標、差異化設計與英文短文為草案（擬定，請教師確認）。</p>
+      <p>素材出處：<a href="https://www.cna.com.tw/news/aopl/202608280020.aspx" target="_blank" rel="noopener">中央社 2026/8/28</a></p>
+    </div>
+    <a class="back" href="#top">回到頁首</a>
+  </div>
+  <p class="big">我們是誰，我們應該做什麼</p>
+  <div class="meta">
+    <a href="index.html">回入口頁</a>
+    <span>引自霍恩於中央社報導</span>
+    <span>2026</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  document.querySelectorAll('table').forEach(function (t) {
+    var heads = Array.prototype.map.call(t.querySelectorAll('thead th'), function (h) { return h.textContent; });
+    t.querySelectorAll('tbody tr').forEach(function (r) {
+      Array.prototype.forEach.call(r.children, function (c, i) { c.setAttribute('data-label', heads[i] || ''); });
+    });
+  });
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('in'); }); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { threshold: 0 });
+  els.forEach(function (e, i) { e.style.transitionDelay = (i % 3) * 70 + 'ms'; io.observe(e); });
+})();
+</script>
+</body>
+</html>
