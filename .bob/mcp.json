@@ -13,6 +13,7 @@
       "disabled": true
     },
     "excalidraw": {
+      "type": "streamable-http",
       "url": "https://mcp.excalidraw.com",
       "disabled": true
     }
