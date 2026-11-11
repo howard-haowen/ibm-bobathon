@@ -11,3 +11,4 @@ output/
 .bob/tmp/
 artifacts/.vercel/
 .taste-skill/
+.DS_Store
