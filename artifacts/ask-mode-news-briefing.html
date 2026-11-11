@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ask 模式實際執行結果 — AI 時代的人文素養</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Segoe UI", "PingFang TC", "Noto Sans TC", system-ui, sans-serif; font-size: 16px; line-height: 1.75; color: #161616; background: #f4f4f4; }
+  main { max-width: 860px; margin: 0 auto; padding: 40px 24px 64px; }
+  .back { display: inline-block; font-size: 14px; color: #0f62fe; text-decoration: none; margin-bottom: 24px; }
+  .back:hover { text-decoration: underline; }
+  .badge { display: inline-block; background: #d0e2ff; color: #0043ce; font-size: 13px; padding: 2px 10px; border-radius: 12px; margin-bottom: 12px; }
+  h1 { font-size: 30px; font-weight: 400; line-height: 1.3; margin-bottom: 12px; }
+  .lead { color: #525252; margin-bottom: 28px; }
+  h2 { font-size: 21px; font-weight: 400; margin: 36px 0 12px; }
+  h3 { font-size: 16px; font-weight: 600; margin: 18px 0 6px; }
+  p { margin-bottom: 12px; }
+  ul, ol { margin: 0 0 12px 22px; }
+  li { margin-bottom: 6px; }
+  .panel { background: #fff; border-top: 3px solid #0f62fe; padding: 20px 24px; margin-bottom: 16px; }
+  .prompt { background: #262626; color: #f4f4f4; padding: 16px 20px; font-size: 14px; white-space: pre-wrap; margin-bottom: 8px; }
+  .note { background: #edf5ff; border-left: 4px solid #0f62fe; padding: 12px 16px; font-size: 14px; color: #161616; margin: 12px 0; }
+  .warn { background: #fff8e1; border-left: 4px solid #f1c21b; padding: 12px 16px; font-size: 14px; margin: 12px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; margin-bottom: 12px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+  th { background: #e8e8e8; font-weight: 600; }
+  .src { font-size: 13px; color: #6f6f6f; }
+  footer { max-width: 860px; margin: 0 auto; padding: 16px 24px 32px; font-size: 12px; color: #6f6f6f; text-align: center; border-top: 1px solid #e0e0e0; }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="01-ibm-bob-basic-usage.html">← 回入門操作指南</a>
+  <span class="badge">Ask 模式 · 唯讀 · 實際執行存檔</span>
+  <h1>Step 1：讀懂新聞素材，確認教學起點</h1>
+  <p class="lead">以下是在 Ask 模式下，把入門指南中的 Prompt 原文實際送出後的回答。過程中已抓取新聞全文閱讀，沒有修改任何專案檔案。</p>
+
+  <h2>送出的 Prompt（原文）</h2>
+  <div class="prompt">我是高二英文老師，下週想用這篇新聞當教材，主題是「AI 時代的人文素養」：https://www.cna.com.tw/news/aopl/202608280020.aspx
+課程是 50 分鐘上 2 堂，班上是一般程度。
+請先幫我讀這篇新聞，整理出重點，並告訴我：
+1. 可以延伸出哪些英文閱讀或討論的主題？
+2. 學生可能會卡在哪裡？
+3. 哪些內容適合先講，哪些留給程度好的學生進階討論？
+我現在只是想先了解，請不要修改任何檔案。</div>
+  <p class="src">素材：中央社〈美大學開AI學位蔚為風潮　專家：人文教育更顯重要〉，記者林宏翰洛杉磯 27 日專電，2026/8/28。已用 rss-reader 的 fetch_article_content 取得全文。</p>
+
+  <div class="warn">先提醒一件事：這篇新聞是<strong>中文</strong>報導。要在英文課使用，需要有英文版本的閱讀文本。我可以在後續步驟協助改寫成貼近原文的英文短文，但改寫稿須由老師依原文核對，不能當成原報導。</div>
+
+  <h2>新聞重點整理</h2>
+  <div class="panel">
+    <ul>
+      <li><strong>現象</strong>：隨著 AI 進入各產業，美國大學不分人文或理工科系，開設 AI 學位蔚為風潮。南加州大學（USC）與加州大學洛杉磯分校（UCLA）今年新學年加入這波熱潮。</li>
+      <li><strong>原因</strong>：哈佛教育研究所教授霍恩（Michael Horn）指出，主要是回應市場需求，學生與家長都希望所學與未來產業更直接相關。</li>
+      <li><strong>USC</strong>：工程學院新開四年制大學部「人工智慧學程」，培養學生設計並建構 AI 系統（應用於新藥開發、機器人、農業）；必修一學期 AI 倫理課，討論例如「自動駕駛的車輛撞傷人，誰應該負責？」。</li>
+      <li><strong>判斷力</strong>：USC 教授安納瓦倫（Murali Annavaram）說，AI 模型很容易給答案，但學生必須有判斷力；他把 AI 比喻成「計算機」，學生仍要能判定答案是否正確、合理。</li>
+      <li><strong>UCLA</strong>：新成立數位人文系，把 AI 與數位工具用在社會學、考古、歷史、種族與性別研究，由 2011 年開設的數位人文副修發展而來。</li>
+      <li><strong>歷史視角</strong>：UCLA 教授普雷斯納（Todd Presner）指出 AI 累積了約 70 年研究，可追溯到 1940 年代末、1950 年代初對語言統計的研究；他讓學生先用語言模型寫一段歷史敘事，再用 AI 刻意改動，親身體驗 AI 如何製造錯誤資訊、扭曲事實。</li>
+      <li><strong>核心論點</strong>：「AI 時代，人文教育比以往任何時候都更重要」，因為人們需要思考「我們是誰，我們應該做什麼」。</li>
+    </ul>
+  </div>
+  <div class="note">請對照原文核對人名、校名與數字；報導中的「70 年」「2011 年」等為原文說法，請勿自行補充報導以外的數據。</div>
+
+  <h2>1. 可延伸的英文閱讀與討論主題</h2>
+  <table>
+    <thead><tr><th>主題</th><th>可做成的英文活動</th><th>新聞中的依據</th></tr></thead>
+    <tbody>
+      <tr><td>AI 倫理：誰該負責？</td><td>用 I think ... should be responsible because ... 表態並說明理由</td><td>USC 倫理課的自動駕駛案例</td></tr>
+      <tr><td>事實 vs. 看法</td><td>把句子分類為 fact / opinion，圈出 says、believes 這類線索詞</td><td>霍恩、安納瓦倫的說法皆為專家看法</td></tr>
+      <tr><td>AI 是計算機嗎？</td><td>比喻的異同：Both ... but ...</td><td>安納瓦倫的計算機比喻</td></tr>
+      <tr><td>AI 與錯誤資訊</td><td>討論如何查證：How can we check if an AI answer is true?</td><td>普雷斯納的課堂實驗</td></tr>
+      <tr><td>為什麼念大學？</td><td>短講：Why do we still need the humanities in the age of AI?</td><td>霍恩談市場需求與人文教育</td></tr>
+    </tbody>
+  </table>
+  <p>建議關鍵詞彙：degree、program、ethics、responsible、humanities、judgment、false information。這些詞語言難度適中，且直接出自新聞脈絡。</p>
+
+  <h2>2. 學生可能卡住的地方</h2>
+  <ul>
+    <li><strong>素材是中文</strong>：需要英文改寫稿；若直接讓學生讀中文再用英文討論，閱讀目標會模糊。</li>
+    <li><strong>抽象詞彙</strong>：ethics、humanities、judgment 對一般程度學生較抽象，建議先用例子（自動駕駛、AI 寫作業）說明。</li>
+    <li><strong>機構與人名陌生</strong>：USC、UCLA、哈佛教育研究所這些名稱容易造成干擾，閱讀前用一句話交代即可，不必展開。</li>
+    <li><strong>分不清事實與看法</strong>：「人文教育比以往任何時候都更重要」是專家的看法，而「USC 開設四年制 AI 學程」是可查證的事實；學生常把兩者都當成事實。</li>
+    <li><strong>用英文表達立場</strong>：知道想法但缺句型；需要提供句型鷹架。</li>
+    <li><strong>倫理題沒有標準答案</strong>：部分學生會急著找「正確答案」，須事先說明本題重視理由而非結論。</li>
+  </ul>
+
+  <h2>3. 先講與進階討論的建議分配</h2>
+  <table>
+    <thead><tr><th>適合先講（基礎，全班）</th><th>留給程度較好的學生（進階）</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>
+          <ul>
+            <li>美國大學開設 AI 學位的現象與兩所學校的做法</li>
+            <li>USC 必修 AI 倫理課與自動駕駛案例</li>
+            <li>關鍵詞彙與每段主旨句</li>
+            <li>用句型說出一個看法與理由</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>判斷霍恩的說法為何屬於「看法」，並提出反方理由</li>
+            <li>AI 與計算機比喻的限制</li>
+            <li>市場需求 vs. 思考「我們是誰」，大學應教什麼</li>
+            <li>怎麼降低 AI 錯誤資訊的風險，並排出方法的優先順序</li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note">Bob 的整理僅供參考，請依原文與你的專業判斷核對。本次沒有修改任何檔案。下一步可切換到 Plan 模式，把以上整理成備課規劃。</div>
+</main>
+<footer>Made with IBM Bob</footer>
+</body>
+</html>

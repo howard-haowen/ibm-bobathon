@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan 模式實際執行結果 — AI 時代的人文素養備課計畫</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Segoe UI", "PingFang TC", "Noto Sans TC", system-ui, sans-serif; font-size: 16px; line-height: 1.75; color: #161616; background: #f4f4f4; }
+  main { max-width: 900px; margin: 0 auto; padding: 40px 24px 64px; }
+  .back { display: inline-block; font-size: 14px; color: #0f62fe; text-decoration: none; margin-bottom: 24px; }
+  .back:hover { text-decoration: underline; }
+  .badge { display: inline-block; background: #e8daff; color: #6929c4; font-size: 13px; padding: 2px 10px; border-radius: 12px; margin-bottom: 12px; }
+  h1 { font-size: 30px; font-weight: 400; line-height: 1.3; margin-bottom: 12px; }
+  .lead { color: #525252; margin-bottom: 28px; }
+  h2 { font-size: 21px; font-weight: 400; margin: 40px 0 12px; }
+  h3 { font-size: 16px; font-weight: 600; margin: 18px 0 6px; }
+  p { margin-bottom: 12px; }
+  ul, ol { margin: 0 0 12px 22px; }
+  li { margin-bottom: 6px; }
+  .panel { background: #fff; border-top: 3px solid #8a3ffc; padding: 20px 24px; margin-bottom: 16px; }
+  .prompt { background: #262626; color: #f4f4f4; padding: 16px 20px; font-size: 14px; white-space: pre-wrap; margin-bottom: 8px; }
+  .note { background: #f6f2ff; border-left: 4px solid #8a3ffc; padding: 12px 16px; font-size: 14px; margin: 12px 0; }
+  .warn { background: #fff8e1; border-left: 4px solid #f1c21b; padding: 12px 16px; font-size: 14px; margin: 12px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; margin-bottom: 12px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+  th { background: #e8e8e8; font-weight: 600; }
+  td.num, th.num { white-space: nowrap; }
+  blockquote { background: #fff; border-left: 4px solid #c6c6c6; padding: 8px 16px; margin: 8px 0 12px; font-size: 14px; color: #393939; }
+  .src { font-size: 13px; color: #6f6f6f; }
+  footer { max-width: 900px; margin: 0 auto; padding: 16px 24px 32px; font-size: 12px; color: #6f6f6f; text-align: center; border-top: 1px solid #e0e0e0; }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="01-ibm-bob-basic-usage.html">← 回入門操作指南</a>
+  <span class="badge">Plan 模式 · 只產出計畫 · 實際執行存檔</span>
+  <h1>Step 2：AI 時代的人文素養 — 備課規劃文件</h1>
+  <p class="lead">以下是在 Plan 模式下，把入門指南中的 Prompt 原文實際送出後的規劃結果。本階段只做規劃與課綱查詢，尚未製作教案與網站；請你確認後再進入 Agent 模式。標示「擬定，請教師確認」的內容，最終由老師決定。</p>
+
+  <h2>送出的 Prompt（原文）</h2>
+  <div class="prompt">根據剛剛整理的內容，幫我規劃這個單元的備課計畫。
+計畫要包含：
+1. 對應的課綱
+2. 教學目標
+3. 2 堂課共 100 分鐘的時間流程與活動
+4. 基礎和進階兩種程度各自怎麼教
+5. 每個教學段落可以問學生什麼問題
+6. 最後要做出的教案和教學網站
+請整理成一份完整的規劃文件，先讓我確認，不要直接開始製作。</div>
+
+  <h2>基本資料</h2>
+  <table>
+    <tbody>
+      <tr><th>學科 / 年級</th><td>英文 / 高二</td></tr>
+      <tr><th>課程主題</th><td>AI 時代的人文素養：從美國大學開設 AI 學位談起</td></tr>
+      <tr><th>時數</th><td>50 分鐘 × 2 堂（共 100 分鐘）</td></tr>
+      <tr><th>學生程度</th><td>一般程度；同一堂課要同時照顧基礎與進階兩種程度（示例輸入）</td></tr>
+      <tr><th>素材</th><td>中央社〈美大學開AI學位蔚為風潮　專家：人文教育更顯重要〉，2026/8/28</td></tr>
+    </tbody>
+  </table>
+
+  <h2>1. 對應的課綱</h2>
+  <div class="warn">查詢範圍：專案內 <code>108curriculum/英語文/</code>，為「綜合型高級中等學校」版本。英語文學習重點以「學習階段Ⅴ（高級中等學校 10–12 年級）」標示，不分高一、高二、高三，因此年級差異由差異化設計處理，不自行推定條目屬於哪一年級。</div>
+  <p class="src">來源檔：十二年國民基本教育課程綱要綜合型高級中等學校語文領域─英語文.md，「伍、學習重點」。以下條文逐字引用。</p>
+  <table>
+    <thead><tr><th class="num">代碼</th><th>條文</th><th>本單元用在</th></tr></thead>
+    <tbody>
+      <tr><td class="num">3-Ⅴ-9</td><td>能閱讀不同體裁、不同主題的文章。</td><td>閱讀新聞改寫短文</td></tr>
+      <tr><td class="num">5-Ⅴ-10</td><td>能讀懂簡易短文或故事，並以簡短的句子述說或寫出主旨或大意。</td><td>出場票：一句英文主旨</td></tr>
+      <tr><td class="num">9-Ⅴ-3</td><td>能依據上下文分辨客觀事實與主觀意見。</td><td>Fact / Opinion 分類</td></tr>
+      <tr><td class="num">2-Ⅴ-3</td><td>能依主題或情境以英語簡短描述事件或回答問題。</td><td>討論與短講</td></tr>
+      <tr><td class="num">\*6-Ⅴ-6</td><td>樂於以英語文為工具，接觸新知並關注國際議題。</td><td>以國際新聞為素材</td></tr>
+      <tr><td class="num">8-Ⅴ-5</td><td>能關心時事，了解國際情勢，以培養國際視野。</td><td>美國大學的 AI 教育趨勢</td></tr>
+      <tr><td class="num">7-Ⅴ-8</td><td>能檢視自我學習過程，並隨時改進。</td><td>第 2 堂自評單</td></tr>
+      <tr><td class="num">Ae-Ⅴ-8</td><td>不同體裁、不同主題之文章。</td><td>學習內容：閱讀文本</td></tr>
+      <tr><td class="num">D-Ⅴ-3</td><td>藉文字線索，對客觀事實及主觀意見的分辨。</td><td>學習內容：線索詞</td></tr>
+      <tr><td class="num">B-Ⅴ-4</td><td>引導式討論。</td><td>學習內容：倫理案例討論</td></tr>
+      <tr><td class="num">\*C-Ⅴ-4</td><td>國際議題(如環境與永續、正義與人權等) 。</td><td>學習內容：AI 倫理屬國際議題討論（較高階條目，供進階任務使用）</td></tr>
+    </tbody>
+  </table>
+  <p>標有 * 者為課綱中「較高階」的條目，規劃上放在進階任務。老師確認後，我會把這份對照寫進教案的「課綱對應」欄。</p>
+
+  <h2>2. 教學目標（擬定，請教師確認）</h2>
+  <ol>
+    <li>能讀懂一篇改寫自新聞的英文短文，並用簡短英文句子說出主旨（3-Ⅴ-9、5-Ⅴ-10）。</li>
+    <li>能依據文中線索，分辨可查證的事實與專家的看法（9-Ⅴ-3、D-Ⅴ-3）。</li>
+    <li>能用英文簡短陳述「AI 時代為什麼還需要人文素養」並說出一個理由（2-Ⅴ-3、\*6-Ⅴ-6、8-Ⅴ-5）。</li>
+    <li>能檢視自己的學習並提出一項改進（7-Ⅴ-8）。</li>
+  </ol>
+
+  <h2>3. 時間流程與活動（共 100 分鐘）</h2>
+  <h3>第 1 堂：讀懂新聞、分辨事實與看法</h3>
+  <table>
+    <thead><tr><th class="num">時間</th><th>階段</th><th>活動</th></tr></thead>
+    <tbody>
+      <tr><td class="num">0–5</td><td>引起動機</td><td>提問：如果 AI 能回答所有問題，你還需要學什麼？</td></tr>
+      <tr><td class="num">5–15</td><td>關鍵詞彙預習</td><td>degree、program、ethics、responsible、humanities、judgment、false information</td></tr>
+      <tr><td class="num">15–30</td><td>閱讀新聞短文</td><td>默讀並標出每段主旨句，兩人核對</td></tr>
+      <tr><td class="num">30–45</td><td>分辨事實與看法</td><td>6 句敘述卡分成 Fact / Opinion，圈出線索詞</td></tr>
+      <tr><td class="num">45–50</td><td>出場票</td><td>寫一句英文主旨</td></tr>
+    </tbody>
+  </table>
+  <p class="src">合計：5 + 10 + 15 + 15 + 5 = 50 分鐘。</p>
+  <h3>第 2 堂：倫理討論與英文短講</h3>
+  <table>
+    <thead><tr><th class="num">時間</th><th>階段</th><th>活動</th></tr></thead>
+    <tbody>
+      <tr><td class="num">0–10</td><td>回顧與暖身</td><td>3 題快問快答複習短文</td></tr>
+      <tr><td class="num">10–25</td><td>倫理案例討論</td><td>自動駕駛車撞傷人，誰該負責？以句型表態並說明理由</td></tr>
+      <tr><td class="num">25–40</td><td>準備短講</td><td>題目：Why do we still need the humanities in the age of AI?，寫 3–5 句</td></tr>
+      <tr><td class="num">40–48</td><td>分享</td><td>4–6 位學生或小組上台，其餘同學用評語卡回饋</td></tr>
+      <tr><td class="num">48–50</td><td>自我檢視</td><td>自評單，寫一項改進</td></tr>
+    </tbody>
+  </table>
+  <p class="src">合計：10 + 15 + 15 + 8 + 2 = 50 分鐘。兩堂共 100 分鐘。</p>
+
+  <h2>4. 基礎與進階各自怎麼教</h2>
+  <table>
+    <thead><tr><th>層級</th><th>目標</th><th>任務</th><th>支持策略</th><th>檢核</th></tr></thead>
+    <tbody>
+      <tr><td>基礎</td><td>找出每段主旨，用句型說出一個看法</td><td>已標出關鍵詞的短文；Fact / Opinion 處理 4 句較明確的敘述；短講用填空句型</td><td>詞彙卡附中文；I think AI ... / We still need the humanities because ...</td><td>主旨句有主詞與動詞；短講稿 3 句</td></tr>
+      <tr><td>一般</td><td>分辨事實與看法，並用 2–3 句說明理由</td><td>完成 6 句分類並圈出線索；短講稿 4 句含一個理由</td><td>線索詞清單：says、believes、according to</td><td>分類正確率；看法與理由是否齊備</td></tr>
+      <tr><td>進階</td><td>質疑來源並比較觀點</td><td>判斷霍恩的說法為何是看法，寫出一個反方理由；短講加入新聞中的具體例子</td><td>On the one hand ... On the other hand ...</td><td>短講稿 5 句含例子與反方回應</td></tr>
+    </tbody>
+  </table>
+
+  <h2>5. 各教學段落可以問學生的問題</h2>
+  <table>
+    <thead><tr><th>段落</th><th>提問方向（暖身 → 核心 → 延伸）</th></tr></thead>
+    <tbody>
+      <tr><td>引起動機</td><td>If AI can answer almost any question, what do you still need to learn?　／　你用 AI 寫過作業嗎？答案總是對的嗎？</td></tr>
+      <tr><td>閱讀新聞短文</td><td>USC 的學生除了建構 AI 還要學什麼？普雷斯納教授要學生用語言模型做什麼？目的是什麼？</td></tr>
+      <tr><td>分辨事實與看法</td><td>哪一句可以查證？哪一句是專家的看法？AI 像計算機，相同與不同在哪裡？</td></tr>
+      <tr><td>倫理案例討論</td><td>自動駕駛車撞傷人，該由公司、工程師、車主或車負責？為什麼？</td></tr>
+      <tr><td>準備與分享短講</td><td>霍恩說大學開 AI 學位主要是回應市場需求，你覺得是好理由嗎？AI 會製造錯誤資訊，你要怎麼保護自己？</td></tr>
+    </tbody>
+  </table>
+  <p>每個提問在教案裡都會附「設計意圖」「可能的學生回應與追問」「分層提示」。</p>
+
+  <h2>6. 最後要做出的教案與教學網站</h2>
+  <ul>
+    <li><strong>教案</strong>：<code>output/英文-高二/AI時代的人文素養.md</code>，含教學概覽、教學目標、時間流程與活動設計（含差異化設計）、啟發提問、摘要、宣傳文案。</li>
+    <li><strong>素材</strong>：新聞全文存為 <code>AI時代的人文素養-material.md</code>，僅供本機備課；原站聲明未經授權不得轉載，因此不放入公開網頁，只附出處連結。</li>
+    <li><strong>教學網站</strong>：網站類型與宣傳文案的對象／語氣尚未指定，進入 Agent 模式時會先詢問你，不自行假設。</li>
+    <li><strong>不做的事</strong>：不產生照片或海報；如需圖表，只做 SVG 學習圖表。不放任何學生個資。</li>
+  </ul>
+
+  <h2>待老師確認的事項</h2>
+  <ul>
+    <li>教學目標與評量方式是否符合你的班級？</li>
+    <li>英文閱讀短文會由我依新聞改寫，請你依原文核對。</li>
+    <li>宣傳文案的對象與語氣、網站要做成哪一種類型。</li>
+  </ul>
+  <div class="note">本次 Plan 階段沒有建立教案或網站。確認沒問題後，可切換到 Agent 模式照此計畫製作。</div>
+</main>
+<footer>Made with IBM Bob</footer>
+</body>
+</html>
