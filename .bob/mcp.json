@@ -29,7 +29,7 @@
       "env": {
         "ZOTERO_LOCAL": "true"
       },
-      "disabled": true
+      "disabled": false
     },
     "workspacemcp": {
       "type": "streamable-http",
