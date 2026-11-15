@@ -13,6 +13,7 @@ description: End-to-end multilingual language learning workflow. Use when the us
 - **繁體中文輸出**：所有解說、文法剖析、詞義翻譯與教學說明一律使用「繁體中文（台灣，zh-TW）」。
 - **結構化與在地化**：例句必須自然道地，附音標/讀音、詞性、難度等級（CEFR）與繁體中文釋義。
 - **工具協同（Agentic Flow）**：嚴格依順序執行四個步驟，不得跳過或亂序。
+- **輸出格式規範**：所有產出（生詞卡、文法剖析、閃卡、筆記、HTML）一律須遵守 [`references/language-learning-prefs.md`](references/language-learning-prefs.md)（繁體中文解說、IPA／假名、CEFR 標示、例句場景、閃卡兩欄表格）。
 
 ```mermaid
 flowchart LR
@@ -32,18 +33,23 @@ flowchart LR
 
 **目標**：取得選定文章的完整原文，作為後續所有步驟的語料來源。
 
-### 1.1 選擇 RSS 工具取得文章
-- **環境判定**：
-  - 若已安裝 NetNewsWire MCP → 使用 `mcp__netnewswire__get_articles` 列出未讀文章，選定後呼叫 `mcp__netnewswire__read_article` 取得內容。
-  - 若未安裝 NetNewsWire → 使用 `rss-reader-mcp` 的 `rss_get_feed` 傳入 Feed URL（參考 [`language-learning-feeds.opml`](language-learning-feeds.opml)），選定後呼叫 `rss_get_article` 取得內容。
-- **全文補齊（Fallback）**：若 RSS 僅提供摘要或全文缺失，啟用 `defuddle` 技能（`.bob/skills/defuddle/SKILL.md`）透過文章原始 URL 抓取完整網頁正文。
+### 1.1 語料來源
+文章可來自以下兩種來源之一：
+- **使用者提供的文章 URL / 網誌連結**：直接以該 URL 為文章來源，啟用 `defuddle` 技能（`.bob/skills/defuddle/SKILL.md`）抓取完整網頁正文，不需經過 RSS 工具。
+- **RSS 工具**：使用者未提供 URL 時，依 1.2 透過 RSS 工具列出文章供選擇。
 
-### 1.2 語言偵測與目標外語確認
+### 1.2 RSS 工具選擇
+- **預設**：使用 NetNewsWire MCP → 以 `mcp__netnewswire__get_articles` 列出未讀文章，選定後呼叫 `mcp__netnewswire__read_article` 取得內容。
+- **Fallback**：若未安裝 NetNewsWire MCP → 改用 `rss-reader-mcp`，Feed 清單取自 [`references/language-learning-feeds.opml`](references/language-learning-feeds.opml)；以 `fetch_feed_entries` 傳入該 OPML 中的 Feed URL 列出文章，選定後呼叫 `fetch_article_content` 取得內容。
+- **全文補齊**：若 RSS 僅提供摘要或全文缺失，啟用 `defuddle` 技能透過文章原始 URL 抓取完整網頁正文。
+
+### 1.3 語言偵測與目標外語確認
+
 - 偵測文章語言：
   - **原文為非中文**：將偵測到的語言設為 `article_language`，設 `article_is_chinese_source = false`。
   - **原文為中文**（繁體或簡體）：使用 `ask_followup_question` 詢問使用者欲翻譯並學習的目標外語（如 English, Japanese, French, German...），將選擇設為 `article_language`，設 `article_is_chinese_source = true`。
 
-### 1.3 產出資料結構
+### 1.4 產出資料結構
 確認取得全文後記錄以下變數：
 - `article_title`：文章標題
 - `article_url`：原始連結
