@@ -9,3 +9,7 @@ output/
 .env
 !.env.sample
 .vercel/
+.DS_Store
+.bob/tmp/
+.herenow/
+.taste-skill/
